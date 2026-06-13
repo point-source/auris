@@ -118,7 +118,9 @@ Each criterion is observable from the product's visible surface.
 - **Customizability.** Accent color, corner bevel, and glow intensity are
   adjustable without forking the package.
 - **Correctness / reliability.** Zero analyzer warnings; consistent rendering
-  across the supported Flutter range.
+  across the supported Flutter range; the look stays visually correct as the kit
+  evolves — geometry and glow regressions are caught automatically, not only by
+  eye.
 - **Compatibility.** Flutter ≥ 3.22 / Dart ≥ 3.4, Material 3, dark theme only
   for v0.1.0; mobile-first (no web/desktop-specific adaptation in v0.1.0).
 - **Footprint.** Zero runtime pub dependencies; package size kept reasonable

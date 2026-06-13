@@ -469,6 +469,14 @@ surface for prospective adopters and the manual acceptance harness for the
 team, which is why it must cover every component group rather than a curated
 subset.
 
+**Visual regression.** The rendered appearance of the geometry- and
+glow-bearing custom widgets is locked with golden-image tests
+(`matchesGoldenFile`). The analyzer and behavioral unit tests do not catch
+visual changes — a zero-height progress segment, an off-screen popup, a
+too-large chamfer, or a runaway glow all pass logic tests while looking wrong —
+so goldens are the automated counterpart to the manual showcase review, failing
+in CI when the look drifts (§req:success-criteria).
+
 ---
 
 ## Scope and non-goals §spec:scope
