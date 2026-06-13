@@ -13,27 +13,25 @@ Material widgets Flutter cannot fully theme.
 
 Implement `AurisSwitch` (true chamfered animated track and thumb, optional
 label and status labels) in `lib/src/widgets/auris_switch.dart`.
-§spec:custom-widgets. Depends on §road:auris-container.
+§spec:custom-widgets.
 
 ### §road:auris-progress-bar
 
 Implement `AurisProgressBar` (segmented, with an `.animated` constructor)
 reading variant colors and depth from the resolved `AurisScheme` in
 `lib/src/widgets/auris_progress_bar.dart`. §spec:custom-widgets, §spec:scheme.
-Depends on §road:chamfer-clipper.
 
 ### §road:terminal-and-stepper
 
 Implement `AurisTerminal` (auto-scrolling monospace log with blinking cursor)
-and `AurisStepIndicator` in `lib/src/widgets/`. §spec:custom-widgets. Depends
-on §road:auris-container.
+and `AurisStepIndicator` in `lib/src/widgets/`. §spec:custom-widgets.
 
 ### §road:auris-select
 
 Implement `AurisSelect` (custom dropdown: rotating caret, chamfered glowing
 popup, per-row dividers with hover/selected highlight — the reference look the
 native `DropdownMenu` cannot reach) in `lib/src/widgets/auris_select.dart`.
-§spec:custom-widgets. Depends on §road:auris-container.
+§spec:custom-widgets.
 
 ### §road:interactive-widgets-showcase
 
@@ -57,7 +55,7 @@ that the scheme seam already accepts them and all widgets read the scheme.
 Expose optional accent/bevel/glow override parameters on `AurisTheme.light()`
 (defaults reproduce the canonical look) that pass through to the scheme resolver
 in `lib/src/theme.dart`, and confirm every Material component theme and custom
-widget honors them. §spec:customization. Depends on §road:display-widgets,
+widget honors them. §spec:customization. Depends on
 §road:interactive-widgets-showcase.
 
 ### §road:customization-showcase
