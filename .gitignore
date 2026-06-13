@@ -19,3 +19,7 @@ doc/api/
 *.js_
 *.js.deps
 *.js.map
+
+# Local conduct/orchestration artifacts (worktrees, progress files)
+.claude/worktrees/
+*.local.md
