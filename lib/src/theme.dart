@@ -16,11 +16,12 @@ import 'tokens.dart';
 /// light-background variant is anticipated (§spec:scope); [AurisTheme.dark] is
 /// reserved and throws [UnimplementedError] until it lands.
 ///
-/// This batch populates `ColorScheme`, `TextTheme`, the button component
-/// themes, and the input / dropdown decoration themes; the remaining component
-/// themes are added in later batches. Elevation and shadow defaults already
-/// reflect the aesthetic: elevation is `0` and shadows are transparent, so
-/// depth reads as glow rather than drop shadow.
+/// This batch populates `ColorScheme`, `TextTheme`, and the core-control
+/// component themes (buttons, input / dropdown decoration, and the selection
+/// controls — checkbox / radio / switch / slider / chip); the remaining
+/// component themes are added in later batches. Elevation and shadow defaults
+/// already reflect the aesthetic: elevation is `0` and shadows are transparent,
+/// so depth reads as glow rather than drop shadow.
 abstract final class AurisTheme {
   const AurisTheme._();
 
@@ -65,6 +66,12 @@ abstract final class AurisTheme {
       // Input + dropdown decoration themes.
       inputDecorationTheme: AurisInputThemes.inputDecoration(scheme),
       dropdownMenuTheme: AurisInputThemes.dropdownMenu(scheme),
+      // Selection-control component themes.
+      checkboxTheme: AurisInputThemes.checkbox(scheme),
+      radioTheme: AurisInputThemes.radio(scheme),
+      switchTheme: AurisInputThemes.switchTheme(scheme),
+      sliderTheme: AurisInputThemes.slider(scheme),
+      chipTheme: AurisInputThemes.chip(scheme),
       // Carry the resolved scheme so custom widgets read the exact same values.
       extensions: <ThemeExtension<dynamic>>[scheme],
     );
