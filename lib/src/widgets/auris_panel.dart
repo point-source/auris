@@ -57,56 +57,44 @@ class AurisPanel extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          // Header strip — inset surface with right-angle corner ticks.
+          // Header strip — inset surface with corner ticks flanking the title.
           ColoredBox(
             color: scheme.surfaceInset,
-            child: Stack(
-              fit: StackFit.passthrough,
-              children: <Widget>[
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 11),
-                  child: Row(
-                    children: <Widget>[
-                      Flexible(
-                        child: Text(
-                          title.toUpperCase(),
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontFamily: AurisTokens.fontDisplay,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 15,
-                            letterSpacing: AurisTokens.trackingHeading,
-                            color: titleColor,
-                          ),
-                        ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 11),
+              child: Row(
+                children: <Widget>[
+                  _CornerTick(color: bracketColor, left: true),
+                  const SizedBox(width: 10),
+                  Flexible(
+                    child: Text(
+                      title.toUpperCase(),
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontFamily: AurisTokens.fontDisplay,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 15,
+                        letterSpacing: AurisTokens.trackingHeading,
+                        color: titleColor,
                       ),
-                      if (code != null) ...<Widget>[
-                        const Spacer(),
-                        Text(
-                          code!,
-                          style: TextStyle(
-                            fontFamily: AurisTokens.fontMono,
-                            fontSize: 11,
-                            letterSpacing: AurisTokens.trackingLabel,
-                            color: scheme.textMid,
-                          ),
-                        ),
-                      ],
-                    ],
+                    ),
                   ),
-                ),
-                Positioned(
-                  top: 6,
-                  left: 8,
-                  child: _CornerTick(color: bracketColor, left: true),
-                ),
-                Positioned(
-                  top: 6,
-                  right: 8,
-                  child: _CornerTick(color: bracketColor, left: false),
-                ),
-              ],
+                  const SizedBox(width: 10),
+                  _CornerTick(color: bracketColor, left: false),
+                  if (code != null) ...<Widget>[
+                    const Spacer(),
+                    Text(
+                      code!,
+                      style: TextStyle(
+                        fontFamily: AurisTokens.fontMono,
+                        fontSize: 11,
+                        letterSpacing: AurisTokens.trackingLabel,
+                        color: scheme.textMid,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
             ),
           ),
           Container(height: 1, color: scheme.borderResting),
