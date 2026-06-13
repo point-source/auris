@@ -101,15 +101,22 @@ class AurisContainer extends StatelessWidget {
       );
     }
 
-    // The glow is painted on a DecoratedBox whose shape matches the chamfer so
-    // the cast shadow follows the notched silhouette, not a plain rectangle.
+    // Fill + glow ride behind the (clipped) child; the glow's shape matches the
+    // chamfer so the cast shadow follows the notched silhouette. The border is
+    // drawn in the FOREGROUND so an opaque child (e.g. a panel's inset header
+    // strip) can never cover part of it — covering made the outline read as
+    // uneven where the header and body shades met it differently.
     Widget box = DecoratedBox(
       decoration: ShapeDecoration(
         color: effectiveFill,
-        shape: shape,
+        shape: AurisChamferBorder(cut: effectiveCut),
         shadows: depth?.glow.isEmpty ?? true ? null : depth!.glow,
       ),
-      child: content,
+      child: DecoratedBox(
+        position: DecorationPosition.foreground,
+        decoration: ShapeDecoration(shape: shape),
+        child: content,
+      ),
     );
 
     if (width != null || height != null) {
