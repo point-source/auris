@@ -151,51 +151,36 @@ abstract final class AurisTokens {
   /// Subtle resting glow.
   static const List<BoxShadow> glowSubtle = <BoxShadow>[
     BoxShadow(
-      color: Color(0x2EC8860A),
-      blurRadius: 6,
-      spreadRadius: -3,
+      color: Color(0x22C8860A),
+      blurRadius: 4,
+      spreadRadius: -2,
     ),
   ];
 
-  /// Active glow — two stacked amber blurs, contained by negative spread.
+  /// Active glow — a single tight amber blur hugging the element.
   static const List<BoxShadow> glowActive = <BoxShadow>[
     BoxShadow(
-      color: Color(0x55F0A500),
-      blurRadius: 8,
-      spreadRadius: -3,
-    ),
-    BoxShadow(
-      color: Color(0x22F0A500),
-      blurRadius: 14,
-      spreadRadius: -6,
+      color: Color(0x3DF0A500),
+      blurRadius: 5,
+      spreadRadius: -2,
     ),
   ];
 
   /// Danger glow.
   static const List<BoxShadow> glowDanger = <BoxShadow>[
     BoxShadow(
-      color: Color(0x55E84838),
-      blurRadius: 8,
-      spreadRadius: -3,
-    ),
-    BoxShadow(
-      color: Color(0x22E84838),
-      blurRadius: 14,
-      spreadRadius: -6,
+      color: Color(0x3DE84838),
+      blurRadius: 5,
+      spreadRadius: -2,
     ),
   ];
 
   /// Slate (secondary) glow.
   static const List<BoxShadow> glowSlate = <BoxShadow>[
     BoxShadow(
-      color: Color(0x558AABB0),
-      blurRadius: 8,
-      spreadRadius: -3,
-    ),
-    BoxShadow(
-      color: Color(0x228AABB0),
-      blurRadius: 14,
-      spreadRadius: -6,
+      color: Color(0x3D8AABB0),
+      blurRadius: 5,
+      spreadRadius: -2,
     ),
   ];
 

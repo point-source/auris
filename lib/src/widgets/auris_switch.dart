@@ -168,9 +168,8 @@ class _AurisSwitchState extends State<AurisSwitch>
         return KeyEventResult.ignored;
       },
       child: MouseRegion(
-        cursor: _enabled
-            ? SystemMouseCursors.click
-            : SystemMouseCursors.forbidden,
+        cursor:
+            _enabled ? SystemMouseCursors.click : SystemMouseCursors.forbidden,
         child: GestureDetector(
           onTap: _toggle,
           behavior: HitTestBehavior.opaque,
@@ -255,41 +254,39 @@ class _AurisSwitchState extends State<AurisSwitch>
             child: SizedBox(
               width: _trackWidth,
               height: _trackHeight,
-              // antiAliasWithSaveLayer gives the diagonal slant a smooth edge;
-              // plain antiAlias clipping leaves jaggies on diagonals.
-              child: ClipPath(
-                clipper: const SlantClipper(trackSlant),
-                clipBehavior: Clip.antiAliasWithSaveLayer,
-                child: DecoratedBox(
-                  decoration: ShapeDecoration(
-                    color: trackFill,
-                    shape: AurisSlantBorder(
-                      slant: trackSlant,
-                      side: BorderSide(color: trackBorder),
-                    ),
+              // No ClipPath: the track and thumb are both ShapeDecoration fills
+              // (anti-aliased) and the thumb stays within the track bounds, so
+              // there is nothing to clip — and a clip would re-introduce the
+              // jagged diagonal edge.
+              child: DecoratedBox(
+                decoration: ShapeDecoration(
+                  color: trackFill,
+                  shape: AurisSlantBorder(
+                    slant: trackSlant,
+                    side: BorderSide(color: trackBorder),
                   ),
-                  child: Stack(
-                    children: <Widget>[
-                      Positioned(
-                        left: thumbX,
-                        top: _thumbInset,
-                        // The ShapeDecoration fills the slant anti-aliased;
-                        // no ClipPath needed (and a clip would re-introduce
-                        // the jagged diagonal).
-                        child: Container(
-                          width: thumbSize,
-                          height: thumbSize,
-                          decoration: ShapeDecoration(
-                            color: thumbColor,
-                            shape: const AurisSlantBorder(slant: thumbSlant),
-                            shadows: widget.value && t > 0.5
-                                ? scheme.depthSubtle.glow
-                                : null,
-                          ),
+                ),
+                child: Stack(
+                  children: <Widget>[
+                    Positioned(
+                      left: thumbX,
+                      top: _thumbInset,
+                      // The ShapeDecoration fills the slant anti-aliased;
+                      // no ClipPath needed (and a clip would re-introduce
+                      // the jagged diagonal).
+                      child: Container(
+                        width: thumbSize,
+                        height: thumbSize,
+                        decoration: ShapeDecoration(
+                          color: thumbColor,
+                          shape: const AurisSlantBorder(slant: thumbSlant),
+                          shadows: widget.value && t > 0.5
+                              ? scheme.depthSubtle.glow
+                              : null,
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),

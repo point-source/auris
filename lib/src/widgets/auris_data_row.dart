@@ -68,19 +68,16 @@ class AurisDataRow extends StatelessWidget {
             ),
           ),
           if (value != null)
-            DecoratedBox(
-              decoration: BoxDecoration(
-                boxShadow: highlight ? scheme.depthActive.glow : null,
-              ),
-              child: Text(
-                value!,
-                style: TextStyle(
-                  fontFamily: AurisTokens.fontMono,
-                  fontSize: 13,
-                  fontWeight: highlight ? FontWeight.w600 : FontWeight.w400,
-                  letterSpacing: AurisTokens.trackingBody,
-                  color: valueColor,
-                ),
+            Text(
+              value!,
+              style: TextStyle(
+                fontFamily: AurisTokens.fontMono,
+                fontSize: 13,
+                fontWeight: highlight ? FontWeight.w600 : FontWeight.w400,
+                letterSpacing: AurisTokens.trackingBody,
+                color: valueColor,
+                // A tight glyph shadow when highlighted, not a box halo.
+                shadows: highlight ? scheme.depthSubtle.glow : null,
               ),
             ),
           if (trailing != null) ...<Widget>[
