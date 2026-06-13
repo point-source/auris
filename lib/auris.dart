@@ -9,6 +9,7 @@
 library;
 
 export 'src/painters/chamfer_border.dart';
+export 'src/painters/chamfer_clipper.dart';
 export 'src/scheme.dart';
 export 'src/theme.dart';
 export 'src/tokens.dart';

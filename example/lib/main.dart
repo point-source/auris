@@ -1,4 +1,5 @@
 import 'package:auris/auris.dart';
+import 'package:auris/auris_widgets.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(const AurisExampleApp());
@@ -44,6 +45,7 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
   String? _dropdown = 'ALPHA';
   int _navIndex = 0;
   int _step = 1;
+  bool _showError = true;
 
   @override
   Widget build(BuildContext context) {
@@ -607,6 +609,152 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
                       ),
                     ],
                   ),
+                ),
+
+                // ---- BADGES (CUSTOM) ----------------------------------------
+                const _SectionHeader('BADGES (HUD)'),
+                const Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: <Widget>[
+                    AurisBadge('ONLINE', variant: AurisBadgeVariant.success),
+                    AurisBadge('ARMED', variant: AurisBadgeVariant.gold),
+                    AurisBadge('SYNC', variant: AurisBadgeVariant.amber),
+                    AurisBadge('LINK', variant: AurisBadgeVariant.slate),
+                    AurisBadge('FAULT', variant: AurisBadgeVariant.danger),
+                    AurisBadge('OFFLINE', variant: AurisBadgeVariant.inactive),
+                  ],
+                ),
+
+                // ---- PANELS -------------------------------------------------
+                const _SectionHeader('PANELS'),
+                const AurisPanel(
+                  title: 'Reactor Core',
+                  code: 'SYS-01',
+                  child: Text(
+                    'Chamfered titled panel with bracket-flanked header and a '
+                    'status code.',
+                  ),
+                ),
+                const SizedBox(height: 16),
+                const AurisPanel(
+                  title: 'Priority Channel',
+                  code: 'ACCENT',
+                  accent: true,
+                  child: Text(
+                    'Accent mode: gold border and a subtle glow mark this panel '
+                    'as emphasized.',
+                  ),
+                ),
+
+                // ---- NOTIFICATIONS ------------------------------------------
+                const _SectionHeader('NOTIFICATIONS'),
+                const AurisNotification(
+                  title: 'Uplink Established',
+                  message: 'Telemetry stream is nominal.',
+                  variant: AurisNotificationVariant.info,
+                ),
+                const SizedBox(height: 12),
+                const AurisNotification(
+                  title: 'Calibration Complete',
+                  message: 'All 14 subsystems passed.',
+                  variant: AurisNotificationVariant.success,
+                ),
+                const SizedBox(height: 12),
+                const AurisNotification(
+                  title: 'Power Reserve Low',
+                  message: 'Auxiliary cells at 18%.',
+                  code: 'W-204',
+                  variant: AurisNotificationVariant.warning,
+                ),
+                const SizedBox(height: 12),
+                if (_showError)
+                  AurisNotification(
+                    title: 'Containment Breach',
+                    message: 'Sector 7 isolation failed.',
+                    code: 'E-911',
+                    variant: AurisNotificationVariant.error,
+                    onDismiss: () => setState(() => _showError = false),
+                  )
+                else
+                  OutlinedButton(
+                    onPressed: () => setState(() => _showError = true),
+                    child: const Text('RESTORE ALERT'),
+                  ),
+
+                // ---- DATA ROWS ----------------------------------------------
+                const _SectionHeader('DATA ROWS'),
+                const AurisDataRow(label: 'Core Temp', value: '412 K'),
+                const AurisDataRow(label: 'Output', value: '82.4 MW'),
+                const AurisDataRow(
+                  label: 'Field Strength',
+                  value: 'CRITICAL',
+                  highlight: true,
+                ),
+                const AurisDataRow(
+                  label: 'Coolant Loop',
+                  value: 'NOMINAL',
+                  trailing: AurisBadge(
+                    'OK',
+                    variant: AurisBadgeVariant.success,
+                  ),
+                ),
+
+                // ---- STAT CARDS ---------------------------------------------
+                const _SectionHeader('STAT CARDS'),
+                const Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: AurisStatCard(
+                        label: 'Throughput',
+                        value: '94.2',
+                        unit: 'GB/s',
+                        delta: '+2.4%',
+                      ),
+                    ),
+                    SizedBox(width: 12),
+                    Expanded(
+                      child: AurisStatCard(
+                        label: 'Latency',
+                        value: '12',
+                        unit: 'ms',
+                        delta: '-3.1%',
+                        deltaPositiveIsGood: false,
+                      ),
+                    ),
+                  ],
+                ),
+
+                // ---- ORNAMENTS ----------------------------------------------
+                const _SectionHeader('ORNAMENTS'),
+                Text('HEX CLUSTER', style: text.labelMedium),
+                const SizedBox(height: 8),
+                const SizedBox(
+                  height: 96,
+                  width: double.infinity,
+                  child: AurisHexOrnament(),
+                ),
+                const SizedBox(height: 16),
+                Text('SCAN BRACKET', style: text.labelMedium),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    AurisScanBracket(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Text('TARGET', style: text.bodyMedium),
+                      ),
+                    ),
+                    AurisScanBracket(
+                      pulse: true,
+                      color: scheme.dangerBright,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Text('LOCK', style: text.bodyMedium),
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 24),
               ],

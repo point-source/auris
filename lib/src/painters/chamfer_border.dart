@@ -2,6 +2,52 @@ import 'dart:ui' show lerpDouble;
 
 import 'package:flutter/material.dart';
 
+/// The effective chamfer cut for [rect]: [cut] clamped to half the shorter side
+/// so a large bevel on a small rect degrades gracefully instead of
+/// self-crossing.
+///
+/// This is the single clamp rule shared by every consumer of the Auris corner
+/// geometry — [AurisChamferBorder], [AurisChamferInputBorder], and
+/// `ChamferClipper` — so the clipped silhouette matches the bordered one
+/// exactly.
+double aurisEffectiveChamferCut(Rect rect, double cut) =>
+    cut.clamp(0.0, rect.shortestSide / 2);
+
+/// The signature Auris notched polygon for [rect]: a six-vertex path cutting
+/// **only the top-left and bottom-right** corners by [cut] (clamped per-rect).
+///
+/// This is the single place the corner *path* lives. [AurisChamferBorder]
+/// (theme layer) and `ChamferClipper` (widget layer) both build their geometry
+/// from this function, so "which corners are cut" and "how the cut is shaped"
+/// is one definition, not several that can drift apart (§spec:design-tokens
+/// "Shape").
+///
+/// Starting on the top edge a [cut] before the top-left corner, it slants
+/// down-left to the left edge ([cut] below the corner), runs down to the square
+/// bottom-left corner, along the bottom to a [cut] before the bottom-right
+/// corner, slants up-right to the right edge, and up to the square top-right
+/// corner before closing.
+Path aurisChamferPath(Rect rect, double cut) {
+  final double c = aurisEffectiveChamferCut(rect, cut);
+  if (c <= 0) {
+    return Path()..addRect(rect);
+  }
+  return Path()
+    // Top edge, a cut before the top-left corner.
+    ..moveTo(rect.left + c, rect.top)
+    // Slant down-left to the left edge (top-left corner cut).
+    ..lineTo(rect.left, rect.top + c)
+    // Down the left edge to the square bottom-left corner.
+    ..lineTo(rect.left, rect.bottom)
+    // Along the bottom to a cut before the bottom-right corner.
+    ..lineTo(rect.right - c, rect.bottom)
+    // Slant up-right to the right edge (bottom-right corner cut).
+    ..lineTo(rect.right, rect.bottom - c)
+    // Up the right edge to the square top-right corner, then back to start.
+    ..lineTo(rect.right, rect.top)
+    ..close();
+}
+
 /// The signature Auris corner geometry: an **asymmetric** 45° chamfer that cuts
 /// **only the top-left and bottom-right** corners, leaving the top-right and
 /// bottom-left square (§spec:design-tokens "Shape", §spec:theme-layer).
@@ -28,36 +74,12 @@ class AurisChamferBorder extends OutlinedBorder {
   /// never exceeds half the shorter side.
   final double cut;
 
-  /// The effective cut for [rect]: [cut] clamped to half the shorter side so a
-  /// large bevel on a small rect degrades gracefully instead of self-crossing.
-  double _effectiveCut(Rect rect) {
-    final double limit = rect.shortestSide / 2;
-    final double c = cut.clamp(0.0, limit);
-    return c;
-  }
-
   /// The notched polygon for [rect], inset on all edges by [inset] (used to
-  /// derive the inner path from the outer one).
+  /// derive the inner path from the outer one). Delegates to the shared
+  /// [aurisChamferPath] so the silhouette matches `ChamferClipper` exactly.
   Path _buildPath(Rect rect, {double inset = 0}) {
     final Rect r = inset == 0 ? rect : rect.deflate(inset);
-    final double c = _effectiveCut(r);
-    if (c <= 0) {
-      return Path()..addRect(r);
-    }
-    return Path()
-      // Top edge, a cut before the top-left corner.
-      ..moveTo(r.left + c, r.top)
-      // Slant down-left to the left edge (top-left corner cut).
-      ..lineTo(r.left, r.top + c)
-      // Down the left edge to the square bottom-left corner.
-      ..lineTo(r.left, r.bottom)
-      // Along the bottom to a cut before the bottom-right corner.
-      ..lineTo(r.right - c, r.bottom)
-      // Slant up-right to the right edge (bottom-right corner cut).
-      ..lineTo(r.right, r.bottom - c)
-      // Up the right edge to the square top-right corner, then back to start.
-      ..lineTo(r.right, r.top)
-      ..close();
+    return aurisChamferPath(r, cut);
   }
 
   @override
@@ -153,22 +175,9 @@ class AurisChamferInputBorder extends InputBorder {
   /// The length of each 45° cut leg, in logical pixels.
   final double cut;
 
-  double _effectiveCut(Rect rect) => cut.clamp(0.0, rect.shortestSide / 2);
-
   Path _buildPath(Rect rect, {double inset = 0}) {
     final Rect r = inset == 0 ? rect : rect.deflate(inset);
-    final double c = _effectiveCut(r);
-    if (c <= 0) {
-      return Path()..addRect(r);
-    }
-    return Path()
-      ..moveTo(r.left + c, r.top)
-      ..lineTo(r.left, r.top + c)
-      ..lineTo(r.left, r.bottom)
-      ..lineTo(r.right - c, r.bottom)
-      ..lineTo(r.right, r.bottom - c)
-      ..lineTo(r.right, r.top)
-      ..close();
+    return aurisChamferPath(r, cut);
   }
 
   @override
