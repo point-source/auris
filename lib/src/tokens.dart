@@ -90,14 +90,20 @@ abstract final class AurisTokens {
   // Typography.
   // ---------------------------------------------------------------------------
 
+  // Families are prefixed with `packages/auris/` because the fonts are bundled
+  // in this package: Flutter registers package fonts under that prefix, and the
+  // bare name does not resolve from the package's own code (it silently falls
+  // back to the platform font). The prefix resolves correctly both here and in
+  // any app that depends on the package.
+
   /// Display / headline family (Rajdhani). Uppercase, letter-spaced.
-  static const String fontDisplay = 'Rajdhani';
+  static const String fontDisplay = 'packages/auris/Rajdhani';
 
   /// Body / label family (Exo 2).
-  static const String fontBody = 'ExoTwo';
+  static const String fontBody = 'packages/auris/ExoTwo';
 
   /// Data / monospace family (Share Tech Mono).
-  static const String fontMono = 'ShareTechMono';
+  static const String fontMono = 'packages/auris/ShareTechMono';
 
   /// Letter spacing for label roles.
   static const double trackingLabel = 1.5;
