@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 
 void main() => runApp(const AurisExampleApp());
 
-/// The core-controls showcase: a scrollable app that applies [AurisTheme.light]
-/// and renders every re-skinned core control — buttons (all variants incl.
-/// disabled), inputs (text, password, error, dropdown), selection controls
-/// (checkbox, radio, switch, chip), and sliders — each section introduced by a
-/// monospace uppercase amber header (§spec:showcase).
+/// The showcase: a scrollable app that applies [AurisTheme.light] and renders
+/// the re-skinned Material widgets — buttons, inputs, selection controls and
+/// sliders; surfaces and overlays (cards, dialog, snackbar, bottom sheet,
+/// tooltip, popup menu); navigation chrome (tab bar, navigation bar); and
+/// data / feedback widgets (data table, list / expansion tile, progress, badge,
+/// stepper) — each section introduced by a monospace uppercase amber header
+/// (§spec:showcase).
 class AurisExampleApp extends StatelessWidget {
   const AurisExampleApp({super.key});
 
@@ -40,6 +42,8 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
   final Set<String> _chips = <String>{'CORE'};
   String _segment = 'AUTO';
   String? _dropdown = 'ALPHA';
+  int _navIndex = 0;
+  int _step = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -311,12 +315,375 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
                 const SizedBox(height: 8),
                 Text('LOCKED (DISABLED)', style: text.labelMedium),
                 const Slider(value: 0.6, onChanged: null),
+
+                // ---- CARDS & PANELS -----------------------------------------
+                const _SectionHeader('CARDS & PANELS'),
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text('REACTOR CORE', style: text.titleMedium),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Chamfered panel surface with a resting outline in '
+                          'place of a Material drop shadow.',
+                          style: text.bodyMedium,
+                        ),
+                        const SizedBox(height: 12),
+                        Row(
+                          children: <Widget>[
+                            const Badge(label: Text('NOMINAL')),
+                            const SizedBox(width: 12),
+                            Tooltip(
+                              message: 'STABLE',
+                              child: Icon(
+                                Icons.shield_outlined,
+                                color: scheme.primaryActive,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                // ---- OVERLAYS -----------------------------------------------
+                const _SectionHeader('OVERLAYS'),
+                Text(
+                  'Trigger overlays — none are pre-opened.',
+                  style: text.bodyMedium,
+                ),
+                const SizedBox(height: 12),
+                Wrap(
+                  spacing: 12,
+                  runSpacing: 12,
+                  children: <Widget>[
+                    OutlinedButton(
+                      onPressed: _showDialog,
+                      child: const Text('DIALOG'),
+                    ),
+                    OutlinedButton(
+                      onPressed: _showSnackBar,
+                      child: const Text('SNACKBAR'),
+                    ),
+                    OutlinedButton(
+                      onPressed: _showBottomSheet,
+                      child: const Text('SHEET'),
+                    ),
+                    PopupMenuButton<String>(
+                      tooltip: 'MENU',
+                      icon: const Icon(Icons.more_vert),
+                      itemBuilder: (BuildContext context) =>
+                          const <PopupMenuEntry<String>>[
+                        PopupMenuItem<String>(
+                          value: 'ARM',
+                          child: Text('ARM'),
+                        ),
+                        PopupMenuItem<String>(
+                          value: 'DISARM',
+                          child: Text('DISARM'),
+                        ),
+                        PopupMenuItem<String>(
+                          value: 'RESET',
+                          child: Text('RESET'),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+
+                // ---- NAVIGATION ---------------------------------------------
+                const _SectionHeader('NAVIGATION'),
+                Text('TAB BAR', style: text.labelMedium),
+                const SizedBox(height: 8),
+                DefaultTabController(
+                  length: 3,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      const TabBar(
+                        tabs: <Widget>[
+                          Tab(text: 'STATUS'),
+                          Tab(text: 'POWER'),
+                          Tab(text: 'COMMS'),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 64,
+                        child: TabBarView(
+                          children: <Widget>[
+                            Center(
+                              child: Text('ALL SYSTEMS NOMINAL',
+                                  style: text.bodyMedium),
+                            ),
+                            Center(
+                              child: Text('REACTOR AT 82%',
+                                  style: text.bodyMedium),
+                            ),
+                            Center(
+                              child: Text('UPLINK ESTABLISHED',
+                                  style: text.bodyMedium),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Text('NAVIGATION BAR', style: text.labelMedium),
+                const SizedBox(height: 8),
+                NavigationBar(
+                  selectedIndex: _navIndex,
+                  onDestinationSelected: (int i) =>
+                      setState(() => _navIndex = i),
+                  destinations: const <NavigationDestination>[
+                    NavigationDestination(
+                      icon: Icon(Icons.dashboard_outlined),
+                      selectedIcon: Icon(Icons.dashboard),
+                      label: 'HUD',
+                    ),
+                    NavigationDestination(
+                      icon: Icon(Icons.sensors_outlined),
+                      selectedIcon: Icon(Icons.sensors),
+                      label: 'SENSORS',
+                    ),
+                    NavigationDestination(
+                      icon: Icon(Icons.settings_outlined),
+                      selectedIcon: Icon(Icons.settings),
+                      label: 'CONFIG',
+                    ),
+                  ],
+                ),
+
+                // ---- DATA ----------------------------------------------------
+                const _SectionHeader('DATA'),
+                Text('DATA TABLE', style: text.labelMedium),
+                const SizedBox(height: 8),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: DataTable(
+                    columns: const <DataColumn>[
+                      DataColumn(label: Text('NODE')),
+                      DataColumn(label: Text('LOAD')),
+                      DataColumn(label: Text('STATE')),
+                    ],
+                    rows: const <DataRow>[
+                      DataRow(
+                        cells: <DataCell>[
+                          DataCell(Text('ALPHA')),
+                          DataCell(Text('42%')),
+                          DataCell(Text('ONLINE')),
+                        ],
+                      ),
+                      DataRow(
+                        cells: <DataCell>[
+                          DataCell(Text('BRAVO')),
+                          DataCell(Text('77%')),
+                          DataCell(Text('ONLINE')),
+                        ],
+                      ),
+                      DataRow(
+                        selected: true,
+                        cells: <DataCell>[
+                          DataCell(Text('CHARLIE')),
+                          DataCell(Text('98%')),
+                          DataCell(Text('CRITICAL')),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Text('LIST TILES', style: text.labelMedium),
+                const SizedBox(height: 8),
+                ListTile(
+                  leading: const Icon(Icons.memory),
+                  title: const Text('PRIMARY BUS'),
+                  subtitle: const Text('Voltage nominal'),
+                  trailing: const Text('12.4V'),
+                  onTap: () {},
+                ),
+                ListTile(
+                  selected: true,
+                  leading: const Icon(Icons.bolt),
+                  title: const Text('AUX BUS'),
+                  subtitle: const Text('Selected'),
+                  trailing: const Text('5.0V'),
+                  onTap: () {},
+                ),
+                const SizedBox(height: 8),
+                ExpansionTile(
+                  title: const Text('DIAGNOSTICS'),
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Text(
+                        'No faults detected across 14 subsystems.',
+                        style: text.bodyMedium,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Text('PROGRESS', style: text.labelMedium),
+                const SizedBox(height: 8),
+                const LinearProgressIndicator(value: 0.66),
+                const SizedBox(height: 12),
+                Row(
+                  children: <Widget>[
+                    const SizedBox(
+                      width: 28,
+                      height: 28,
+                      child: CircularProgressIndicator(strokeWidth: 3),
+                    ),
+                    const SizedBox(width: 16),
+                    Text('SYNCING…', style: text.bodyMedium),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Text('BADGES', style: text.labelMedium),
+                const SizedBox(height: 8),
+                Row(
+                  children: <Widget>[
+                    Badge(
+                      label: const Text('3'),
+                      child: Icon(
+                        Icons.notifications_outlined,
+                        color: scheme.primaryActive,
+                      ),
+                    ),
+                    const SizedBox(width: 24),
+                    const Badge(
+                      label: Text('SYNC'),
+                      child: Icon(Icons.cloud_outlined),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Text('STEPPER', style: text.labelMedium),
+                const SizedBox(height: 8),
+                SizedBox(
+                  height: 280,
+                  child: Stepper(
+                    currentStep: _step,
+                    onStepTapped: (int s) => setState(() => _step = s),
+                    controlsBuilder: (BuildContext context,
+                        ControlsDetails details) {
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 12),
+                        child: Row(
+                          children: <Widget>[
+                            FilledButton(
+                              onPressed: details.onStepContinue,
+                              child: const Text('NEXT'),
+                            ),
+                            const SizedBox(width: 8),
+                            TextButton(
+                              onPressed: details.onStepCancel,
+                              child: const Text('BACK'),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                    onStepContinue: () => setState(
+                        () => _step = (_step + 1).clamp(0, 2)),
+                    onStepCancel: () => setState(
+                        () => _step = (_step - 1).clamp(0, 2)),
+                    steps: const <Step>[
+                      Step(
+                        title: Text('CALIBRATE'),
+                        content: Text('Align sensors.'),
+                        state: StepState.complete,
+                        isActive: true,
+                      ),
+                      Step(
+                        title: Text('PRIME'),
+                        content: Text('Spin up the reactor.'),
+                        isActive: true,
+                      ),
+                      Step(
+                        title: Text('ENGAGE'),
+                        content: Text('Commit to launch.'),
+                      ),
+                    ],
+                  ),
+                ),
                 const SizedBox(height: 24),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  /// Open a chamfered, flat dialog (theme-driven; no per-call styling).
+  Future<void> _showDialog() {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('CONFIRM LAUNCH'),
+          content: const Text(
+            'This commits the sequence and cannot be aborted.',
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('CANCEL'),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('LAUNCH'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  /// Show a chamfered, flat snackbar with a gold action.
+  void _showSnackBar() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Text('SEQUENCE ARMED'),
+        action: SnackBarAction(label: 'UNDO', onPressed: () {}),
+      ),
+    );
+  }
+
+  /// Open a chamfered, flat modal bottom sheet.
+  Future<void> _showBottomSheet() {
+    return showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        final TextTheme text = Theme.of(context).textTheme;
+        return Padding(
+          padding: const EdgeInsets.fromLTRB(24, 8, 24, 32),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text('TELEMETRY', style: text.titleMedium),
+              const SizedBox(height: 12),
+              Text(
+                'A chamfered modal sheet on the panel surface.',
+                style: text.bodyMedium,
+              ),
+              const SizedBox(height: 16),
+              FilledButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('CLOSE'),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
