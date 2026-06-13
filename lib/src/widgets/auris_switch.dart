@@ -62,9 +62,12 @@ class AurisSwitch extends StatefulWidget {
 
 class _AurisSwitchState extends State<AurisSwitch>
     with SingleTickerProviderStateMixin {
-  static const double _trackWidth = 52;
-  static const double _trackHeight = 26;
-  static const double _thumbInset = 3;
+  static const double _trackWidth = 48;
+  static const double _trackHeight = 24;
+  static const double _thumbInset = 4;
+  // Space reserved around the track for the focus ring, so focusing never
+  // shifts the row layout.
+  static const double _focusPad = 6;
 
   late final AnimationController _controller = AnimationController(
     vsync: this,
@@ -222,15 +225,18 @@ class _AurisSwitchState extends State<AurisSwitch>
       t,
     )!;
 
-    const double trackCut = AurisTokens.bevelSm;
+    // A subtle chamfer (bevelXs) on the small track/thumb — a larger cut reads
+    // as a lopsided wedge at this size.
+    const double trackCut = AurisTokens.bevelXs;
     const double thumbSize = _trackHeight - _thumbInset * 2;
     const double travel = _trackWidth - _thumbInset * 2 - thumbSize;
     final double thumbX = _thumbInset + travel * t;
     const double thumbCut = AurisTokens.bevelXs;
 
     return SizedBox(
-      width: _trackWidth,
-      height: _focused ? _trackHeight + 8 : _trackHeight,
+      // Fixed size (track + reserved ring space) so focus never shifts layout.
+      width: _trackWidth + _focusPad,
+      height: _trackHeight + _focusPad,
       child: Center(
         child: DecoratedBox(
           // The keyboard-focus ring: a gold chamfered outline around the track.
