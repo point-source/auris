@@ -206,10 +206,52 @@ class AurisChamferInputBorder extends InputBorder {
     if (borderSide.style == BorderStyle.none || borderSide.width == 0) {
       return;
     }
-    canvas.drawPath(
-      getOuterPath(rect, textDirection: textDirection),
-      borderSide.toPaint(),
-    );
+    final Paint paint = borderSide.toPaint();
+
+    // No floating label → stroke the whole chamfered outline.
+    if (gapStart == null || gapExtent <= 0.0 || gapPercentage == 0.0) {
+      canvas.drawPath(
+        getOuterPath(rect, textDirection: textDirection),
+        paint,
+      );
+      return;
+    }
+
+    // A floating label sits on the top edge: cut a gap there so the border does
+    // not draw through the label text (mirrors OutlineInputBorder). The top
+    // edge runs from `topStart` (a cut in from the left, after the top-left
+    // chamfer) to the square top-right corner at `rect.right`.
+    const double gapPadding = 4.0;
+    final double c = aurisEffectiveChamferCut(rect, cut);
+    final double topStart = rect.left + c;
+    final double topEnd = rect.right;
+    final double extent =
+        lerpDouble(0.0, gapExtent + gapPadding * 2.0, gapPercentage)!;
+
+    double gapLeft;
+    double gapRight;
+    if (textDirection == TextDirection.rtl) {
+      gapRight = gapStart + gapPadding;
+      gapLeft = gapRight - extent;
+    } else {
+      gapLeft = gapStart - gapPadding;
+      gapRight = gapLeft + extent;
+    }
+    gapLeft = gapLeft.clamp(topStart, topEnd);
+    gapRight = gapRight.clamp(topStart, topEnd);
+
+    // Open path: trace the full outline but omit the [gapLeft, gapRight] span
+    // of the top edge.
+    final Path path = Path()
+      ..moveTo(gapLeft, rect.top)
+      ..lineTo(topStart, rect.top)
+      ..lineTo(rect.left, rect.top + c)
+      ..lineTo(rect.left, rect.bottom)
+      ..lineTo(rect.right - c, rect.bottom)
+      ..lineTo(rect.right, rect.bottom - c)
+      ..lineTo(rect.right, rect.top)
+      ..lineTo(gapRight, rect.top);
+    canvas.drawPath(path, paint);
   }
 
   @override
