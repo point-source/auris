@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../painters/chamfer_border.dart';
-import '../painters/chamfer_clipper.dart';
+import '../painters/slant_clipper.dart';
 import '../scheme.dart';
 import '../tokens.dart';
 
@@ -225,13 +224,12 @@ class _AurisSwitchState extends State<AurisSwitch>
       t,
     )!;
 
-    // A subtle chamfer (bevelXs) on the small track/thumb — a larger cut reads
-    // as a lopsided wedge at this size.
-    const double trackCut = AurisTokens.bevelXs;
+    // The slanted (parallelogram) HUD motif for the track and thumb.
+    const double trackSlant = 4;
+    const double thumbSlant = 4;
     const double thumbSize = _trackHeight - _thumbInset * 2;
     const double travel = _trackWidth - _thumbInset * 2 - thumbSize;
     final double thumbX = _thumbInset + travel * t;
-    const double thumbCut = AurisTokens.bevelXs;
 
     return SizedBox(
       // Fixed size (track + reserved ring space) so focus never shifts layout.
@@ -239,10 +237,10 @@ class _AurisSwitchState extends State<AurisSwitch>
       height: _trackHeight + _focusPad,
       child: Center(
         child: DecoratedBox(
-          // The keyboard-focus ring: a gold chamfered outline around the track.
+          // The keyboard-focus ring: a gold slanted outline around the track.
           decoration: ShapeDecoration(
-            shape: AurisChamferBorder(
-              cut: trackCut + 3,
+            shape: AurisSlantBorder(
+              slant: trackSlant + 3,
               side: _focused && _enabled
                   ? BorderSide(color: scheme.primaryActive, width: 1.5)
                   : BorderSide.none,
@@ -254,12 +252,12 @@ class _AurisSwitchState extends State<AurisSwitch>
               width: _trackWidth,
               height: _trackHeight,
               child: ClipPath(
-                clipper: const ChamferClipper(cut: trackCut),
+                clipper: const SlantClipper(trackSlant),
                 child: DecoratedBox(
                   decoration: ShapeDecoration(
                     color: trackFill,
-                    shape: AurisChamferBorder(
-                      cut: trackCut,
+                    shape: AurisSlantBorder(
+                      slant: trackSlant,
                       side: BorderSide(color: trackBorder),
                     ),
                   ),
@@ -269,13 +267,13 @@ class _AurisSwitchState extends State<AurisSwitch>
                         left: thumbX,
                         top: _thumbInset,
                         child: ClipPath(
-                          clipper: const ChamferClipper(cut: thumbCut),
+                          clipper: const SlantClipper(thumbSlant),
                           child: Container(
                             width: thumbSize,
                             height: thumbSize,
                             decoration: ShapeDecoration(
                               color: thumbColor,
-                              shape: const AurisChamferBorder(cut: thumbCut),
+                              shape: const AurisSlantBorder(slant: thumbSlant),
                               shadows: widget.value && t > 0.5
                                   ? scheme.depthSubtle.glow
                                   : null,
