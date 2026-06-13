@@ -32,13 +32,17 @@ abstract final class AurisButtonThemes {
       AurisChamferBorder(cut: scheme.bevel.md);
 
   /// The uppercase, letter-spaced button label style.
-  static TextStyle _labelStyle(AurisScheme scheme) => TextStyle(
-        fontFamily: AurisTokens.fontBody,
-        fontWeight: FontWeight.w600,
-        fontSize: 14,
-        letterSpacing: AurisTokens.trackingButton,
-        color: scheme.primaryActive,
-      );
+  ///
+  /// No `color` here on purpose — each button's `foregroundColor` drives the
+  /// text color so selected / disabled states resolve correctly (the
+  /// gold-filled selected SegmentedButton segment needs onPrimary text, not
+  /// gold-on-gold). A baked-in color would override foregroundColor.
+  static const TextStyle _labelStyle = TextStyle(
+    fontFamily: AurisTokens.fontBody,
+    fontWeight: FontWeight.w600,
+    fontSize: 14,
+    letterSpacing: AurisTokens.trackingButton,
+  );
 
   /// An amber hover / focus / press overlay that replaces the ink ripple.
   ///
@@ -123,7 +127,7 @@ abstract final class AurisButtonThemes {
         padding: const WidgetStatePropertyAll<EdgeInsets>(_padding),
         shape: WidgetStatePropertyAll<OutlinedBorder>(_bevel(scheme)),
         textStyle: WidgetStatePropertyAll<TextStyle>(
-          _labelStyle(scheme).copyWith(color: scheme.onPrimary),
+          _labelStyle.copyWith(color: scheme.onPrimary),
         ),
       ),
     );
@@ -150,7 +154,7 @@ abstract final class AurisButtonThemes {
         padding: const WidgetStatePropertyAll<EdgeInsets>(_padding),
         side: _side(scheme),
         shape: WidgetStatePropertyAll<OutlinedBorder>(_bevel(scheme)),
-        textStyle: WidgetStatePropertyAll<TextStyle>(_labelStyle(scheme)),
+        textStyle: const WidgetStatePropertyAll<TextStyle>(_labelStyle),
       ),
     );
   }
@@ -176,7 +180,7 @@ abstract final class AurisButtonThemes {
         padding: const WidgetStatePropertyAll<EdgeInsets>(_padding),
         side: _side(scheme),
         shape: WidgetStatePropertyAll<OutlinedBorder>(_bevel(scheme)),
-        textStyle: WidgetStatePropertyAll<TextStyle>(_labelStyle(scheme)),
+        textStyle: const WidgetStatePropertyAll<TextStyle>(_labelStyle),
       ),
     );
   }
@@ -201,7 +205,7 @@ abstract final class AurisButtonThemes {
         splashFactory: NoSplash.splashFactory,
         padding: const WidgetStatePropertyAll<EdgeInsets>(_padding),
         shape: WidgetStatePropertyAll<OutlinedBorder>(_bevel(scheme)),
-        textStyle: WidgetStatePropertyAll<TextStyle>(_labelStyle(scheme)),
+        textStyle: const WidgetStatePropertyAll<TextStyle>(_labelStyle),
       ),
     );
   }
@@ -291,7 +295,7 @@ abstract final class AurisButtonThemes {
             const WidgetStatePropertyAll<Color>(Colors.transparent),
         splashFactory: NoSplash.splashFactory,
         shape: WidgetStatePropertyAll<OutlinedBorder>(_bevel(scheme)),
-        textStyle: WidgetStatePropertyAll<TextStyle>(_labelStyle(scheme)),
+        textStyle: const WidgetStatePropertyAll<TextStyle>(_labelStyle),
       ),
     );
   }

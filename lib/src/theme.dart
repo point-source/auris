@@ -72,6 +72,7 @@ abstract final class AurisTheme {
       // Input + dropdown decoration themes.
       inputDecorationTheme: AurisInputThemes.inputDecoration(scheme),
       dropdownMenuTheme: AurisInputThemes.dropdownMenu(scheme),
+      menuButtonTheme: AurisInputThemes.menuButton(scheme),
       // Selection-control component themes.
       checkboxTheme: AurisInputThemes.checkbox(scheme),
       radioTheme: AurisInputThemes.radio(scheme),

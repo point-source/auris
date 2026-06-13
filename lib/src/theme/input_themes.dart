@@ -123,6 +123,51 @@ abstract final class AurisInputThemes {
   }
 
   // ---------------------------------------------------------------------------
+  // MenuButton — the rows inside a DropdownMenu popup. Full-width monospace
+  // entries, textMid → textBright on hover with an amber overlay, no splash.
+  // ---------------------------------------------------------------------------
+
+  /// The [MenuButtonThemeData] for [DropdownMenu] entry rows: monospace,
+  /// `textMid` resting / `textBright` on hover, amber overlay, square full-width
+  /// rows (the chamfer lives on the menu container, not each row).
+  static MenuButtonThemeData menuButton(AurisScheme scheme) {
+    return MenuButtonThemeData(
+      style: ButtonStyle(
+        backgroundColor:
+            const WidgetStatePropertyAll<Color>(Colors.transparent),
+        foregroundColor: WidgetStateProperty.resolveWith<Color?>(
+          (Set<WidgetState> states) {
+            if (states.contains(WidgetState.disabled)) {
+              return scheme.textDim;
+            }
+            if (states.contains(WidgetState.hovered) ||
+                states.contains(WidgetState.focused)) {
+              return scheme.textBright;
+            }
+            return scheme.textMid;
+          },
+        ),
+        overlayColor: _overlay(scheme.primaryActive),
+        textStyle: const WidgetStatePropertyAll<TextStyle>(
+          TextStyle(
+            fontFamily: AurisTokens.fontMono,
+            fontSize: 13,
+            letterSpacing: AurisTokens.trackingBody,
+          ),
+        ),
+        shape: const WidgetStatePropertyAll<OutlinedBorder>(
+          RoundedRectangleBorder(),
+        ),
+        splashFactory: NoSplash.splashFactory,
+        elevation: const WidgetStatePropertyAll<double>(0),
+        padding: const WidgetStatePropertyAll<EdgeInsets>(
+          EdgeInsets.symmetric(horizontal: 14, vertical: 9),
+        ),
+      ),
+    );
+  }
+
+  // ---------------------------------------------------------------------------
   // Checkbox — gold check fill, suppressed splash, amber overlay, chamfered.
   // ---------------------------------------------------------------------------
 
@@ -161,7 +206,8 @@ abstract final class AurisInputThemes {
       side: BorderSide(color: scheme.borderBright, width: 1.5),
       overlayColor: _overlay(scheme.primaryActive),
       splashRadius: 0,
-      shape: AurisChamferBorder(cut: scheme.bevel.sm),
+      // xs (not sm): the checkbox is ~18px, so a larger cut reads as a diamond.
+      shape: AurisChamferBorder(cut: scheme.bevel.xs),
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
     );
   }

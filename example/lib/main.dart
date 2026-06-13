@@ -193,24 +193,19 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                DropdownButtonFormField<String>(
-                  initialValue: _dropdown,
-                  decoration: const InputDecoration(labelText: 'CHANNEL'),
-                  items: const <DropdownMenuItem<String>>[
-                    DropdownMenuItem<String>(
-                      value: 'ALPHA',
-                      child: Text('ALPHA'),
-                    ),
-                    DropdownMenuItem<String>(
-                      value: 'BRAVO',
-                      child: Text('BRAVO'),
-                    ),
-                    DropdownMenuItem<String>(
+                DropdownMenu<String>(
+                  initialSelection: _dropdown,
+                  label: const Text('CHANNEL'),
+                  expandedInsets: EdgeInsets.zero,
+                  onSelected: (String? v) => setState(() => _dropdown = v),
+                  dropdownMenuEntries: const <DropdownMenuEntry<String>>[
+                    DropdownMenuEntry<String>(value: 'ALPHA', label: 'ALPHA'),
+                    DropdownMenuEntry<String>(value: 'BRAVO', label: 'BRAVO'),
+                    DropdownMenuEntry<String>(
                       value: 'CHARLIE',
-                      child: Text('CHARLIE'),
+                      label: 'CHARLIE',
                     ),
                   ],
-                  onChanged: (String? v) => setState(() => _dropdown = v),
                 ),
 
                 // ---- SELECTION CONTROLS -------------------------------------

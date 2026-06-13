@@ -69,11 +69,15 @@ class AurisDepth {
 @immutable
 class AurisBevelScale {
   const AurisBevelScale({
+    required this.xs,
     required this.sm,
     required this.md,
     required this.lg,
     required this.xl,
   });
+
+  /// Extra-small bevel — tiny controls (checkbox).
+  final double xs;
 
   /// Small bevel.
   final double sm;
@@ -90,6 +94,7 @@ class AurisBevelScale {
   static AurisBevelScale? _lerp(AurisBevelScale? a, AurisBevelScale? b, double t) {
     if (a == null || b == null) return t < 0.5 ? a : b;
     return AurisBevelScale(
+      xs: lerpDouble(a.xs, b.xs, t),
       sm: lerpDouble(a.sm, b.sm, t),
       md: lerpDouble(a.md, b.md, t),
       lg: lerpDouble(a.lg, b.lg, t),
@@ -303,6 +308,7 @@ class AurisScheme extends ThemeExtension<AurisScheme> {
       successBright: AurisTokens.successBright,
       // Shape.
       bevel: AurisBevelScale(
+        xs: AurisTokens.bevelXs * bevelScale,
         sm: AurisTokens.bevelSm * bevelScale,
         md: AurisTokens.bevelMd * bevelScale,
         lg: AurisTokens.bevelLg * bevelScale,

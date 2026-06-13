@@ -105,6 +105,10 @@ abstract final class AurisTokens {
   // Shape — chamfered (45°) corners are the signature geometry.
   // ---------------------------------------------------------------------------
 
+  /// Extra-small bevel — tiny controls (checkbox) where a larger cut reads as
+  /// a diamond rather than a chamfer.
+  static const double bevelXs = 3;
+
   /// Small bevel.
   static const double bevelSm = 6;
 
