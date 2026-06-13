@@ -15,7 +15,7 @@ are not design-defining are owned by the implementation and its tests.
 
 ## Overview and architecture §spec:overview
 
-*Status: not started*
+*Status: in progress*
 
 Cites: §req:problem-statement, §req:constraints
 
@@ -66,7 +66,7 @@ and renaming ahead of need would churn the public API.
 
 ## Design tokens §spec:design-tokens
 
-*Status: not started*
+*Status: in progress*
 
 Cites: §req:problem-statement, §req:quality-attributes, §req:constraints
 
@@ -139,7 +139,7 @@ the roles without touching this primitive layer or any call site.
 
 ## Resolved scheme and theme assembly §spec:scheme
 
-*Status: not started*
+*Status: in progress*
 
 Cites: §req:quality-attributes, §req:success-criteria, §req:constraints
 
@@ -193,7 +193,7 @@ values.
 
 ## Theme layer — complete Material re-skin §spec:theme-layer
 
-*Status: not started*
+*Status: in progress*
 
 Cites: §req:success-criteria, §req:user-stories, §req:priorities
 
@@ -375,7 +375,7 @@ motion is both an accessibility and a performance affordance.
 
 ## Fonts and packaging §spec:packaging
 
-*Status: not started*
+*Status: in progress*
 
 Cites: §req:success-criteria, §req:constraints, §req:priorities
 
@@ -401,7 +401,7 @@ to be publication-ready, but v0.1.0 does not publish.
 
 ## Example showcase §spec:showcase
 
-*Status: not started*
+*Status: in progress*
 
 Cites: §req:success-criteria, §req:user-stories
 
