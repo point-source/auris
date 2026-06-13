@@ -84,7 +84,7 @@ void main() {
   });
 
   group('AurisPanel', () {
-    testWidgets('renders title, code, body, and bracket ornaments', (
+    testWidgets('renders the uppercased title, code, and body', (
       WidgetTester tester,
     ) async {
       await tester.pumpWidget(
@@ -99,8 +99,8 @@ void main() {
       expect(find.text('REACTOR'), findsOneWidget);
       expect(find.text('SYS-01'), findsOneWidget);
       expect(find.text('BODY'), findsOneWidget);
-      expect(find.text('['), findsOneWidget);
-      expect(find.text(']'), findsOneWidget);
+      // The header is marked by corner ticks now, not '[' ']' glyphs.
+      expect(find.text('['), findsNothing);
     });
 
     testWidgets('accent mode adds a subtle-depth glow to the container', (

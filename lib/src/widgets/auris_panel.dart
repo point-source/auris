@@ -57,44 +57,56 @@ class AurisPanel extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          // Header strip — inset surface with bracket-flanked title.
+          // Header strip — inset surface with right-angle corner ticks.
           ColoredBox(
             color: scheme.surfaceInset,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-              child: Row(
-                children: <Widget>[
-                  _Bracket('[', bracketColor),
-                  const SizedBox(width: 8),
-                  Flexible(
-                    child: Text(
-                      title.toUpperCase(),
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontFamily: AurisTokens.fontDisplay,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 15,
-                        letterSpacing: AurisTokens.trackingHeading,
-                        color: titleColor,
+            child: Stack(
+              fit: StackFit.passthrough,
+              children: <Widget>[
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 11),
+                  child: Row(
+                    children: <Widget>[
+                      Flexible(
+                        child: Text(
+                          title.toUpperCase(),
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontFamily: AurisTokens.fontDisplay,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 15,
+                            letterSpacing: AurisTokens.trackingHeading,
+                            color: titleColor,
+                          ),
+                        ),
                       ),
-                    ),
+                      if (code != null) ...<Widget>[
+                        const Spacer(),
+                        Text(
+                          code!,
+                          style: TextStyle(
+                            fontFamily: AurisTokens.fontMono,
+                            fontSize: 11,
+                            letterSpacing: AurisTokens.trackingLabel,
+                            color: scheme.textMid,
+                          ),
+                        ),
+                      ],
+                    ],
                   ),
-                  const SizedBox(width: 8),
-                  _Bracket(']', bracketColor),
-                  if (code != null) ...<Widget>[
-                    const Spacer(),
-                    Text(
-                      code!,
-                      style: TextStyle(
-                        fontFamily: AurisTokens.fontMono,
-                        fontSize: 11,
-                        letterSpacing: AurisTokens.trackingLabel,
-                        color: scheme.textMid,
-                      ),
-                    ),
-                  ],
-                ],
-              ),
+                ),
+                Positioned(
+                  top: 6,
+                  left: 8,
+                  child: _CornerTick(color: bracketColor, left: true),
+                ),
+                Positioned(
+                  top: 6,
+                  right: 8,
+                  child: _CornerTick(color: bracketColor, left: false),
+                ),
+              ],
             ),
           ),
           Container(height: 1, color: scheme.borderResting),
@@ -106,22 +118,31 @@ class AurisPanel extends StatelessWidget {
   }
 }
 
-/// A single corner-bracket glyph used to flank a panel title.
-class _Bracket extends StatelessWidget {
-  const _Bracket(this.glyph, this.color);
+/// A small right-angle corner tick that marks a panel header corner — the
+/// `⌐`/`¬` accent the reference uses instead of flanking `[ ]` brackets.
+class _CornerTick extends StatelessWidget {
+  const _CornerTick({required this.color, required this.left});
 
-  final String glyph;
   final Color color;
+
+  /// Top-left tick (top + left edges) when true; top-right (top + right) when
+  /// false.
+  final bool left;
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      glyph,
-      style: TextStyle(
-        fontFamily: AurisTokens.fontMono,
-        fontSize: 15,
-        fontWeight: FontWeight.w600,
-        color: color,
+    final BorderSide side = BorderSide(color: color, width: 1.5);
+    return SizedBox(
+      width: 7,
+      height: 7,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          border: Border(
+            top: side,
+            left: left ? side : BorderSide.none,
+            right: left ? BorderSide.none : side,
+          ),
+        ),
       ),
     );
   }
