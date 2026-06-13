@@ -1,0 +1,37 @@
+name: auris
+description: >-
+  A Flutter UI kit and Material 3 theme system with a warm amber-on-near-black,
+  chamfered "augmentation-era" sci-fi aesthetic. Ships a drop-in ThemeData plus
+  a library of custom HUD widgets.
+version: 0.1.0
+publish_to: none
+
+environment:
+  sdk: ">=3.4.0 <4.0.0"
+  flutter: ">=3.22.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  fonts:
+    - family: Rajdhani
+      fonts:
+        - asset: fonts/Rajdhani-Medium.ttf
+          weight: 500
+        - asset: fonts/Rajdhani-SemiBold.ttf
+          weight: 600
+        - asset: fonts/Rajdhani-Bold.ttf
+          weight: 700
+    - family: ExoTwo
+      fonts:
+        - asset: fonts/Exo2-Regular.ttf
+    - family: ShareTechMono
+      fonts:
+        - asset: fonts/ShareTechMono-Regular.ttf
