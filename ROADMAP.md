@@ -4,39 +4,6 @@
 <!-- assumptions later sections depend on. Completed work leaves from -->
 <!-- the head; new work enters at the tail. -->
 
-## Material re-skin — surfaces, navigation & data
-
-Re-skin the remaining component families: containers/overlays, navigation
-chrome, and data/feedback widgets.
-
-### §road:surface-overlay-themes
-
-Implement the Card, Dialog, SnackBar, BottomSheet, Drawer, Tooltip, and
-PopupMenu themes in `lib/src/theme/overlay_themes.dart`. §spec:theme-layer.
-
-### §road:navigation-themes
-
-Implement the AppBar, NavigationBar, NavigationRail, and TabBar themes in
-`lib/src/theme/navigation_themes.dart`. §spec:theme-layer.
-
-### §road:data-feedback-themes
-
-Implement the DataTable, ListTile, ExpansionTile, ProgressIndicator, Divider,
-Badge, Stepper, and SearchBar/SearchView themes in
-`lib/src/theme/data_themes.dart`. §spec:theme-layer.
-
-### §road:surfaces-nav-data-showcase
-
-Add showcase sections for surfaces/overlays, navigation, and data/feedback
-components to `example/lib/main.dart`. §spec:showcase. Depends on
-§road:surface-overlay-themes, §road:navigation-themes, §road:data-feedback-themes.
-
-**Verify:** In the running example, exercise the Cards/Dialogs/Sheets,
-Navigation (TabBar, NavigationBar), and Data (DataTable, ListTile, Stepper,
-ProgressIndicator) sections; trigger a dialog and a snackbar. All surfaces use
-chamfered borders and amber glow instead of Material elevation shadows; no
-component renders default-styled.
-
 ## Custom HUD widgets — containers, panels & display
 
 Deliver the static HUD components that `ThemeData` cannot express, built on the
