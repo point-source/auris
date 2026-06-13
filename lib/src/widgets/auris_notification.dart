@@ -97,11 +97,19 @@ class AurisNotification extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            // Left accent bar carrying the variant glow.
+            // Left accent bar with a soft edge glow that bleeds into the panel.
+            // A dedicated glow (not the tight box depth token) because the bar
+            // is only a few px wide — the depth token's negative spread would
+            // shrink to nothing here.
             DecoratedBox(
               decoration: BoxDecoration(
                 color: v.accent,
-                boxShadow: v.depth.glow,
+                boxShadow: <BoxShadow>[
+                  BoxShadow(
+                    color: v.accent.withValues(alpha: 0.45),
+                    blurRadius: 10,
+                  ),
+                ],
               ),
               child: const SizedBox(width: 4),
             ),
