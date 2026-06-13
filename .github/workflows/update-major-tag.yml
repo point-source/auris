@@ -1,0 +1,22 @@
+name: Update Major Tag
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  update-major-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Move floating major tag to this release
+        run: |
+          set -euo pipefail
+          VERSION="${GITHUB_REF_NAME#v}"
+          MAJOR="v${VERSION%%.*}"
+          git tag -f "$MAJOR" "$GITHUB_SHA"
+          git push origin "$MAJOR" --force
