@@ -27,33 +27,6 @@ across themed Material widgets and Auris custom widgets in
 Material components and Auris custom widgets recolor consistently with no source
 edits; bevel and glow overrides visibly change corner cut and glow strength.
 
-## Accessibility & motion polish
-
-Hold the cross-cutting quality bars — AA contrast, visible focus, reduced-motion
-respect, and 60fps — across everything built so far.
-
-### §road:contrast-and-focus
-
-Tune any token used in a primary text/control role that fails WCAG AA, document
-the dim tokens as decorative-only, and add a visible `gold` keyboard-focus
-decoration to all interactive custom widgets. §spec:accessibility.
-
-### §road:reduced-motion-and-perf
-
-Make every animated widget honor `MediaQuery.disableAnimations` (render the end
-state) and bound glow/segment/clip work to hold 60fps. §spec:motion-performance.
-
-### §road:polish-showcase-verification
-
-Add a reduced-motion and keyboard-navigation pass to the showcase so both
-behaviors are demonstrable in `example/lib/main.dart`. §spec:showcase. Depends
-on §road:contrast-and-focus, §road:reduced-motion-and-perf.
-
-**Verify:** Enable the OS reduce-motion setting and reload the example —
-animated widgets show their end state with no animation. Tab through the
-showcase: a gold focus indicator is visible on every interactive element.
-Primary text and controls meet AA contrast; scrolling stays smooth.
-
 ## Packaging & pub-readiness
 
 Make Auris adoptable from a clean install and ready to publish.

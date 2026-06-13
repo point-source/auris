@@ -339,7 +339,7 @@ this is a conscious v0.1.0 boundary.
 
 ## Accessibility and contrast §spec:accessibility
 
-*Status: not started*
+*Status: complete*
 
 Cites: §req:quality-attributes, §req:constraints
 
@@ -366,7 +366,7 @@ tokens is documented so adopters do not misuse them for body content.
 
 ## Motion and performance §spec:motion-performance
 
-*Status: not started*
+*Status: complete*
 
 Cites: §req:quality-attributes, §req:priorities
 
