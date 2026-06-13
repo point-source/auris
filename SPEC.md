@@ -127,6 +127,30 @@ the slant geometry lives in one place (`AurisSlantBorder` / `SlantClipper`), so
 the two motifs stay distinct and internally consistent: chamfer for
 panels/buttons/surfaces, slant for data cells.
 
+**Component conventions.** Recurring rules that keep the aesthetic consistent
+and avoid the failure modes that small elements invite:
+
+- *Geometry scales with element size.* A fixed large corner cut reads as a
+  diamond or lopsided wedge on a small control. Tiny controls (checkbox, radio
+  pip, slider thumb) use the extra-small bevel; the switch slant is a constant
+  ratio of each element's height so the track and thumb edges stay parallel.
+- *Text glow is a tight glyph shadow, not a box halo.* A glowing value sets a
+  subtle `depthSubtle` shadow on the text style's `shadows` so the glow hugs the
+  glyphs. A `BoxShadow` behind the text reads as a rectangular halo and is
+  wrong.
+- *Glow hugs the element.* Depth is a tight blur with low alpha (and slight
+  negative spread on boxes), never a wash that bleeds across the layout. A
+  few-pixel accent bar uses its own small edge glow, since the box depth token's
+  negative spread would vanish on it.
+- *Fill chamfer/slant shapes via `ShapeDecoration`* (anti-aliased), not a
+  `ClipPath` over a `ColoredBox` — clipping leaves jagged diagonal edges. Use a
+  clip only to contain children, with `Clip.antiAliasWithSaveLayer`.
+- *Filled progressions dim the trail and brighten the leading/active cell.* In a
+  segmented meter or slider, trailing filled cells are dimmed and the leading
+  (active-position) cell is brightest, so position reads at a glance.
+- *Bundled fonts are referenced with the `packages/auris/` prefix* — a bare
+  family name silently falls back to the platform font.
+
 **Elevation and glow.** Material elevation shadows are replaced by amber glow,
 because drop shadows read as flat/soft and conflict with the hard-edged,
 luminous aesthetic. The primitive glow values are `BoxShadow` lists: `glowNone`,
