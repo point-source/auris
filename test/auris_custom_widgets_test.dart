@@ -286,4 +286,46 @@ void main() {
       expect(tester.hasRunningAnimations, isFalse);
     });
   });
+
+  group('AurisRadio', () {
+    testWidgets('reports its value on tap when not already selected', (
+      WidgetTester tester,
+    ) async {
+      int? picked;
+      await tester.pumpWidget(
+        host(
+          AurisRadio<int>(
+            value: 1,
+            groupValue: 0,
+            onChanged: (int v) => picked = v,
+            label: 'HIGH',
+          ),
+        ),
+      );
+      expect(find.text('HIGH'), findsOneWidget);
+      await tester.tap(find.byType(AurisRadio<int>));
+      expect(picked, 1);
+    });
+
+    testWidgets('a disabled radio does not report', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        host(
+          const AurisRadio<int>(
+            value: 2,
+            groupValue: 0,
+            onChanged: null,
+            label: 'LOCKED',
+          ),
+        ),
+      );
+      // Tapping a disabled radio is a no-op; it renders at half opacity.
+      await tester.tap(find.byType(AurisRadio<int>));
+      expect(
+        tester.widget<Opacity>(find.byType(Opacity).first).opacity,
+        0.5,
+      );
+    });
+  });
 }

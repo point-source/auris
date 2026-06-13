@@ -21,6 +21,7 @@ export 'src/widgets/auris_hex_ornament.dart';
 export 'src/widgets/auris_notification.dart';
 export 'src/widgets/auris_panel.dart';
 export 'src/widgets/auris_progress_bar.dart';
+export 'src/widgets/auris_radio.dart';
 export 'src/widgets/auris_scan_bracket.dart';
 export 'src/widgets/auris_select.dart';
 export 'src/widgets/auris_stat_card.dart';

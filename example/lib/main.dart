@@ -292,19 +292,29 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
                   ],
                 ),
                 const SizedBox(height: 8),
-                RadioGroup<int>(
-                  groupValue: _radio,
-                  onChanged: (int? v) => setState(() => _radio = v ?? 0),
-                  child: Row(
-                    children: <Widget>[
-                      const Radio<int>(value: 0),
-                      Text('LOW', style: text.bodyMedium),
-                      const Radio<int>(value: 1),
-                      Text('HIGH', style: text.bodyMedium),
-                      const Radio<int>(value: 2, enabled: false),
-                      Text('DISABLED', style: text.bodyMedium),
-                    ],
-                  ),
+                Wrap(
+                  spacing: 20,
+                  runSpacing: 8,
+                  children: <Widget>[
+                    AurisRadio<int>(
+                      value: 0,
+                      groupValue: _radio,
+                      onChanged: (int v) => setState(() => _radio = v),
+                      label: 'LOW',
+                    ),
+                    AurisRadio<int>(
+                      value: 1,
+                      groupValue: _radio,
+                      onChanged: (int v) => setState(() => _radio = v),
+                      label: 'HIGH',
+                    ),
+                    AurisRadio<int>(
+                      value: 2,
+                      groupValue: _radio,
+                      onChanged: null,
+                      label: 'DISABLED',
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 8),
                 Wrap(
