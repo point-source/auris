@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'scheme.dart';
 import 'theme/button_themes.dart';
+import 'theme/data_themes.dart';
 import 'theme/input_themes.dart';
+import 'theme/navigation_themes.dart';
+import 'theme/overlay_themes.dart';
 import 'tokens.dart';
 
 /// Factory for the Auris `ThemeData`.
@@ -16,12 +19,15 @@ import 'tokens.dart';
 /// light-background variant is anticipated (§spec:scope); [AurisTheme.dark] is
 /// reserved and throws [UnimplementedError] until it lands.
 ///
-/// This batch populates `ColorScheme`, `TextTheme`, and the core-control
-/// component themes (buttons, input / dropdown decoration, and the selection
-/// controls — checkbox / radio / switch / slider / chip); the remaining
-/// component themes are added in later batches. Elevation and shadow defaults
-/// already reflect the aesthetic: elevation is `0` and shadows are transparent,
-/// so depth reads as glow rather than drop shadow.
+/// This populates `ColorScheme`, `TextTheme`, the core-control component themes
+/// (buttons, input / dropdown decoration, and the selection controls —
+/// checkbox / radio / switch / slider / chip), the surface + overlay themes
+/// (card, dialog, snackbar, bottom sheet, drawer, tooltip, popup menu), the
+/// navigation-chrome themes (app bar, navigation bar / rail, tab bar), and the
+/// data + feedback themes (data table, list / expansion tile, progress, divider,
+/// badge, search bar / view). Elevation and shadow defaults reflect the
+/// aesthetic: elevation is `0` and shadows are transparent, so depth reads as
+/// glow rather than drop shadow.
 abstract final class AurisTheme {
   const AurisTheme._();
 
@@ -72,6 +78,29 @@ abstract final class AurisTheme {
       switchTheme: AurisInputThemes.switchTheme(scheme),
       sliderTheme: AurisInputThemes.slider(scheme),
       chipTheme: AurisInputThemes.chip(scheme),
+      // Surface + overlay component themes — chamfered, flat, glow-not-shadow.
+      cardTheme: AurisOverlayThemes.card(scheme),
+      dialogTheme: AurisOverlayThemes.dialog(scheme),
+      snackBarTheme: AurisOverlayThemes.snackBar(scheme),
+      bottomSheetTheme: AurisOverlayThemes.bottomSheet(scheme),
+      drawerTheme: AurisOverlayThemes.drawer(scheme),
+      tooltipTheme: AurisOverlayThemes.tooltip(scheme),
+      popupMenuTheme: AurisOverlayThemes.popupMenu(scheme),
+      // Navigation-chrome component themes.
+      appBarTheme: AurisNavigationThemes.appBar(scheme),
+      navigationBarTheme: AurisNavigationThemes.navigationBar(scheme),
+      navigationRailTheme: AurisNavigationThemes.navigationRail(scheme),
+      tabBarTheme: AurisNavigationThemes.tabBar(scheme),
+      // Data + feedback component themes. (Stepper has no ThemeData; it reads
+      // the ColorScheme above — see AurisDataThemes docs.)
+      dataTableTheme: AurisDataThemes.dataTable(scheme),
+      listTileTheme: AurisDataThemes.listTile(scheme),
+      expansionTileTheme: AurisDataThemes.expansionTile(scheme),
+      progressIndicatorTheme: AurisDataThemes.progressIndicator(scheme),
+      dividerTheme: AurisDataThemes.divider(scheme),
+      badgeTheme: AurisDataThemes.badge(scheme),
+      searchBarTheme: AurisDataThemes.searchBar(scheme),
+      searchViewTheme: AurisDataThemes.searchView(scheme),
       // Carry the resolved scheme so custom widgets read the exact same values.
       extensions: <ThemeExtension<dynamic>>[scheme],
     );
