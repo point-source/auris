@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../painters/chamfer_border.dart';
+import '../painters/slant_clipper.dart';
 import '../scheme.dart';
 import '../tokens.dart';
 
@@ -295,14 +296,14 @@ abstract final class AurisInputThemes {
   static SliderThemeData slider(AurisScheme scheme) {
     return SliderThemeData(
       activeTrackColor: scheme.primaryActive,
-      inactiveTrackColor: scheme.surfaceInset,
+      inactiveTrackColor: scheme.borderBright,
       thumbColor: scheme.primaryActive,
       overlayColor: scheme.primaryActive.withValues(alpha: 0.16),
       valueIndicatorColor: scheme.surfacePanel,
       activeTickMarkColor: scheme.onPrimary,
       inactiveTickMarkColor: scheme.borderBright,
-      trackHeight: 4,
-      trackShape: const RectangularSliderTrackShape(),
+      trackHeight: 6,
+      trackShape: const _AurisSliderTrack(),
       thumbShape: const _AurisSliderThumb(),
       overlayShape:
           const RoundSliderOverlayShape(overlayRadius: 16),
@@ -402,5 +403,57 @@ class _AurisSliderThumb extends SliderComponentShape {
       aurisChamferPath(rect, half * 0.7),
       Paint()..color = color,
     );
+  }
+}
+
+/// A segmented slider track — thin slanted cells (like [AurisProgressBar]) that
+/// fill with the active color up to the thumb, dim after it, instead of a solid
+/// Material bar.
+class _AurisSliderTrack extends SliderTrackShape with BaseSliderTrackShape {
+  const _AurisSliderTrack();
+
+  static const int _segments = 22;
+  static const double _gap = 3;
+  static const double _slant = 3;
+
+  @override
+  void paint(
+    PaintingContext context,
+    Offset offset, {
+    required RenderBox parentBox,
+    required SliderThemeData sliderTheme,
+    required Animation<double> enableAnimation,
+    required Offset thumbCenter,
+    Offset? secondaryOffset,
+    bool isEnabled = false,
+    bool isDiscrete = false,
+    required TextDirection textDirection,
+  }) {
+    final Rect rect = getPreferredRect(
+      parentBox: parentBox,
+      offset: offset,
+      sliderTheme: sliderTheme,
+      isEnabled: isEnabled,
+      isDiscrete: isDiscrete,
+    );
+    if (rect.width <= 0 || rect.height <= 0) {
+      return;
+    }
+    final double cellWidth = (rect.width - _gap * (_segments - 1)) / _segments;
+    if (cellWidth <= 0) {
+      return;
+    }
+    final Color active = sliderTheme.activeTrackColor!;
+    final Color inactive = sliderTheme.inactiveTrackColor!;
+    final Canvas canvas = context.canvas;
+    for (int i = 0; i < _segments; i++) {
+      final double left = rect.left + i * (cellWidth + _gap);
+      final Rect cell = Rect.fromLTWH(left, rect.top, cellWidth, rect.height);
+      final bool filled = cell.center.dx <= thumbCenter.dx;
+      canvas.drawPath(
+        aurisSlantPath(cell, _slant),
+        Paint()..color = filled ? active : inactive,
+      );
+    }
   }
 }
