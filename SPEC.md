@@ -120,6 +120,13 @@ deliberately: which corners are cut (and the cut size) is a single edit, not a
 sweep across every theme. The two-corner cut also makes the resting and
 hover/focus border feel directional, reinforcing the HUD aesthetic.
 
+A second, related motif — a right-leaning **parallelogram slant** — is used for
+the small "data" controls (progress-bar segments, the switch track/thumb),
+where a corner notch reads as a lopsided wedge at that size. Like the chamfer,
+the slant geometry lives in one place (`AurisSlantBorder` / `SlantClipper`), so
+the two motifs stay distinct and internally consistent: chamfer for
+panels/buttons/surfaces, slant for data cells.
+
 **Elevation and glow.** Material elevation shadows are replaced by amber glow,
 because drop shadows read as flat/soft and conflict with the hard-edged,
 luminous aesthetic. The primitive glow values are `BoxShadow` lists: `glowNone`,
