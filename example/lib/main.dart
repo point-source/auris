@@ -254,15 +254,15 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                DropdownMenu<String>(
-                  initialSelection: _dropdown,
-                  label: const Text('CHANNEL'),
-                  expandedInsets: EdgeInsets.zero,
-                  onSelected: (String? v) => setState(() => _dropdown = v),
-                  dropdownMenuEntries: const <DropdownMenuEntry<String>>[
-                    DropdownMenuEntry<String>(value: 'ALPHA', label: 'ALPHA'),
-                    DropdownMenuEntry<String>(value: 'BRAVO', label: 'BRAVO'),
-                    DropdownMenuEntry<String>(
+                Text('CHANNEL', style: text.labelMedium),
+                const SizedBox(height: 6),
+                AurisSelect<String>(
+                  value: _dropdown,
+                  onChanged: (String v) => setState(() => _dropdown = v),
+                  options: const <AurisSelectOption<String>>[
+                    AurisSelectOption<String>(value: 'ALPHA', label: 'ALPHA'),
+                    AurisSelectOption<String>(value: 'BRAVO', label: 'BRAVO'),
+                    AurisSelectOption<String>(
                       value: 'CHARLIE',
                       label: 'CHARLIE',
                     ),
@@ -307,22 +307,21 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
                   ),
                 ),
                 const SizedBox(height: 8),
-                Row(
+                Wrap(
+                  spacing: 20,
+                  runSpacing: 8,
                   children: <Widget>[
-                    Switch(
+                    AurisSwitch(
                       value: _switch,
                       onChanged: (bool v) => setState(() => _switch = v),
+                      label: 'SHIELDS',
                     ),
-                    Text('SHIELDS', style: text.bodyMedium),
-                    const SizedBox(width: 16),
-                    Switch(
+                    AurisSwitch(
                       value: _switchOff,
                       onChanged: (bool v) => setState(() => _switchOff = v),
+                      label: 'CLOAK',
                     ),
-                    Text('CLOAK', style: text.bodyMedium),
-                    const SizedBox(width: 16),
-                    const Switch(value: false, onChanged: null),
-                    Text('AUX', style: text.bodyMedium),
+                    const AurisSwitch(value: false, onChanged: null, label: 'AUX'),
                   ],
                 ),
                 const SizedBox(height: 16),
