@@ -197,6 +197,49 @@ void main() {
           .length;
       expect(filled, 9);
     });
+
+    testWidgets(
+      '.animated snaps to the end state with no running animation under '
+      'reduced motion',
+      (WidgetTester tester) async {
+        double value = 0.2;
+        await tester.pumpWidget(
+          host(
+            disableAnimations: true,
+            StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+                return Column(
+                  children: <Widget>[
+                    SizedBox(
+                      width: 300,
+                      child: AurisProgressBar.animated(
+                        value: value,
+                        segments: 10,
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () => setState(() => value = 0.9),
+                      child: const Text('GO'),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+        );
+        await tester.tap(find.text('GO'));
+        await tester.pump();
+        // No controller is running; the bar is already at its end state.
+        expect(tester.hasRunningAnimations, isFalse);
+        final int filled = tester
+            .widgetList<DecoratedBox>(find.byType(DecoratedBox))
+            .map((DecoratedBox b) => b.decoration)
+            .whereType<ShapeDecoration>()
+            .where((ShapeDecoration d) => d.color == scheme.primaryActive)
+            .length;
+        expect(filled, 9);
+      },
+    );
   });
 
   group('AurisStepIndicator', () {
@@ -421,5 +464,41 @@ void main() {
       // No popup row appears (only the trigger label).
       expect(find.text('ALPHA'), findsOneWidget);
     });
+
+    testWidgets(
+      'caret snaps open with no running animation under reduced motion',
+      (WidgetTester tester) async {
+        await tester.pumpWidget(
+          host(
+            disableAnimations: true,
+            const AurisSelect<String>(
+              value: 'a',
+              onChanged: _noop,
+              options: <AurisSelectOption<String>>[
+                AurisSelectOption<String>(value: 'a', label: 'Alpha'),
+                AurisSelectOption<String>(value: 'b', label: 'Beta'),
+              ],
+            ),
+          ),
+        );
+        await tester.tap(find.byType(AurisSelect<String>));
+        // A single pump (no settle): the caret is already at its end state and
+        // no controller is running.
+        await tester.pump();
+        expect(tester.hasRunningAnimations, isFalse);
+        // The popup is open (rows visible) without any tween elapsing.
+        expect(find.text('BETA'), findsOneWidget);
+        final RotationTransition caret = tester.widget<RotationTransition>(
+          find.ancestor(
+            of: find.byIcon(Icons.keyboard_arrow_down),
+            matching: find.byType(RotationTransition),
+          ),
+        );
+        expect(caret.turns.value, 0.5);
+      },
+    );
   });
 }
+
+/// A const, top-level no-op so an enabled [AurisSelect] can be built `const`.
+void _noop(String _) {}

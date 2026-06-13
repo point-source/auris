@@ -30,10 +30,16 @@ abstract final class AurisTokens {
   /// Inset / input surface.
   static const Color panelAlt = Color(0xFF16161C);
 
-  /// Resting border.
+  /// Resting border — DECORATIVE / SUPPLEMENTARY ONLY. A dim outline that, by
+  /// design, falls below the WCAG 1.4.11 3:1 boundary contrast on [void_]; it is
+  /// never the sole affordance for an interactive control. Controls are
+  /// identified by their distinct inset fill, depth glow, and the gold focus
+  /// ring (§spec:accessibility).
   static const Color border = Color(0xFF2A2510);
 
-  /// Hover / focus border.
+  /// Hover / focus border — DECORATIVE / SUPPLEMENTARY ONLY (see [border]). The
+  /// gold [gold] focus decoration, not this outline, is the AA-meeting
+  /// keyboard-focus indicator (§spec:accessibility).
   static const Color borderBright = Color(0xFF4A4020);
 
   /// Amber — inactive / dim primary.
@@ -57,8 +63,12 @@ abstract final class AurisTokens {
   /// Danger.
   static const Color danger = Color(0xFFB03020);
 
-  /// Danger — bright.
-  static const Color dangerBright = Color(0xFFE04030);
+  /// Danger — bright. Used as readable error TEXT (terminal error lines, input
+  /// error/helper text, badge/stat-card deltas, notifications), so it is tuned
+  /// to clear WCAG AA (>=4.5:1) on the darkest text surface, [panelAlt]
+  /// (§spec:accessibility). Brightened from `0xFFE04030` (which read 4.24:1 on
+  /// inset) to meet AA while preserving the red danger hue.
+  static const Color dangerBright = Color(0xFFE84838);
 
   /// Success.
   static const Color success = Color(0xFF4A8A60);

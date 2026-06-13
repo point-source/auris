@@ -126,6 +126,15 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
                   'geometry, glow in place of drop shadow.',
                   style: text.bodyLarge,
                 ),
+                const SizedBox(height: 24),
+
+                // ---- ACCESSIBILITY ------------------------------------------
+                // Surfaces the two cross-cutting a11y behaviors for review:
+                // the live reduced-motion state (driven by the OS setting via
+                // MediaQuery.disableAnimations) and a prompt to tab through the
+                // controls and watch the gold focus ring travel
+                // (§spec:accessibility, §road:polish-showcase-verification).
+                const _AccessibilityBanner(),
                 const SizedBox(height: 32),
 
                 // ---- BUTTONS -------------------------------------------------
@@ -1008,6 +1017,38 @@ class _SectionHeader extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// An on-theme banner that makes the two cross-cutting accessibility behaviors
+/// demonstrable in the showcase (§road:polish-showcase-verification):
+///
+/// - It reads the live `MediaQuery.disableAnimations` (the OS reduce-motion
+///   setting) and reports the current state, so a reviewer can toggle the OS
+///   setting, reload, and see the showcase honor it (animated widgets render
+///   their end state).
+/// - It prompts the reviewer to Tab through the controls and watch the gold
+///   focus ring travel across every interactive element.
+class _AccessibilityBanner extends StatelessWidget {
+  const _AccessibilityBanner();
+
+  @override
+  Widget build(BuildContext context) {
+    final bool reduceMotion = MediaQuery.disableAnimationsOf(context);
+    return AurisNotification(
+      title: 'ACCESSIBILITY',
+      code: reduceMotion ? 'MOTION:REDUCED' : 'MOTION:FULL',
+      variant: reduceMotion
+          ? AurisNotificationVariant.success
+          : AurisNotificationVariant.info,
+      message: reduceMotion
+          ? 'Reduced motion is ON (OS setting): animations render their end '
+              'state with no running controllers. Press Tab to move the gold '
+              'focus ring across the controls below.'
+          : 'Reduced motion is OFF. Enable your OS reduce-motion setting and '
+              'reload to see animations snap to their end state. Press Tab to '
+              'move the gold focus ring across the controls below.',
     );
   }
 }
