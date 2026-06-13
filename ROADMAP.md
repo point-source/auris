@@ -69,12 +69,19 @@ Implement `AurisTerminal` (auto-scrolling monospace log with blinking cursor)
 and `AurisStepIndicator` in `lib/src/widgets/`. §spec:custom-widgets. Depends
 on §road:auris-container.
 
+### §road:auris-select
+
+Implement `AurisSelect` (custom dropdown: rotating caret, chamfered glowing
+popup, per-row dividers with hover/selected highlight — the reference look the
+native `DropdownMenu` cannot reach) in `lib/src/widgets/auris_select.dart`.
+§spec:custom-widgets. Depends on §road:auris-container.
+
 ### §road:interactive-widgets-showcase
 
 Export the interactive widgets and add their showcase sections — including a
-live-appending terminal — to `example/lib/main.dart`. §spec:custom-widgets,
-§spec:showcase. Depends on §road:auris-switch, §road:auris-progress-bar,
-§road:terminal-and-stepper.
+live-appending terminal and an `AurisSelect` — to `example/lib/main.dart`.
+§spec:custom-widgets, §spec:showcase. Depends on §road:auris-switch,
+§road:auris-progress-bar, §road:terminal-and-stepper, §road:auris-select.
 
 **Verify:** In the example, toggle `AurisSwitch` and watch the thumb animate
 across a chamfered track; watch `AurisProgressBar` segments fill with the
