@@ -4,47 +4,6 @@
 <!-- assumptions later sections depend on. Completed work leaves from -->
 <!-- the head; new work enters at the tail. -->
 
-## Custom HUD widgets — containers, panels & display
-
-Deliver the static HUD components that `ThemeData` cannot express, built on the
-chamfer primitive.
-
-### §road:chamfer-clipper
-
-Implement `ChamferClipper` in `lib/src/painters/chamfer_clipper.dart` — a
-`CustomClipper<Path>` parameterized by corner cut that chamfers all four
-corners at 45°. §spec:design-tokens.
-
-### §road:auris-container
-
-Implement `AurisContainer` in `lib/src/widgets/auris_container.dart` — the
-chamfered border + fill + depth-by-intent primitive that clips its child via
-`ChamferClipper` and reads colors/bevel/depth from the resolved `AurisScheme`.
-§spec:custom-widgets, §spec:scheme. Depends on §road:chamfer-clipper.
-
-### §road:display-widgets
-
-Implement `AurisBadge`, `AurisPanel`, `AurisNotification`, `AurisDataRow`, and
-`AurisStatCard` in `lib/src/widgets/`. §spec:custom-widgets. Depends on
-§road:auris-container.
-
-### §road:ornament-widgets
-
-Implement `AurisHexOrnament` and `AurisScanBracket`, with
-`lib/src/painters/hex_painter.dart`, in `lib/src/widgets/`, reading colors from
-the resolved `AurisScheme`. §spec:custom-widgets, §spec:scheme.
-
-### §road:display-widgets-showcase
-
-Export the display and ornament widgets from `lib/auris_widgets.dart` and add
-their showcase sections to `example/lib/main.dart`. §spec:custom-widgets,
-§spec:showcase. Depends on §road:display-widgets, §road:ornament-widgets.
-
-**Verify:** In the example, the Badges, Panels, Notifications, Data Rows, Stat
-Cards, and Ornaments sections render. Panels show header brackets and status
-codes; stat cards show a glowing value and signed delta; hex ornaments and scan
-brackets paint correctly behind and around content.
-
 ## Custom HUD widgets — interactive & dynamic
 
 Deliver the stateful/animated HUD widgets and the custom replacements for the

@@ -264,7 +264,7 @@ above; a reviewer confirms none falls back to default Material styling.
 
 ## Custom widget library §spec:custom-widgets
 
-*Status: not started*
+*Status: in progress*
 
 Cites: §req:user-stories, §req:success-criteria, §req:priorities
 
