@@ -47,9 +47,12 @@ rejected: it would not satisfy the "instant drop-in re-skin" success criterion
 and would force adopters to replace every existing Material widget.
 
 **Naming note.** `AurisTheme.light()` is the default and only implemented
-constructor; "light" is a historical misnomer — Auris is always dark.
-`AurisTheme.dark()` is reserved for a future higher-contrast variant and is
-out of scope here.
+constructor; "light" is a historical misnomer — Auris is always dark in
+v0.1.0. A genuine light-background variant is an anticipated future requirement
+(see §spec:scope); when it lands it will force the `light()`/`dark()` naming to
+be reconsidered, since today both names describe dark themes. This is flagged
+now as known debt rather than resolved, because v0.1.0 ships a single variant
+and renaming ahead of need would churn the public API.
 
 ---
 
@@ -117,6 +120,17 @@ curves `curveDefault` (easeInOut), `curveEnter` (easeOut), `curveExit`
 "no raw literals" quality bar enforceable and makes the customization layer
 (§spec:customization) tractable — there is exactly one place the look is
 defined.
+
+**Anticipated change — brightness variants.** A light-background variant (and a
+higher-contrast variant) is an anticipated future requirement (§spec:scope).
+The token layer is therefore expected to express the palette in semantic roles
+(surface, on-surface, primary, border, …) that a variant can re-resolve, rather
+than as a single hard-coded set that only reads correctly on near-black. v0.1.0
+ships only the dark values, but the role structure is chosen so a future
+variant is an additive resolution of the same roles, not a rewrite of every
+consumer. The decorative-only status of dim tokens (§spec:accessibility) is part
+of this: roles carry intent, so a light variant can re-pick values per role
+without auditing every call site.
 
 ---
 
@@ -355,8 +369,12 @@ Cites: §req:constraints, §req:priorities
 
 Deferred beyond v0.1.0, by deliberate decision:
 
-- A light / higher-contrast theme variant (`AurisTheme.dark()` is reserved and
-  unimplemented).
+- A light-background theme variant (and a higher-contrast variant). Deferred,
+  but **anticipated** rather than speculative: the token role structure
+  (§spec:design-tokens) is chosen now so the variant can be added as an
+  additive re-resolution of semantic roles without restructuring consumers.
+  `AurisTheme.dark()` is reserved and unimplemented; the `light()`/`dark()`
+  naming is revisited when this variant lands (§spec:overview).
 - Actual pub.dev publication (the package is publication-*ready*, not
   published).
 - Localization / RTL support.
