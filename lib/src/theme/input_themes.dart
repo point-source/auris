@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../painters/chamfer_border.dart';
 import '../scheme.dart';
 import '../tokens.dart';
 
@@ -25,15 +26,14 @@ abstract final class AurisInputThemes {
 
   /// The chamfered border for input surfaces, sized from the scheme's medium
   /// bevel role.
-  static OutlineInputBorder _inputBorder(
+  static AurisChamferInputBorder _inputBorder(
     AurisScheme scheme,
     Color color, [
     double width = 1,
   ]) {
-    return OutlineInputBorder(
-      borderRadius: BorderRadius.all(Radius.circular(scheme.bevel.md)),
+    return AurisChamferInputBorder(
+      cut: scheme.bevel.md,
       borderSide: BorderSide(color: color, width: width),
-      gapPadding: 0,
     );
   }
 
@@ -116,10 +116,7 @@ abstract final class AurisInputThemes {
           BorderSide(color: scheme.borderBright),
         ),
         shape: WidgetStatePropertyAll<OutlinedBorder>(
-          BeveledRectangleBorder(
-            borderRadius:
-                BorderRadius.all(Radius.circular(scheme.bevel.md)),
-          ),
+          AurisChamferBorder(cut: scheme.bevel.md),
         ),
       ),
     );
@@ -164,9 +161,7 @@ abstract final class AurisInputThemes {
       side: BorderSide(color: scheme.borderBright, width: 1.5),
       overlayColor: _overlay(scheme.primaryActive),
       splashRadius: 0,
-      shape: BeveledRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(scheme.bevel.sm)),
-      ),
+      shape: AurisChamferBorder(cut: scheme.bevel.sm),
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
     );
   }
@@ -291,9 +286,7 @@ abstract final class AurisInputThemes {
       elevation: 0,
       pressElevation: 0,
       side: BorderSide(color: scheme.borderBright),
-      shape: BeveledRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(scheme.bevel.sm)),
-      ),
+      shape: AurisChamferBorder(cut: scheme.bevel.sm),
       labelStyle: TextStyle(
         fontFamily: AurisTokens.fontMono,
         fontSize: 12,

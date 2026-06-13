@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../painters/chamfer_border.dart';
 import '../scheme.dart';
 import '../tokens.dart';
 
@@ -21,7 +22,7 @@ import '../tokens.dart';
 ///
 /// Signature treatments (§spec:theme-layer):
 ///
-/// - **Shape:** chamfered [BeveledRectangleBorder] on tiles and the search
+/// - **Shape:** the chamfered [AurisChamferBorder] on tiles and the search
 ///   surfaces; chamfered border radius on the linear progress track.
 /// - **Elevation:** `0`; `surfaceTintColor` / `shadowColor` transparent.
 /// - **Color roles:** `gold` for active fills / progress, `amber`/dim for
@@ -31,16 +32,12 @@ abstract final class AurisDataThemes {
   const AurisDataThemes._();
 
   /// A chamfered rectangle border sized from a bevel role.
-  static BeveledRectangleBorder _bevel(double size) => BeveledRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(size)),
-      );
+  static AurisChamferBorder _bevel(double size) =>
+      AurisChamferBorder(cut: size);
 
   /// A chamfered border with a visible resting outline.
-  static BeveledRectangleBorder _bevelOutlined(double size, Color color) =>
-      BeveledRectangleBorder(
-        side: BorderSide(color: color),
-        borderRadius: BorderRadius.all(Radius.circular(size)),
-      );
+  static AurisChamferBorder _bevelOutlined(double size, Color color) =>
+      AurisChamferBorder(cut: size, side: BorderSide(color: color));
 
   // ---------------------------------------------------------------------------
   // DataTable — mono cells, panel surface, gold-tinted selection, bright rules.

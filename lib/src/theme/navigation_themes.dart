@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../painters/chamfer_border.dart';
 import '../scheme.dart';
 import '../tokens.dart';
 
@@ -12,7 +13,7 @@ import '../tokens.dart';
 ///
 /// Signature treatments (§spec:theme-layer):
 ///
-/// - **Shape:** chamfered [BeveledRectangleBorder] on the selection indicators.
+/// - **Shape:** the chamfered [AurisChamferBorder] on the selection indicators.
 /// - **Elevation:** `0` at all states; `surfaceTintColor` / `shadowColor`
 ///   transparent. Depth is glow, not Material shadow.
 /// - **Ripple:** suppressed and replaced with an amber `overlayColor` on
@@ -24,10 +25,8 @@ abstract final class AurisNavigationThemes {
   const AurisNavigationThemes._();
 
   /// The chamfered selection-indicator shape, sized from the small bevel role.
-  static BeveledRectangleBorder _indicator(AurisScheme scheme) =>
-      BeveledRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(scheme.bevel.sm)),
-      );
+  static AurisChamferBorder _indicator(AurisScheme scheme) =>
+      AurisChamferBorder(cut: scheme.bevel.sm);
 
   /// An amber hover / focus / press overlay tinting [base], replacing the ink
   /// ripple.

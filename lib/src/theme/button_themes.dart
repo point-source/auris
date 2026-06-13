@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../painters/chamfer_border.dart';
 import '../scheme.dart';
 import '../tokens.dart';
 
@@ -9,8 +10,8 @@ import '../tokens.dart';
 ///
 /// Signature treatments applied to every button (§spec:theme-layer):
 ///
-/// - **Shape:** [BeveledRectangleBorder] at the scheme's medium bevel — the
-///   chamfered (45°) corners that define the look.
+/// - **Shape:** [AurisChamferBorder] at the scheme's medium bevel — the
+///   asymmetric chamfer (top-left + bottom-right) that defines the look.
 /// - **Elevation:** `0` at all states; `surfaceTintColor` transparent. Depth is
 ///   glow, not Material shadow.
 /// - **Ripple:** suppressed (the theme uses [NoSplash]) and replaced with an
@@ -27,10 +28,8 @@ abstract final class AurisButtonThemes {
 
   /// The chamfered shape shared by every rectangular button, sized from the
   /// scheme's medium bevel role.
-  static BeveledRectangleBorder _bevel(AurisScheme scheme) =>
-      BeveledRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(scheme.bevel.md)),
-      );
+  static AurisChamferBorder _bevel(AurisScheme scheme) =>
+      AurisChamferBorder(cut: scheme.bevel.md);
 
   /// The uppercase, letter-spaced button label style.
   static TextStyle _labelStyle(AurisScheme scheme) => TextStyle(

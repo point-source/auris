@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../painters/chamfer_border.dart';
 import '../scheme.dart';
 import '../tokens.dart';
 
@@ -13,7 +14,7 @@ import '../tokens.dart';
 ///
 /// Signature treatments applied to every surface (§spec:theme-layer):
 ///
-/// - **Shape:** [BeveledRectangleBorder] — chamfered (45°) corners. Panels and
+/// - **Shape:** [AurisChamferBorder] — asymmetric chamfered corners. Panels and
 ///   dialogs use the extra-large bevel role; smaller overlays use medium.
 /// - **Elevation:** `0` at all states; `surfaceTintColor` and `shadowColor`
 ///   transparent. Depth is communicated by glow, not Material drop shadow.
@@ -32,11 +33,8 @@ abstract final class AurisOverlayThemes {
 
   /// A chamfered border with a visible resting outline, for surfaces that read
   /// better with an explicit edge (dialogs, menus, sheets).
-  static BeveledRectangleBorder _bevelOutlined(double size, Color color) =>
-      BeveledRectangleBorder(
-        side: BorderSide(color: color),
-        borderRadius: BorderRadius.all(Radius.circular(size)),
-      );
+  static AurisChamferBorder _bevelOutlined(double size, Color color) =>
+      AurisChamferBorder(cut: size, side: BorderSide(color: color));
 
   // ---------------------------------------------------------------------------
   // Card — panel surface, chamfered, flat, resting outline.
@@ -130,12 +128,9 @@ abstract final class AurisOverlayThemes {
       showDragHandle: true,
       dragHandleColor: scheme.primaryDim,
       clipBehavior: Clip.antiAlias,
-      shape: BeveledRectangleBorder(
+      shape: AurisChamferBorder(
+        cut: scheme.bevel.xl,
         side: BorderSide(color: scheme.borderBright),
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(scheme.bevel.xl),
-          topRight: Radius.circular(scheme.bevel.xl),
-        ),
       ),
     );
   }
@@ -152,19 +147,13 @@ abstract final class AurisOverlayThemes {
       shadowColor: Colors.transparent,
       scrimColor: scheme.surfacePage.withValues(alpha: 0.72),
       elevation: 0,
-      shape: BeveledRectangleBorder(
+      shape: AurisChamferBorder(
+        cut: scheme.bevel.xl,
         side: BorderSide(color: scheme.borderBright),
-        borderRadius: BorderRadius.only(
-          topRight: Radius.circular(scheme.bevel.xl),
-          bottomRight: Radius.circular(scheme.bevel.xl),
-        ),
       ),
-      endShape: BeveledRectangleBorder(
+      endShape: AurisChamferBorder(
+        cut: scheme.bevel.xl,
         side: BorderSide(color: scheme.borderBright),
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(scheme.bevel.xl),
-          bottomLeft: Radius.circular(scheme.bevel.xl),
-        ),
       ),
     );
   }
