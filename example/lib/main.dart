@@ -521,36 +521,41 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
                 const SizedBox(height: 8),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
-                  child: DataTable(
-                    columns: const <DataColumn>[
-                      DataColumn(label: Text('NODE')),
-                      DataColumn(label: Text('LOAD')),
-                      DataColumn(label: Text('STATE')),
-                    ],
-                    rows: const <DataRow>[
-                      DataRow(
-                        cells: <DataCell>[
-                          DataCell(Text('ALPHA')),
-                          DataCell(Text('42%')),
-                          DataCell(Text('ONLINE')),
-                        ],
-                      ),
-                      DataRow(
-                        cells: <DataCell>[
-                          DataCell(Text('BRAVO')),
-                          DataCell(Text('77%')),
-                          DataCell(Text('ONLINE')),
-                        ],
-                      ),
-                      DataRow(
-                        selected: true,
-                        cells: <DataCell>[
-                          DataCell(Text('CHARLIE')),
-                          DataCell(Text('98%')),
-                          DataCell(Text('CRITICAL')),
-                        ],
-                      ),
-                    ],
+                  // Clip the table to the chamfer so the heading / selected-row
+                  // fills don't poke past the cut corners of the frame.
+                  child: ClipPath(
+                    clipper: ChamferClipper(cut: scheme.bevel.md),
+                    child: DataTable(
+                      columns: const <DataColumn>[
+                        DataColumn(label: Text('NODE')),
+                        DataColumn(label: Text('LOAD')),
+                        DataColumn(label: Text('STATE')),
+                      ],
+                      rows: const <DataRow>[
+                        DataRow(
+                          cells: <DataCell>[
+                            DataCell(Text('ALPHA')),
+                            DataCell(Text('42%')),
+                            DataCell(Text('ONLINE')),
+                          ],
+                        ),
+                        DataRow(
+                          cells: <DataCell>[
+                            DataCell(Text('BRAVO')),
+                            DataCell(Text('77%')),
+                            DataCell(Text('ONLINE')),
+                          ],
+                        ),
+                        DataRow(
+                          selected: true,
+                          cells: <DataCell>[
+                            DataCell(Text('CHARLIE')),
+                            DataCell(Text('98%')),
+                            DataCell(Text('CRITICAL')),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -587,7 +592,7 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
                 const SizedBox(height: 16),
                 Text('PROGRESS', style: text.labelMedium),
                 const SizedBox(height: 8),
-                const LinearProgressIndicator(value: 0.66),
+                const AurisProgressBar(value: 0.66),
                 const SizedBox(height: 12),
                 Row(
                   children: <Widget>[
