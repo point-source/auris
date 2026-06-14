@@ -85,7 +85,7 @@ class _AurisRadioState<T> extends State<AurisRadio<T>> {
         child: DecoratedBox(
           decoration: ShapeDecoration(
             shape: AurisChamferBorder(
-              cut: AurisTokens.bevelXs + 2,
+              cut: scheme.bevel.xs + 2,
               side: _focused && _enabled
                   ? BorderSide(color: scheme.primaryActive, width: 1.5)
                   : BorderSide.none,
@@ -94,7 +94,7 @@ class _AurisRadioState<T> extends State<AurisRadio<T>> {
           child: Padding(
             padding: const EdgeInsets.all(3),
             child: AurisContainer(
-              cut: AurisTokens.bevelXs,
+              cut: scheme.bevel.xs,
               width: 18,
               height: 18,
               fill: scheme.surfaceInset,

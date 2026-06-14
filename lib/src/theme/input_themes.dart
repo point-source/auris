@@ -304,7 +304,7 @@ abstract final class AurisInputThemes {
       inactiveTickMarkColor: scheme.borderBright,
       trackHeight: 6,
       trackShape: const _AurisSliderTrack(),
-      thumbShape: const _AurisSliderThumb(),
+      thumbShape: _AurisSliderThumb(cut: scheme.bevel.xs),
       overlayShape:
           const RoundSliderOverlayShape(overlayRadius: 16),
       valueIndicatorTextStyle: TextStyle(
@@ -364,7 +364,11 @@ abstract final class AurisInputThemes {
 /// An angular slider thumb — a chamfered square reticle (top-left + bottom-right
 /// cut) instead of Material's round thumb, to match the geometric aesthetic.
 class _AurisSliderThumb extends SliderComponentShape {
-  const _AurisSliderThumb();
+  const _AurisSliderThumb({required this.cut});
+
+  /// The chamfer applied to the square thumb, resolved from the scheme bevel
+  /// scale so the bevel customization override reaches the thumb.
+  final double cut;
 
   /// Half the thumb's side length.
   static const double half = 8;
@@ -399,9 +403,10 @@ class _AurisSliderThumb extends SliderComponentShape {
       width: half * 2,
       height: half * 2,
     );
-    // A small chamfer (bevelXs) — a larger cut reads as a diamond at this size.
+    // A small chamfer (the scheme's xs bevel) — a larger cut reads as a diamond
+    // at this size.
     context.canvas.drawPath(
-      aurisChamferPath(rect, AurisTokens.bevelXs),
+      aurisChamferPath(rect, cut),
       Paint()..color = color,
     );
   }
