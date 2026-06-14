@@ -72,7 +72,7 @@ class AurisStatCard extends StatelessWidget {
                   text: value,
                   style: TextStyle(
                     fontFamily: AurisTokens.fontDisplay,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     fontSize: 34,
                     height: 1.0,
                     letterSpacing: AurisTokens.trackingHeading,

@@ -24,15 +24,24 @@ class _Variant {
 // Load the bundled fonts so glyphs render for real instead of as Ahem blocks
 // (needed to judge a glyph-hugging glow).
 Future<void> _loadFonts() async {
-  final Map<String, String> families = <String, String>{
-    'packages/auris/ShareTechMono': 'fonts/ShareTechMono-Regular.ttf',
-    'packages/auris/Rajdhani': 'fonts/Rajdhani-SemiBold.ttf',
-    'packages/auris/ExoTwo': 'fonts/Exo2-Regular.ttf',
+  // Multiple files per family so Flutter can pick the right weight (matching the
+  // pubspec). Rajdhani ships Medium/SemiBold/Bold; loading only one made every
+  // weight render the same, hiding weight changes.
+  final Map<String, List<String>> families = <String, List<String>>{
+    'packages/auris/ShareTechMono': <String>['fonts/ShareTechMono-Regular.ttf'],
+    'packages/auris/Rajdhani': <String>[
+      'fonts/Rajdhani-Medium.ttf',
+      'fonts/Rajdhani-SemiBold.ttf',
+      'fonts/Rajdhani-Bold.ttf',
+    ],
+    'packages/auris/ExoTwo': <String>['fonts/Exo2-Regular.ttf'],
   };
-  for (final MapEntry<String, String> e in families.entries) {
-    final Uint8List bytes = File(e.value).readAsBytesSync();
-    final FontLoader loader = FontLoader(e.key)
-      ..addFont(Future<ByteData>.value(ByteData.view(bytes.buffer)));
+  for (final MapEntry<String, List<String>> e in families.entries) {
+    final FontLoader loader = FontLoader(e.key);
+    for (final String path in e.value) {
+      final Uint8List bytes = File(path).readAsBytesSync();
+      loader.addFont(Future<ByteData>.value(ByteData.view(bytes.buffer)));
+    }
     await loader.load();
   }
 }
@@ -257,6 +266,65 @@ void main() {
     File('${outDir.path}/glow_compare.png').writeAsBytesSync(png!);
   });
 
+  // Same display word at w700 / w600 / w500 so the weight step is visible.
+  testWidgets('weights_compare', (WidgetTester tester) async {
+    final Directory outDir = Directory('/tmp/auris_renders')
+      ..createSync(recursive: true);
+    tester.view.physicalSize = const Size(1400, 600);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+    await _loadFonts();
+
+    Widget sample(String w, FontWeight weight) => Padding(
+          padding: const EdgeInsets.symmetric(vertical: 6),
+          child: Text(
+            'SYSTEM ONLINE  ·  94.2  ($w)',
+            style: TextStyle(
+              fontFamily: 'packages/auris/Rajdhani',
+              fontWeight: weight,
+              fontSize: 40,
+              letterSpacing: 1.8,
+              color: const Color(0xFFF0E8D0),
+            ),
+          ),
+        );
+
+    await tester.pumpWidget(
+      MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: ColoredBox(
+          color: const Color(0xFF0A0A0C),
+          child: RepaintBoundary(
+            key: const ValueKey<String>('shot'),
+            child: Padding(
+              padding: const EdgeInsets.all(40),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  sample('w700 Bold', FontWeight.w700),
+                  sample('w600 SemiBold', FontWeight.w600),
+                  sample('w500 Medium', FontWeight.w500),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump(const Duration(milliseconds: 400));
+    final RenderRepaintBoundary boundary = tester.renderObject(
+      find.byKey(const ValueKey<String>('shot')),
+    );
+    final Uint8List? png = await tester.runAsync(() async {
+      final ui.Image image = await boundary.toImage(pixelRatio: 2.0);
+      final ByteData? bytes =
+          await image.toByteData(format: ui.ImageByteFormat.png);
+      return bytes!.buffer.asUint8List();
+    });
+    File('${outDir.path}/weights_compare.png').writeAsBytesSync(png!);
+  });
+
   // Title + buttons + segmented control, to judge label text weight.
   testWidgets('typography', (WidgetTester tester) async {
     final Directory outDir = Directory('/tmp/auris_renders')
@@ -289,6 +357,21 @@ void main() {
                         Text(
                           'AURIS // CORE CONTROLS',
                           style: theme.textTheme.titleLarge,
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          'SYSTEM ONLINE',
+                          style: theme.textTheme.displaySmall,
+                        ),
+                        Text(
+                          'REACTOR CORE',
+                          style: theme.textTheme.titleMedium,
+                        ),
+                        const SizedBox(height: 8),
+                        const AurisStatCard(
+                          label: 'THROUGHPUT',
+                          value: '94.2',
+                          unit: 'GB/s',
                         ),
                         const SizedBox(height: 20),
                         Row(
