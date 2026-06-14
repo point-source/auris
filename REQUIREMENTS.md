@@ -64,8 +64,14 @@ Each criterion is observable from the product's visible surface.
    and confirm each hallmark is present on the relevant sections.
 4. **Customizable without forking.** A developer can change the accent color,
    corner bevel size, and glow intensity through provided knobs without
-   copying or editing package source. *Testable:* construct the theme with a
-   different accent and observe it propagate.
+   copying or editing package source, and the change reaches **every** surface
+   — themed Material components and custom widgets alike, including
+   widget-synthesized glows — with no surface retaining the default accent,
+   tint, or glow. No design-defining value (color, accent tint, bevel, glow
+   intensity) is hardcoded where a shared resolved value determines it.
+   *Testable:* construct the theme with a different accent and a different glow
+   intensity and observe both propagate everywhere, leaving nothing on the
+   default.
 5. **Readable.** All primary text and interactive controls meet WCAG AA
    contrast against their background; intentionally dim/decorative tokens are
    exempt and documented as decorative-only. *Testable:* check key text/control
@@ -116,7 +122,10 @@ Each criterion is observable from the product's visible surface.
   contrast; intentionally dim tokens are decorative-only. All interactive
   widgets expose visible keyboard focus.
 - **Customizability.** Accent color, corner bevel, and glow intensity are
-  adjustable without forking the package.
+  adjustable without forking the package, and every surface honors them through
+  one shared resolved scheme — no widget or component theme hardcodes a value
+  (color, accent tint, bevel, glow intensity) that a shared resolved value or
+  override factor already determines.
 - **Correctness / reliability.** Zero analyzer warnings; consistent rendering
   across the supported Flutter range; the look stays visually correct as the kit
   evolves — geometry and glow regressions are caught automatically, not only by

@@ -141,7 +141,16 @@ and avoid the failure modes that small elements invite:
 - *Glow hugs the element.* Depth is a tight blur with low alpha (and slight
   negative spread on boxes), never a wash that bleeds across the layout. A
   few-pixel accent bar uses its own small edge glow, since the box depth token's
-  negative spread would vanish on it.
+  negative spread would vanish on it. *Intensity is carried by alpha, not blur* —
+  a stronger glow is brighter/denser, not wider, so it keeps hugging the shape
+  rather than ballooning into a cloud.
+- *Glow intensity and accent come from the scheme, never hardcoded.* A widget
+  requests depth by intent through the resolved `depth*` cues (already
+  accent-tinted and glow-scaled). A widget that must synthesize a custom-shaped
+  glow the depth token cannot express takes its hue from the accent role and
+  scales its alpha by `scheme.glowScale`, so both the accent and glow knobs reach
+  it; a literal blur/alpha/color silently ignores customization
+  (§spec:customization "Propagation invariant").
 - *Fill chamfer/slant shapes via `ShapeDecoration`* (anti-aliased), not a
   `ClipPath` over a `ColoredBox` — clipping leaves jagged diagonal edges. Use a
   clip only to contain children, with `Clip.antiAliasWithSaveLayer`.
@@ -353,12 +362,37 @@ the whole kit.
 **Design.** The overrides are inputs to the scheme resolver (§spec:scheme), the
 same resolver whose other input is target brightness — customization and
 brightness are orthogonal knobs on one resolution, not two mechanisms. The
-accent override recolors the primary ramp; the bevel scale multiplies the bevel
-role; the glow scale multiplies the resolved depth intensity. The exact API
-surface (named parameters vs. a config object) is an implementation choice,
-constrained to: overrides are optional, defaults reproduce the canonical look
-exactly, and an adopter who supplies no overrides pays no resolution cost beyond
-the default scheme.
+accent override recolors the primary ramp **and re-tints the otherwise-warm
+neutral roles** (the text and border roles), so the whole kit shares one hue
+rather than leaving amber text/outlines fighting a cool accent; the tinted roles
+are derived from the accent's own hue at low saturation (a clean desaturated
+accent), not by blending the accent into the warm token (which yields a muddy
+mix). The bevel scale multiplies the bevel role. The glow scale scales the
+resolved depth **intensity via alpha, holding blur/spread constant**, so a
+stronger glow is brighter, not wider — it keeps hugging the element instead of
+ballooning into a wash. The exact API surface (named parameters vs. a config
+object) is an implementation choice, constrained to: overrides are optional,
+defaults reproduce the canonical look exactly, and an adopter who supplies no
+overrides pays no resolution cost beyond the default scheme.
+
+**Propagation invariant.** Because both layers read the one resolved scheme,
+every design-defining value a surface renders — ramp/accent color, the
+amber→accent tint of the neutral text and border roles, the bevel, and **glow
+intensity** — must be obtained from the resolved `AurisScheme`: a semantic role,
+or, where a widget synthesizes a value the scheme does not pre-resolve, the
+override factors the scheme carries for that purpose. The scheme therefore
+exposes not only resolved roles and `depth*` cues but the raw `glowScale` factor,
+so a widget building a *custom-shaped* glow (e.g. a few-pixel accent bar whose
+geometry the tight depth token cannot express) scales its own alpha by
+`glowScale` and takes its hue from the accent role, rather than baking a constant
+blur/alpha/color. A surface that hardcodes any of these silently opts out of
+customization — this is the recurring failure mode (an amber glow under a teal
+accent; a fixed glow that ignores the intensity knob; warm text under a cool
+accent). Every new or changed widget and component theme is reviewed against
+this invariant: flip the accent and the glow, and confirm the surface re-skins
+with no leftover default. This is the customization counterpart to the "no raw
+literals" bar (§spec:design-tokens), extended from color to tint and glow
+intensity.
 
 **Rationale and boundary.** Scope is deliberately limited to accent, bevel, and
 glow — the three knobs that cover the common brand-fit case — rather than full
