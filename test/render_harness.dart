@@ -257,6 +257,71 @@ void main() {
     File('${outDir.path}/glow_compare.png').writeAsBytesSync(png!);
   });
 
+  // Continuous vs stepped (divisions:10) slider — the stepped track should show
+  // one cell per step.
+  testWidgets('sliders', (WidgetTester tester) async {
+    final Directory outDir = Directory('/tmp/auris_renders')
+      ..createSync(recursive: true);
+    tester.view.physicalSize = const Size(1200, 500);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+    await _loadFonts();
+
+    await tester.pumpWidget(
+      MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: AurisTheme.light(),
+        home: Builder(
+          builder: (BuildContext context) {
+            final AurisScheme scheme =
+                Theme.of(context).extension<AurisScheme>()!;
+            return Scaffold(
+              backgroundColor: scheme.surfacePage,
+              body: RepaintBoundary(
+                key: const ValueKey<String>('shot'),
+                child: ColoredBox(
+                  color: scheme.surfacePage,
+                  child: Padding(
+                    padding: const EdgeInsets.all(40),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        const Text('CONTINUOUS',
+                            style: TextStyle(color: Color(0xFFA09060)),),
+                        Slider(value: 0.4, onChanged: (_) {}),
+                        const SizedBox(height: 16),
+                        const Text('STEPPED divisions:10',
+                            style: TextStyle(color: Color(0xFFA09060)),),
+                        Slider(
+                          value: 0.4,
+                          divisions: 10,
+                          max: 1,
+                          onChanged: (_) {},
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+    await tester.pump(const Duration(milliseconds: 400));
+    final RenderRepaintBoundary boundary = tester.renderObject(
+      find.byKey(const ValueKey<String>('shot')),
+    );
+    final Uint8List? png = await tester.runAsync(() async {
+      final ui.Image image = await boundary.toImage(pixelRatio: 2.5);
+      final ByteData? bytes =
+          await image.toByteData(format: ui.ImageByteFormat.png);
+      return bytes!.buffer.asUint8List();
+    });
+    File('${outDir.path}/sliders.png').writeAsBytesSync(png!);
+  });
+
   // The native Material Stepper's default step icons vs the chamfered
   // AurisStepIndicator, to see whether they are consistent.
   testWidgets('stepper', (WidgetTester tester) async {

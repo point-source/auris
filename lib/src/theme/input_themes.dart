@@ -448,9 +448,28 @@ class _AurisSliderThumb extends SliderComponentShape {
 class _AurisSliderTrack extends SliderTrackShape with BaseSliderTrackShape {
   const _AurisSliderTrack();
 
-  static const int _segments = 22;
+  /// Cell count for a continuous slider, where there are no steps to match.
+  static const int _continuousSegments = 22;
   static const double _gap = 3;
   static const double _slant = 3;
+
+  /// A stepped slider should show one cell per step so the cell boundaries land
+  /// on the thumb's snap positions. The division count isn't on the
+  /// `SliderTrackShape` API, but the slider's render object ([parentBox]) exposes
+  /// a public `divisions` getter; read it dynamically (the render class itself is
+  /// private) and fall back to the continuous count when null.
+  static int _segmentsFor(RenderBox parentBox) {
+    try {
+      // ignore: avoid_dynamic_calls
+      final Object? divisions = (parentBox as dynamic).divisions;
+      if (divisions is int && divisions > 0) {
+        return divisions;
+      }
+    } on NoSuchMethodError {
+      // Not a slider render object — fall through to the default.
+    }
+    return _continuousSegments;
+  }
 
   @override
   void paint(
@@ -475,7 +494,8 @@ class _AurisSliderTrack extends SliderTrackShape with BaseSliderTrackShape {
     if (rect.width <= 0 || rect.height <= 0) {
       return;
     }
-    final double cellWidth = (rect.width - _gap * (_segments - 1)) / _segments;
+    final int segments = _segmentsFor(parentBox);
+    final double cellWidth = (rect.width - _gap * (segments - 1)) / segments;
     if (cellWidth <= 0) {
       return;
     }
@@ -487,13 +507,13 @@ class _AurisSliderTrack extends SliderTrackShape with BaseSliderTrackShape {
     // position cue; the rest of the filled trail is dim so it stays backgrounded
     // and the bright handle is the clear indicator.
     int leading = -1;
-    for (int i = 0; i < _segments; i++) {
+    for (int i = 0; i < segments; i++) {
       final double cx = rect.left + i * (cellWidth + _gap) + cellWidth / 2;
       if (cx <= thumbCenter.dx) {
         leading = i;
       }
     }
-    for (int i = 0; i < _segments; i++) {
+    for (int i = 0; i < segments; i++) {
       final double left = rect.left + i * (cellWidth + _gap);
       final Rect cell = Rect.fromLTWH(left, rect.top, cellWidth, rect.height);
       final Color color;

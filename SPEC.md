@@ -159,7 +159,10 @@ and avoid the failure modes that small elements invite:
   clip only to contain children, with `Clip.antiAliasWithSaveLayer`.
 - *Filled progressions dim the trail and brighten the leading/active cell.* In a
   segmented meter or slider, trailing filled cells are dimmed and the leading
-  (active-position) cell is brightest, so position reads at a glance.
+  (active-position) cell is brightest, so position reads at a glance. A *stepped*
+  slider matches its cell count to the slider's divisions so each cell is one
+  step and the cell boundaries fall on the thumb's snap points; a continuous
+  slider uses a fixed fine cell count.
 - *Bundled fonts are referenced with the `packages/auris/` prefix* — a bare
   family name silently falls back to the platform font.
 
