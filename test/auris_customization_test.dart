@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:auris/auris.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -134,6 +136,52 @@ void main() {
       final ThemeData theme = AurisTheme.light();
       expect(theme.colorScheme.primary, AurisTokens.gold);
       expect(theme.extension<AurisScheme>()!.bevel.md, AurisTokens.bevelMd);
+    });
+  });
+
+  group('accent carries through to glow and text', () {
+    test('the primary-ramp glow recolors to the accent, not amber', () {
+      final AurisScheme base = AurisScheme.resolve();
+      final AurisScheme themed = AurisScheme.resolve(accent: kAccent);
+
+      // Default keeps the canonical amber active glow untouched.
+      expect(base.depthActive.glow.first.color, AurisTokens.glowActive.first.color);
+
+      // Under an accent the active glow takes the accent hue (alpha preserved),
+      // so a teal element no longer wears an amber halo.
+      final Color glowColor = themed.depthActive.glow.first.color;
+      expect(glowColor.r, closeTo(kAccent.r, 1e-6));
+      expect(glowColor.g, closeTo(kAccent.g, 1e-6));
+      expect(glowColor.b, closeTo(kAccent.b, 1e-6));
+      expect(glowColor.a, closeTo(AurisTokens.glowActive.first.color.a, 1e-6));
+    });
+
+    test('text tints toward the accent yet primary text stays WCAG AA', () {
+      double lin(double c) =>
+          c <= 0.03928 ? c / 12.92 : math.pow((c + 0.055) / 1.055, 2.4).toDouble();
+      double lum(Color c) =>
+          0.2126 * lin(c.r) + 0.7152 * lin(c.g) + 0.0722 * lin(c.b);
+      double contrast(Color fg, Color bg) {
+        final double hi = math.max(lum(fg), lum(bg));
+        final double lo = math.min(lum(fg), lum(bg));
+        return (hi + 0.05) / (lo + 0.05);
+      }
+
+      // A spread of accents, including the example's three alternates.
+      const List<Color> accents = <Color>[
+        Color(0xFF35E0C0), // teal
+        Color(0xFFE048B0), // magenta
+        Color(0xFF6AD050), // green
+      ];
+      final AurisScheme base = AurisScheme.resolve();
+      for (final Color accent in accents) {
+        final AurisScheme s = AurisScheme.resolve(accent: accent);
+        // The cast actually shifts (cohesion): tinted bright text differs from
+        // the canonical warm token.
+        expect(s.textBright, isNot(base.textBright));
+        // …but primary text still clears AA (4.5:1) on the page surface.
+        expect(contrast(s.textBright, s.surfacePage), greaterThanOrEqualTo(4.5));
+      }
     });
   });
 }

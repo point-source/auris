@@ -293,16 +293,32 @@ class AurisScheme extends ThemeExtension<AurisScheme> {
         ? AurisTokens.glowSubtle
         : _tintGlow(AurisTokens.glowSubtle, dim);
 
+    // The canonical text tokens carry an amber warmth, so under a non-default
+    // accent they keep an amber cast that fights the new hue and breaks the
+    // single-hue "glow" read. Give the text roles a faint cast of the accent so
+    // the whole kit shares one hue; the tint is light enough that primary text
+    // stays WCAG AA. With no override the warm canonical tokens are used
+    // verbatim. textDim is decorative-only either way.
+    final Color textBright = accent == null
+        ? AurisTokens.brightWhite
+        : Color.alphaBlend(active.withValues(alpha: 0.10), AurisTokens.brightWhite);
+    final Color textMid = accent == null
+        ? AurisTokens.textMid
+        : Color.alphaBlend(active.withValues(alpha: 0.20), AurisTokens.textMid);
+    final Color textDim = accent == null
+        ? AurisTokens.textDim
+        : Color.alphaBlend(active.withValues(alpha: 0.20), AurisTokens.textDim);
+
     return AurisScheme(
       brightness: Brightness.dark,
       // Surfaces.
       surfacePage: AurisTokens.void_,
       surfacePanel: AurisTokens.panel,
       surfaceInset: AurisTokens.panelAlt,
-      // Text roles.
-      textBright: AurisTokens.brightWhite,
-      textMid: AurisTokens.textMid,
-      textDim: AurisTokens.textDim,
+      // Text roles (accent-tinted under an override; canonical warm otherwise).
+      textBright: textBright,
+      textMid: textMid,
+      textDim: textDim,
       // Primary ramp.
       primaryDim: dim,
       primaryActive: active,

@@ -334,6 +334,9 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
                 const SizedBox(height: 16),
                 const TextField(
                   obscureText: true,
+                  // A hexagon mask glyph ties the obscured field to the kit's
+                  // hex-ornament motif instead of a generic bullet.
+                  obscuringCharacter: '⬡',
                   decoration: InputDecoration(
                     labelText: 'ACCESS KEY',
                     suffixIcon: Icon(Icons.lock_outline),
