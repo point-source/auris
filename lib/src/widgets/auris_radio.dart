@@ -73,38 +73,40 @@ class _AurisRadioState<T> extends State<AurisRadio<T>> {
   @override
   Widget build(BuildContext context) {
     final AurisScheme scheme = Theme.of(context).extension<AurisScheme>()!;
-    // Selection reads as a thicker, brighter outline (plus a subtle glow)
-    // rather than a second inner pip, which looked like a double outline.
+    // A single outline that thickens and brightens on selection and focus —
+    // keyboard focus intensifies the same border rather than drawing a second
+    // concentric ring (which read as a double outline). The selected state keeps
+    // its filled chamfered centre pip.
     final Color border = !_enabled
         ? (_selected ? scheme.primaryDim : scheme.borderResting)
-        : (_selected ? scheme.primaryHighlight : scheme.borderBright);
+        : _focused
+            ? scheme.primaryHighlight
+            : (_selected ? scheme.primaryActive : scheme.borderBright);
+    final double borderWidth = (_enabled && (_selected || _focused)) ? 2.0 : 1.0;
 
     final Widget indicator = SizedBox(
-      // 18px box + reserved focus-ring space.
+      // 18px box + breathing room around it.
       width: 24,
       height: 24,
       child: Center(
-        child: DecoratedBox(
-          decoration: ShapeDecoration(
-            shape: AurisChamferBorder(
-              cut: scheme.bevel.xs + 2,
-              side: _focused && _enabled
-                  ? BorderSide(color: scheme.primaryActive, width: 1.5)
-                  : BorderSide.none,
-            ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(3),
-            child: AurisContainer(
-              cut: scheme.bevel.xs,
-              width: 18,
-              height: 18,
-              fill: scheme.surfaceInset,
-              borderColor: border,
-              borderWidth: _selected ? 2.0 : 1.0,
-              depth: _selected && _enabled ? scheme.depthSubtle : null,
-            ),
-          ),
+        child: AurisContainer(
+          cut: scheme.bevel.xs,
+          width: 18,
+          height: 18,
+          fill: scheme.surfaceInset,
+          borderColor: border,
+          borderWidth: borderWidth,
+          depth: _enabled && (_selected || _focused) ? scheme.depthSubtle : null,
+          alignment: Alignment.center,
+          child: _selected
+              ? DecoratedBox(
+                  decoration: ShapeDecoration(
+                    color: _enabled ? scheme.primaryActive : scheme.textDim,
+                    shape: const AurisChamferBorder(cut: 2),
+                  ),
+                  child: const SizedBox(width: 8, height: 8),
+                )
+              : null,
         ),
       ),
     );

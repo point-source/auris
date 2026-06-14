@@ -300,10 +300,12 @@ abstract final class AurisInputThemes {
       thumbColor: scheme.primaryActive,
       overlayColor: scheme.primaryActive.withValues(alpha: 0.16),
       valueIndicatorColor: scheme.surfacePanel,
-      activeTickMarkColor: scheme.onPrimary,
-      inactiveTickMarkColor: scheme.borderBright,
       trackHeight: 6,
       trackShape: const _AurisSliderTrack(),
+      // The segmented track already shows the subdivisions; Material's round
+      // tick dots landed between the slanted cells and read as misaligned
+      // specks, so they are suppressed.
+      tickMarkShape: const _AurisNoTickMark(),
       thumbShape: _AurisSliderThumb(cut: scheme.bevel.xs),
       overlayShape:
           const RoundSliderOverlayShape(overlayRadius: 16),
@@ -358,6 +360,34 @@ abstract final class AurisInputThemes {
       ),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
     );
+  }
+}
+
+/// A no-op tick-mark shape: the segmented track conveys the subdivisions, so the
+/// default round dots (which fell between cells and looked like misaligned
+/// specks) are drawn as nothing.
+class _AurisNoTickMark extends SliderTickMarkShape {
+  const _AurisNoTickMark();
+
+  @override
+  Size getPreferredSize({
+    required SliderThemeData sliderTheme,
+    required bool isEnabled,
+  }) =>
+      Size.zero;
+
+  @override
+  void paint(
+    PaintingContext context,
+    Offset center, {
+    required RenderBox parentBox,
+    required SliderThemeData sliderTheme,
+    required Animation<double> enableAnimation,
+    required Offset thumbCenter,
+    required bool isEnabled,
+    required TextDirection textDirection,
+  }) {
+    // Intentionally empty — no tick dots.
   }
 }
 

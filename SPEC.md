@@ -320,7 +320,7 @@ visible keyboard focus (§spec:accessibility).
 | `AurisScanBracket` | Targeting-reticle corner brackets around a child; optional opacity pulse on `durationSlow`. |
 | `AurisStatCard` | KPI/metric tile: label, large glowing value, optional unit and signed delta (success/danger arrow + baseline suffix). |
 | `AurisSelect` | Dropdown/select with a rotating caret, a chamfered glowing popup, and per-row dividers with hover/selected highlight — the visual the native `DropdownMenu` cannot reach (no menu glow, no per-row dividers, no caret rotation via `ThemeData`). The themed native `DropdownMenu` remains available for adopters who want the zero-extra-widget path. |
-| `AurisRadio` | Group-based single-select with a chamfered indicator that thickens and brightens its outline (plus a subtle glow) when selected, rather than adding a second inner pip — Material's `Radio` is circular with no shape hook, so this is the geometric replacement. |
+| `AurisRadio` | Group-based single-select with a chamfered indicator: a filled chamfered centre pip when selected, on a single outline that thickens and brightens (with a subtle glow) on selection and on keyboard focus — focus intensifies that one outline rather than drawing a second concentric ring. Material's `Radio` is circular with no shape hook, so this is the geometric replacement. |
 
 **Rationale.** Each widget exists specifically because the corresponding effect
 cannot be produced through `ThemeData` — segmented fills, custom-clipped

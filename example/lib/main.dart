@@ -1150,26 +1150,41 @@ class _CustomizationControl extends StatelessWidget {
           onChanged: onBevelChanged,
         ),
         const SizedBox(height: 16),
-        label('GLOW'),
-        const SizedBox(height: 8),
-        _ScalePicker(
+        Row(
+          children: <Widget>[
+            label('GLOW'),
+            const SizedBox(width: 12),
+            Text(
+              '${glowScale.toStringAsFixed(1)}×',
+              style: TextStyle(
+                fontFamily: AurisTokens.fontMono,
+                fontSize: 12,
+                color: scheme.primaryActive,
+              ),
+            ),
+          ],
+        ),
+        // Glow is a continuous scalar (0 = none, 3 = strong), unlike the stepped
+        // bevel control, so its effect can be dialled and watched on the tile.
+        Slider(
           value: glowScale,
+          max: 3,
           onChanged: onGlowChanged,
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 8),
         // A live preview tile so the three knobs are legible on their own,
         // without scrolling to find a glowing/chamfered element: its corner cut
-        // tracks BEVEL, its border + glow tint track ACCENT, and the halo size
-        // tracks GLOW — all read straight from the resolved scheme.
+        // tracks BEVEL, its fill + glow tint track ACCENT, and the halo size
+        // tracks GLOW. The tile is a solid accent fill with NO border so the
+        // glow halo is not visually swallowed by a same-coloured outline.
         Row(
           children: <Widget>[
             AurisContainer(
               cut: scheme.bevel.lg,
               width: 96,
               height: 56,
-              fill: scheme.surfaceInset,
-              borderColor: scheme.primaryActive,
-              borderWidth: 2,
+              fill: scheme.primaryActive,
+              borderWidth: 0,
               depth: scheme.depthActive,
               alignment: Alignment.center,
               child: Text(
@@ -1178,7 +1193,7 @@ class _CustomizationControl extends StatelessWidget {
                   fontFamily: AurisTokens.fontMono,
                   fontSize: 11,
                   letterSpacing: AurisTokens.trackingLabel,
-                  color: scheme.primaryHighlight,
+                  color: scheme.onPrimary,
                 ),
               ),
             ),

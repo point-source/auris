@@ -299,21 +299,23 @@ class AurisScheme extends ThemeExtension<AurisScheme> {
         ? AurisTokens.glowSubtle
         : _tintGlow(AurisTokens.glowSubtle, dim);
 
-    // The canonical text tokens carry an amber warmth, so under a non-default
-    // accent they keep an amber cast that fights the new hue and breaks the
-    // single-hue "glow" read. Give the text roles a faint cast of the accent so
-    // the whole kit shares one hue; the tint is light enough that primary text
-    // stays WCAG AA. With no override the warm canonical tokens are used
-    // verbatim. textDim is decorative-only either way.
-    final Color textBright = accent == null
-        ? AurisTokens.brightWhite
-        : Color.alphaBlend(active.withValues(alpha: 0.18), AurisTokens.brightWhite);
-    final Color textMid = accent == null
-        ? AurisTokens.textMid
-        : Color.alphaBlend(active.withValues(alpha: 0.42), AurisTokens.textMid);
-    final Color textDim = accent == null
-        ? AurisTokens.textDim
-        : Color.alphaBlend(active.withValues(alpha: 0.42), AurisTokens.textDim);
+    // The canonical text and border tokens carry an amber warmth, so under a
+    // non-default accent they keep an amber cast that fights the new hue. Rather
+    // than blend the accent INTO the warm token — which yields a muddy
+    // amber+accent mix — re-express each tinted role as the accent's own hue at a
+    // low saturation and the role's target lightness, so it reads as a clean
+    // desaturated accent ("dimmed cyan") that shares the kit's single hue. With
+    // no override the warm canonical tokens are used verbatim.
+    final Color textBright =
+        accent == null ? AurisTokens.brightWhite : _accentRole(active, 0.22, 0.88);
+    final Color textMid =
+        accent == null ? AurisTokens.textMid : _accentRole(active, 0.32, 0.60);
+    final Color textDim =
+        accent == null ? AurisTokens.textDim : _accentRole(active, 0.30, 0.34);
+    final Color borderResting =
+        accent == null ? AurisTokens.border : _accentRole(active, 0.45, 0.13);
+    final Color borderBright =
+        accent == null ? AurisTokens.borderBright : _accentRole(active, 0.45, 0.22);
 
     return AurisScheme(
       brightness: Brightness.dark,
@@ -333,9 +335,9 @@ class AurisScheme extends ThemeExtension<AurisScheme> {
       // Secondary.
       secondary: AurisTokens.slate,
       secondaryDim: AurisTokens.slateDim,
-      // Borders.
-      borderResting: AurisTokens.border,
-      borderBright: AurisTokens.borderBright,
+      // Borders (accent-tinted under an override; canonical warm otherwise).
+      borderResting: borderResting,
+      borderBright: borderBright,
       // Semantic.
       danger: AurisTokens.danger,
       dangerBright: AurisTokens.dangerBright,
@@ -370,6 +372,15 @@ class AurisScheme extends ThemeExtension<AurisScheme> {
         borderColor: AurisTokens.slate,
       ).scaled(glowScale),
     );
+  }
+
+  /// Re-express a tinted role as [accent]'s hue at the given [saturation] and
+  /// [lightness]. Producing the color from the accent's hue (rather than
+  /// blending the accent into a warm token) keeps it a clean desaturated accent
+  /// instead of a muddy amber+accent mix.
+  static Color _accentRole(Color accent, double saturation, double lightness) {
+    final HSLColor base = HSLColor.fromColor(accent);
+    return HSLColor.fromAHSL(1.0, base.hue, saturation, lightness).toColor();
   }
 
   /// Retint a glow [BoxShadow] list to [base], preserving each shadow's own
