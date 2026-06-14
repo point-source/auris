@@ -5,13 +5,13 @@
 // Each variant is its own test so the per-test binding is fresh (multiple
 // toImage calls in one test deadlock).
 import 'dart:io';
-import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:auris/auris.dart';
 import 'package:auris/auris_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 class _Variant {
@@ -19,6 +19,22 @@ class _Variant {
   final String name;
   final Color? accent;
   final double glowScale;
+}
+
+// Load the bundled fonts so glyphs render for real instead of as Ahem blocks
+// (needed to judge a glyph-hugging glow).
+Future<void> _loadFonts() async {
+  final Map<String, String> families = <String, String>{
+    'packages/auris/ShareTechMono': 'fonts/ShareTechMono-Regular.ttf',
+    'packages/auris/Rajdhani': 'fonts/Rajdhani-SemiBold.ttf',
+    'packages/auris/ExoTwo': 'fonts/Exo2-Regular.ttf',
+  };
+  for (final MapEntry<String, String> e in families.entries) {
+    final Uint8List bytes = File(e.value).readAsBytesSync();
+    final FontLoader loader = FontLoader(e.key)
+      ..addFont(Future<ByteData>.value(ByteData.view(bytes.buffer)));
+    await loader.load();
+  }
 }
 
 void main() {
@@ -37,6 +53,7 @@ void main() {
       tester.view.physicalSize = const Size(1100, 900);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.reset);
+      await _loadFonts();
 
       await tester.pumpWidget(
         MaterialApp(
@@ -66,6 +83,8 @@ void main() {
                                 const AurisStepIndicator(step: 2, state: AurisStepState.active, size: 64),
                                 const SizedBox(width: 28),
                                 const AurisStepIndicator(step: 3, state: AurisStepState.inactive, size: 64),
+                                const SizedBox(width: 28),
+                                const AurisStepIndicator(step: 4, state: AurisStepState.error, size: 64),
                                 const SizedBox(width: 28),
                                 AurisRadio<int>(
                                   value: 0,
@@ -130,6 +149,7 @@ void main() {
     tester.view.physicalSize = const Size(1600, 500);
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.reset);
+      await _loadFonts();
 
     const Color amber = Color(0xFFF0A500);
     final List<({String label, List<BoxShadow> glow})> candidates =
@@ -235,5 +255,100 @@ void main() {
       return bytes!.buffer.asUint8List();
     });
     File('${outDir.path}/glow_compare.png').writeAsBytesSync(png!);
+  });
+
+  // The native Material Stepper's default step icons vs the chamfered
+  // AurisStepIndicator, to see whether they are consistent.
+  testWidgets('stepper', (WidgetTester tester) async {
+    final Directory outDir = Directory('/tmp/auris_renders')
+      ..createSync(recursive: true);
+    tester.view.physicalSize = const Size(900, 1100);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+      await _loadFonts();
+
+    await tester.pumpWidget(
+      MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: AurisTheme.light(),
+        home: Builder(
+          builder: (BuildContext context) {
+            final AurisScheme scheme =
+                Theme.of(context).extension<AurisScheme>()!;
+            return Scaffold(
+              backgroundColor: scheme.surfacePage,
+              body: RepaintBoundary(
+                key: const ValueKey<String>('shot'),
+                child: ColoredBox(
+                  color: scheme.surfacePage,
+                  child: Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        const Row(
+                          children: <Widget>[
+                            AurisStepIndicator(
+                              step: 1,
+                              state: AurisStepState.complete,
+                            ),
+                            SizedBox(width: 12),
+                            AurisStepIndicator(
+                              step: 2,
+                              state: AurisStepState.active,
+                            ),
+                            SizedBox(width: 12),
+                            AurisStepIndicator(
+                              step: 3,
+                              state: AurisStepState.inactive,
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 24),
+                        SizedBox(
+                          height: 320,
+                          child: Stepper(
+                            currentStep: 1,
+                            steps: const <Step>[
+                              Step(
+                                title: Text('CALIBRATE'),
+                                content: Text('Align sensors.'),
+                                state: StepState.complete,
+                                isActive: true,
+                              ),
+                              Step(
+                                title: Text('PRIME'),
+                                content: Text('Spin up.'),
+                                isActive: true,
+                              ),
+                              Step(
+                                title: Text('LAUNCH'),
+                                content: Text('Go.'),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+    await tester.pump(const Duration(milliseconds: 400));
+    final RenderRepaintBoundary boundary = tester.renderObject(
+      find.byKey(const ValueKey<String>('shot')),
+    );
+    final Uint8List? png = await tester.runAsync(() async {
+      final ui.Image image = await boundary.toImage(pixelRatio: 2.5);
+      final ByteData? bytes =
+          await image.toByteData(format: ui.ImageByteFormat.png);
+      return bytes!.buffer.asUint8List();
+    });
+    File('${outDir.path}/stepper.png').writeAsBytesSync(png!);
   });
 }

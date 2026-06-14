@@ -267,7 +267,7 @@ void main() {
       expect(find.byIcon(Icons.priority_high), findsOneWidget);
     });
 
-    testWidgets('active state carries the active depth glow', (
+    testWidgets('active state glows the glyph, not the box', (
       WidgetTester tester,
     ) async {
       await tester.pumpWidget(
@@ -275,8 +275,12 @@ void main() {
       );
       final AurisContainer container =
           tester.widget<AurisContainer>(find.byType(AurisContainer));
-      expect(container.depth, scheme.depthActive);
       expect(container.borderColor, scheme.primaryActive);
+      // The glow rides on the number as a tight glyph shadow (so it hugs the
+      // digit), not on the box behind a translucent fill (which read as an orb).
+      expect(container.depth, isNull);
+      final Text label = tester.widget<Text>(find.text('1'));
+      expect(label.style?.shadows, scheme.depthActive.glow);
     });
   });
 

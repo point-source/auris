@@ -169,21 +169,22 @@ abstract final class AurisTokens {
     ),
   ];
 
-  /// Danger glow.
+  /// Danger glow — kept tight (like the active glow) so it hugs a glyph or edge
+  /// rather than pooling as a soft orb.
   static const List<BoxShadow> glowDanger = <BoxShadow>[
     BoxShadow(
-      color: Color(0x3DE84838),
-      blurRadius: 5,
-      spreadRadius: -2,
+      color: Color(0x55E84838),
+      blurRadius: 2,
+      spreadRadius: 0,
     ),
   ];
 
-  /// Slate (secondary) glow.
+  /// Slate (secondary) glow — tight to match.
   static const List<BoxShadow> glowSlate = <BoxShadow>[
     BoxShadow(
-      color: Color(0x3D8AABB0),
-      blurRadius: 5,
-      spreadRadius: -2,
+      color: Color(0x558AABB0),
+      blurRadius: 2,
+      spreadRadius: 0,
     ),
   ];
 

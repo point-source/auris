@@ -52,7 +52,12 @@ class AurisStepIndicator extends StatelessWidget {
     late final Color border;
     late final Color fill;
     late final Color foreground;
-    AurisDepth? depth;
+    // The glow rides on the glyph (number/icon) as a tight text shadow that
+    // hugs it, NOT on the box: a box depth behind the marker's translucent fill
+    // bled through and pooled as a round "orb" inside the rectangle, which is
+    // exactly the box-halo failure the glyph-glow convention forbids
+    // (§spec:design-tokens). Empty for states that do not glow.
+    List<BoxShadow> glyphGlow = const <BoxShadow>[];
     Widget content;
 
     switch (state) {
@@ -60,13 +65,13 @@ class AurisStepIndicator extends StatelessWidget {
         border = scheme.borderResting;
         fill = scheme.surfaceInset;
         foreground = scheme.textMid;
-        content = _label(scheme, foreground);
+        content = _label(foreground, glyphGlow);
       case AurisStepState.active:
         border = scheme.primaryActive;
         fill = scheme.primaryActive.withValues(alpha: 0.16);
         foreground = scheme.primaryActive;
-        depth = scheme.depthActive;
-        content = _label(scheme, foreground);
+        glyphGlow = scheme.depthActive.glow;
+        content = _label(foreground, glyphGlow);
       case AurisStepState.complete:
         border = scheme.primaryActive;
         fill = scheme.primaryActive;
@@ -76,9 +81,13 @@ class AurisStepIndicator extends StatelessWidget {
         border = scheme.dangerBright;
         fill = scheme.danger.withValues(alpha: 0.22);
         foreground = scheme.dangerBright;
-        depth = scheme.depthDanger;
-        content =
-            Icon(Icons.priority_high, size: size * 0.6, color: foreground);
+        glyphGlow = scheme.depthDanger.glow;
+        content = Icon(
+          Icons.priority_high,
+          size: size * 0.6,
+          color: foreground,
+          shadows: glyphGlow,
+        );
     }
 
     return AurisContainer(
@@ -87,13 +96,12 @@ class AurisStepIndicator extends StatelessWidget {
       height: size,
       fill: fill,
       borderColor: border,
-      depth: depth,
       alignment: Alignment.center,
       child: content,
     );
   }
 
-  Widget _label(AurisScheme scheme, Color color) {
+  Widget _label(Color color, List<Shadow> glyphGlow) {
     return Text(
       '$step',
       style: TextStyle(
@@ -101,6 +109,7 @@ class AurisStepIndicator extends StatelessWidget {
         fontSize: size * 0.42,
         height: 1.0,
         color: color,
+        shadows: glyphGlow.isEmpty ? null : glyphGlow,
       ),
     );
   }

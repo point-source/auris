@@ -135,9 +135,12 @@ and avoid the failure modes that small elements invite:
   pip, slider thumb) use the extra-small bevel; the switch slant is a constant
   ratio of each element's height so the track and thumb edges stay parallel.
 - *Text glow is a tight glyph shadow, not a box halo.* A glowing value sets a
-  subtle `depthSubtle` shadow on the text style's `shadows` so the glow hugs the
-  glyphs. A `BoxShadow` behind the text reads as a rectangular halo and is
-  wrong.
+  subtle depth shadow on the text style's `shadows` (or the icon's `shadows`) so
+  the glow hugs the glyphs. A `BoxShadow` behind the text reads as a rectangular
+  halo and is wrong — and behind a *translucent* fill (e.g. a marker's faint
+  active fill) the box glow bleeds through and pools as a round orb inside the
+  rectangle, which is the failure the glyph shadow avoids. A small marker that
+  carries a glyph (the step indicator) glows the glyph, not the box.
 - *Glow hugs the element.* Depth is a tight blur with low alpha (and slight
   negative spread on boxes), never a wash that bleeds across the layout. A
   few-pixel accent bar uses its own small edge glow, since the box depth token's
