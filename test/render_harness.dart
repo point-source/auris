@@ -193,7 +193,7 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: AurisTheme.light(),
+        theme: AurisTheme.dark(),
         home: Builder(
           builder: (BuildContext context) {
             final ThemeData base = Theme.of(context);
@@ -267,9 +267,16 @@ void main() {
   });
 
   // The three candidate light palettes on a representative widget gallery.
-  const List<String> lightNames = <String>['light_cyan'];
-  for (int variant = 0; variant < lightNames.length; variant++) {
-    testWidgets(lightNames[variant], (WidgetTester tester) async {
+  // Default (teal) plus a magenta accent override, to confirm the light variant
+  // is fully accent-configurable (the glow follows the override too).
+  const List<({String name, Color? accent})> lightGalleries =
+      <({String name, Color? accent})>[
+    (name: 'light_cyan', accent: null),
+    (name: 'light_accent_magenta', accent: Color(0xFFE048B0)),
+  ];
+  for (int variant = 0; variant < lightGalleries.length; variant++) {
+    final ({String name, Color? accent}) g = lightGalleries[variant];
+    testWidgets(g.name, (WidgetTester tester) async {
       final Directory outDir = Directory('/tmp/auris_renders')
         ..createSync(recursive: true);
       tester.view.physicalSize = const Size(1200, 1500);
@@ -280,7 +287,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           debugShowCheckedModeBanner: false,
-          theme: AurisTheme.light(),
+          theme: AurisTheme.light(accent: g.accent),
           home: Builder(
             builder: (BuildContext context) {
               final ThemeData theme = Theme.of(context);
@@ -417,7 +424,7 @@ void main() {
             await image.toByteData(format: ui.ImageByteFormat.png);
         return bytes!.buffer.asUint8List();
       });
-      File('${outDir.path}/${lightNames[variant]}.png')
+      File('${outDir.path}/${g.name}.png')
           .writeAsBytesSync(png!);
     });
   }
@@ -493,7 +500,7 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: AurisTheme.light(),
+        theme: AurisTheme.dark(),
         home: Builder(
           builder: (BuildContext context) {
             final ThemeData theme = Theme.of(context);
@@ -595,7 +602,7 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: AurisTheme.light(),
+        theme: AurisTheme.dark(),
         home: Builder(
           builder: (BuildContext context) {
             final AurisScheme scheme =
@@ -660,7 +667,7 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: AurisTheme.light(),
+        theme: AurisTheme.dark(),
         home: Builder(
           builder: (BuildContext context) {
             final AurisScheme scheme =
