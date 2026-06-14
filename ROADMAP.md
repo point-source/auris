@@ -4,29 +4,6 @@
 <!-- assumptions later sections depend on. Completed work leaves from -->
 <!-- the head; new work enters at the tail. -->
 
-## Customization
-
-Surface the resolver's override inputs publicly and prove they propagate, now
-that the scheme seam already accepts them and all widgets read the scheme.
-
-### §road:customization-api
-
-Expose optional accent/bevel/glow override parameters on `AurisTheme.light()`
-(defaults reproduce the canonical look) that pass through to the scheme resolver
-in `lib/src/theme.dart`, and confirm every Material component theme and custom
-widget honors them. §spec:customization.
-
-### §road:customization-showcase
-
-Add a showcase control demonstrating a non-default accent applied consistently
-across themed Material widgets and Auris custom widgets in
-`example/lib/main.dart`. §spec:customization, §spec:showcase. Depends on
-§road:customization-api.
-
-**Verify:** In the example, switch the demo to a non-default accent. Both
-Material components and Auris custom widgets recolor consistently with no source
-edits; bevel and glow overrides visibly change corner cut and glow strength.
-
 ## Packaging & pub-readiness
 
 Make Auris adoptable from a clean install and ready to publish.

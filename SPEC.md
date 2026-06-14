@@ -336,7 +336,7 @@ future brightness variants without per-widget changes.
 
 ## Customization without forking §spec:customization
 
-*Status: not started*
+*Status: complete*
 
 Cites: §req:success-criteria, §req:quality-attributes, §req:priorities
 
