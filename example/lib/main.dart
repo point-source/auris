@@ -6,6 +6,42 @@ import 'package:flutter/material.dart';
 
 void main() => runApp(const AurisExampleApp());
 
+/// A non-default accent option for the customization control. The example app
+/// is not the package, so local `Color` literals are allowed here (the
+/// no-raw-literals rule applies to the library, not to consumers).
+class _AccentOption {
+  const _AccentOption(this.label, this.color);
+
+  /// `null` color means "the canonical default" — no accent override.
+  final String label;
+  final Color? color;
+}
+
+/// The accent palette the showcase can flip between: the default amber/gold
+/// ramp plus a cool teal, a magenta, and a green, so flipping the control
+/// re-skins every themed Material widget AND every Auris custom widget at once.
+const List<_AccentOption> _accentOptions = <_AccentOption>[
+  _AccentOption('AMBER', null),
+  _AccentOption('TEAL', Color(0xFF35E0C0)),
+  _AccentOption('MAGENTA', Color(0xFFE048B0)),
+  _AccentOption('GREEN', Color(0xFF6AD050)),
+];
+
+/// Preset steps for the bevel (corner-cut) and glow (depth-intensity) overrides,
+/// labelled TIGHT / NORMAL / BOLD so their effect is legible at a glance.
+class _ScaleStep {
+  const _ScaleStep(this.label, this.value);
+
+  final String label;
+  final double value;
+}
+
+const List<_ScaleStep> _scaleSteps = <_ScaleStep>[
+  _ScaleStep('TIGHT', 0.5),
+  _ScaleStep('NORMAL', 1.0),
+  _ScaleStep('BOLD', 2.0),
+];
+
 /// The showcase: a scrollable app that applies [AurisTheme.light] and renders
 /// the re-skinned Material widgets — buttons, inputs, selection controls and
 /// sliders; surfaces and overlays (cards, dialog, snackbar, bottom sheet,
@@ -13,22 +49,62 @@ void main() => runApp(const AurisExampleApp());
 /// data / feedback widgets (data table, list / expansion tile, progress, badge,
 /// stepper) — each section introduced by a monospace uppercase amber header
 /// (§spec:showcase).
-class AurisExampleApp extends StatelessWidget {
+///
+/// It is stateful so the customization control near the top can lift the live
+/// accent / bevel / glow overrides up to here; changing any of them rebuilds the
+/// `MaterialApp` theme via [AurisTheme.light], and the whole showcase below
+/// recolors and re-shapes because every widget reads the resolved scheme — that
+/// propagation is the proof (§spec:customization, §road:customization-showcase).
+class AurisExampleApp extends StatefulWidget {
   const AurisExampleApp({super.key});
+
+  @override
+  State<AurisExampleApp> createState() => _AurisExampleAppState();
+}
+
+class _AurisExampleAppState extends State<AurisExampleApp> {
+  Color? _accent = _accentOptions.first.color;
+  double _bevelScale = 1.0;
+  double _glowScale = 1.0;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Auris — Core Controls',
       debugShowCheckedModeBanner: false,
-      theme: AurisTheme.light(),
-      home: const _ShowcaseScreen(),
+      theme: AurisTheme.light(
+        accent: _accent,
+        bevelScale: _bevelScale,
+        glowScale: _glowScale,
+      ),
+      home: _ShowcaseScreen(
+        accent: _accent,
+        bevelScale: _bevelScale,
+        glowScale: _glowScale,
+        onAccentChanged: (Color? c) => setState(() => _accent = c),
+        onBevelChanged: (double v) => setState(() => _bevelScale = v),
+        onGlowChanged: (double v) => setState(() => _glowScale = v),
+      ),
     );
   }
 }
 
 class _ShowcaseScreen extends StatefulWidget {
-  const _ShowcaseScreen();
+  const _ShowcaseScreen({
+    required this.accent,
+    required this.bevelScale,
+    required this.glowScale,
+    required this.onAccentChanged,
+    required this.onBevelChanged,
+    required this.onGlowChanged,
+  });
+
+  final Color? accent;
+  final double bevelScale;
+  final double glowScale;
+  final ValueChanged<Color?> onAccentChanged;
+  final ValueChanged<double> onBevelChanged;
+  final ValueChanged<double> onGlowChanged;
 
   @override
   State<_ShowcaseScreen> createState() => _ShowcaseScreenState();
@@ -127,6 +203,23 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
                   style: text.bodyLarge,
                 ),
                 const SizedBox(height: 24),
+
+                // ---- CUSTOMIZATION ------------------------------------------
+                // Lifts the accent / bevel / glow overrides into the root theme
+                // controller. Flipping any of these rebuilds AurisTheme.light,
+                // and every section below recolors / re-shapes because it reads
+                // the resolved scheme — no per-widget edits required
+                // (§spec:customization, §road:customization-showcase).
+                const _SectionHeader('CUSTOMIZATION'),
+                _CustomizationControl(
+                  accent: widget.accent,
+                  bevelScale: widget.bevelScale,
+                  glowScale: widget.glowScale,
+                  onAccentChanged: widget.onAccentChanged,
+                  onBevelChanged: widget.onBevelChanged,
+                  onGlowChanged: widget.onGlowChanged,
+                ),
+                const SizedBox(height: 32),
 
                 // ---- ACCESSIBILITY ------------------------------------------
                 // Surfaces the two cross-cutting a11y behaviors for review:
@@ -994,6 +1087,153 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
           ),
         );
       },
+    );
+  }
+}
+
+/// The on-theme control that drives the live accent / bevel / glow overrides.
+///
+/// Accent is a row of chamfered swatch chips (default amber plus three
+/// alternates); bevel and glow are TIGHT / NORMAL / BOLD segmented toggles.
+/// The control itself is built from themed widgets, so it re-skins along with
+/// everything else when the accent flips. It reports changes upward — it holds
+/// no theme state of its own.
+class _CustomizationControl extends StatelessWidget {
+  const _CustomizationControl({
+    required this.accent,
+    required this.bevelScale,
+    required this.glowScale,
+    required this.onAccentChanged,
+    required this.onBevelChanged,
+    required this.onGlowChanged,
+  });
+
+  final Color? accent;
+  final double bevelScale;
+  final double glowScale;
+  final ValueChanged<Color?> onAccentChanged;
+  final ValueChanged<double> onBevelChanged;
+  final ValueChanged<double> onGlowChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final AurisScheme scheme = Theme.of(context).extension<AurisScheme>()!;
+    final TextTheme text = Theme.of(context).textTheme;
+
+    Widget label(String s) => Text(s, style: text.labelMedium);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        label('ACCENT'),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: <Widget>[
+            for (final _AccentOption option in _accentOptions)
+              _AccentSwatch(
+                option: option,
+                selected: option.color == accent,
+                onTap: () => onAccentChanged(option.color),
+              ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        label('BEVEL'),
+        const SizedBox(height: 8),
+        _ScalePicker(
+          value: bevelScale,
+          onChanged: onBevelChanged,
+        ),
+        const SizedBox(height: 16),
+        label('GLOW'),
+        const SizedBox(height: 8),
+        _ScalePicker(
+          value: glowScale,
+          onChanged: onGlowChanged,
+        ),
+        const SizedBox(height: 12),
+        Text(
+          'Flip any control above — every section below recolors and '
+          're-shapes from the resolved scheme.',
+          style: text.bodySmall?.copyWith(color: scheme.textMid),
+        ),
+      ],
+    );
+  }
+}
+
+/// A single chamfered accent swatch: a colored chip that selects its accent.
+class _AccentSwatch extends StatelessWidget {
+  const _AccentSwatch({
+    required this.option,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final _AccentOption option;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final AurisScheme scheme = Theme.of(context).extension<AurisScheme>()!;
+    // A null option means "default" — preview it with the current default
+    // primary so the swatch reads as the amber/gold ramp.
+    final Color swatch = option.color ?? scheme.primaryActive;
+
+    return GestureDetector(
+      onTap: onTap,
+      child: AurisContainer(
+        cut: scheme.bevel.sm,
+        fill: scheme.surfaceInset,
+        borderColor: selected ? scheme.primaryActive : scheme.borderBright,
+        depth: selected ? scheme.depthActive : null,
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            AurisContainer(
+              cut: 2,
+              width: 14,
+              height: 14,
+              fill: swatch,
+            ),
+            const SizedBox(width: 8),
+            Text(
+              option.label,
+              style: TextStyle(
+                fontFamily: AurisTokens.fontMono,
+                fontSize: 12,
+                letterSpacing: AurisTokens.trackingLabel,
+                color: selected ? scheme.textBright : scheme.textMid,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// A TIGHT / NORMAL / BOLD segmented toggle for a scale override.
+class _ScalePicker extends StatelessWidget {
+  const _ScalePicker({required this.value, required this.onChanged});
+
+  final double value;
+  final ValueChanged<double> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return SegmentedButton<double>(
+      showSelectedIcon: false,
+      segments: <ButtonSegment<double>>[
+        for (final _ScaleStep step in _scaleSteps)
+          ButtonSegment<double>(value: step.value, label: Text(step.label)),
+      ],
+      selected: <double>{value},
+      onSelectionChanged: (Set<double> s) => onChanged(s.first),
     );
   }
 }
