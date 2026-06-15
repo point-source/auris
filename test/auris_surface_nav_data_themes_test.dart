@@ -196,9 +196,13 @@ void main() {
     test('a non-default accent flows into card / nav / data roles', () {
       const Color accent = Color(0xFF00FF99);
       final ThemeData themed = AurisTheme.light(accent: accent);
-      expect(themed.tabBarTheme.indicatorColor, accent);
-      expect(themed.badgeTheme.backgroundColor, accent);
-      expect(themed.listTileTheme.selectedColor, accent);
+      // The light override is contrast-darkened; the component themes carry the
+      // resolved ramp, not the raw bright accent.
+      final Color active = themed.extension<AurisScheme>()!.primaryActive;
+      expect(active, isNot(accent));
+      expect(themed.tabBarTheme.indicatorColor, active);
+      expect(themed.badgeTheme.backgroundColor, active);
+      expect(themed.listTileTheme.selectedColor, active);
     });
   });
 }

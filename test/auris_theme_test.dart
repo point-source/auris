@@ -36,13 +36,30 @@ void main() {
       expect(text.bodyLarge!.fontFamily, AurisTokens.fontBody);
     });
 
-    test('accent override recolors the primary ramp', () {
+    test('accent override recolors the primary ramp, darkened for contrast', () {
       const Color accent = Color(0xFF00FF99);
       final ThemeData theme = AurisTheme.light(accent: accent);
       final AurisScheme scheme = theme.extension<AurisScheme>()!;
 
-      expect(scheme.primaryActive, accent);
-      expect(theme.colorScheme.primary, accent);
+      // A raw light accent is too bright to clear AA on the light surface, so
+      // the override is darkened (same hue, lower lightness) rather than used
+      // verbatim — the same contrast correction the canonical amber rung gets.
+      expect(scheme.primaryActive, isNot(accent));
+      expect(
+        scheme.primaryActive.computeLuminance(),
+        lessThan(accent.computeLuminance()),
+      );
+      expect(
+        HSLColor.fromColor(scheme.primaryActive).hue,
+        closeTo(HSLColor.fromColor(accent).hue, 1.0),
+      );
+      // The darkened ramp clears WCAG AA (4.5:1) against the panel surface.
+      expect(
+        _contrast(scheme.primaryActive, scheme.surfacePanel),
+        greaterThanOrEqualTo(4.5),
+      );
+      // The component color scheme tracks the same darkened ramp.
+      expect(theme.colorScheme.primary, scheme.primaryActive);
     });
   });
 
@@ -127,4 +144,13 @@ void main() {
       expect(find.byType(ColoredBox), findsWidgets);
     });
   });
+}
+
+/// WCAG contrast ratio between [a] and [b], from their relative luminances.
+double _contrast(Color a, Color b) {
+  final double la = a.computeLuminance();
+  final double lb = b.computeLuminance();
+  final double hi = la > lb ? la : lb;
+  final double lo = la > lb ? lb : la;
+  return (hi + 0.05) / (lo + 0.05);
 }

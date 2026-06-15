@@ -377,7 +377,14 @@ neutral roles** (the text and border roles), so the whole kit shares one hue
 rather than leaving amber text/outlines fighting a cool accent; the tinted roles
 are derived from the accent's own hue at low saturation (a clean desaturated
 accent), not by blending the accent into the warm token (which yields a muddy
-mix). The bevel scale multiplies the bevel role. The glow scale scales the
+mix). On the **light variant** an accent override gets the same AA contrast
+correction the canonical amber rung is hand-tuned to — a bright accent (tuned for
+the dark variant) is darkened (hue/saturation held, lightness lowered) until it
+clears the amber rung's contrast on the light surface, so no override reads as
+washed-out; and the primary glow there is the *highlight* rung (a lighter,
+slightly desaturated accent), not a raw brightening of the deep fill, so the halo
+stays in the fill's color family instead of over-saturating into a different hue.
+The bevel scale multiplies the bevel role. The glow scale scales the
 resolved depth **intensity via alpha, holding blur/spread constant**, so a
 stronger glow is brighter, not wider — it keeps hugging the element instead of
 ballooning into a wash. The exact API surface (named parameters vs. a config

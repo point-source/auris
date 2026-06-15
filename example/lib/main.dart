@@ -1286,13 +1286,17 @@ class _AccentSwatch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AurisScheme scheme = Theme.of(context).extension<AurisScheme>()!;
-    // The swatch shows the accent it selects. For the AMBER (no-override) option
-    // that is the kit's native accent — bright gold on dark, the bronze-amber on
-    // light — resolved fresh for the current brightness so it tracks the variant
-    // (same hue, adjusted lightness) without following the live selection.
-    final Color swatch = option.color ??
-        AurisScheme.resolve(brightness: Theme.of(context).brightness)
-            .primaryActive;
+    // The swatch shows the accent it actually selects — the RESOLVED active
+    // rung, not the raw literal. Resolving each option's accent fresh for the
+    // current brightness means the chip reflects the same correction the kit
+    // applies on selection: bright on dark, but darkened-for-AA on light (so a
+    // teal/magenta/green chip shows the deep variant it really becomes, and AMBER
+    // shows the canonical bronze). Without this the chips advertise the bright
+    // literals while selecting them yields the deeper contrast-corrected color.
+    final Color swatch = AurisScheme.resolve(
+      brightness: Theme.of(context).brightness,
+      accent: option.color,
+    ).primaryActive;
 
     return GestureDetector(
       onTap: onTap,

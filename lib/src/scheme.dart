@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 import 'tokens.dart';
@@ -472,7 +474,16 @@ class AurisScheme extends ThemeExtension<AurisScheme> {
     // With no override the palette's tuned (AA-checked) rungs are used. An accent
     // override replaces the deep rung; the dim/highlight (glow) rungs are derived
     // around it so the ramp and its glow stay coherent.
-    final Color active = accent ?? p.accent;
+    //
+    // A raw accent (tuned for the dark variant — bright teal/magenta/green) is
+    // far too light to clear AA on a light surface and reads as washed-out next
+    // to the canonical amber's deep bronze rung. So an override is darkened (hue
+    // and saturation held, only lightness drops) until it clears the same
+    // contrast the canonical amber rung does — the override gets the SAME
+    // contrast correction amber was hand-tuned to, not the raw color.
+    final Color active = accent == null
+        ? p.accent
+        : _darkenForContrast(accent, p.panel, _kAccentContrastTarget);
     final Color dim = accent == null
         ? p.accentDim
         : Color.alphaBlend(active.withValues(alpha: 0.45), p.panel);
@@ -491,7 +502,14 @@ class AurisScheme extends ThemeExtension<AurisScheme> {
       return h.withLightness((h.lightness + byLightness).clamp(0.0, 1.0)).toColor();
     }
 
-    final Color primaryGlow = brighten(active, 0.22);
+    // The primary glow is the highlight rung, NOT a raw brightening of the deep
+    // fill: brightening a fully-saturated deep rung (e.g. the bronze active) only
+    // raises lightness while saturation stays pinned at max, so the halo turns a
+    // vivid pumpkin orange that no longer reads as the muted button glowing. The
+    // highlight is the accent lightened toward white (lower saturation, higher
+    // lightness) — a believable "lit" form that stays in the fill's colour
+    // family, so the glow matches whatever the (deep) accent is.
+    final Color primaryGlow = highlight;
     final Color secondaryGlow = brighten(p.secondary, 0.24);
 
     List<BoxShadow> glow(Color c, double alpha, double blur, double spread) {
@@ -504,9 +522,17 @@ class AurisScheme extends ThemeExtension<AurisScheme> {
       ];
     }
 
+    // The light glow slider is biased by a straight 0.4: sliding it to 0.4×
+    // gave the light default we want, so slider 1.0× should now land there.
+    // Applied once to the scale (not per-channel) so the stored factor and every
+    // light glow — the depth tokens AND a widget's own glowScale-driven glow —
+    // share the one bias. glowScale 1.0 → 0.4 effective; the slider's full 3.0 →
+    // 1.2.
+    final double biasedGlowScale = glowScale * 0.4;
+
     return AurisScheme(
       brightness: Brightness.light,
-      glowScale: glowScale,
+      glowScale: biasedGlowScale,
       surfacePage: p.page,
       surfacePanel: p.panel,
       surfaceInset: p.inset,
@@ -536,26 +562,60 @@ class AurisScheme extends ThemeExtension<AurisScheme> {
         lg: AurisTokens.bevelLg * bevelScale,
         xl: AurisTokens.bevelXl * bevelScale,
       ),
-      // Amber glow (brightened accent), pushed harder than on dark because the
-      // glow has to fight a bright surface to read as a bloom.
+      // Amber glow (the brightened/highlight accent) on a wider, softer blur
+      // than dark so it reads as a bloom against a bright surface, scaled by the
+      // biased glow factor (slider 1.0× ≈ the old 0.4× restraint).
       depthResting: AurisDepth.none,
       depthSubtle: AurisDepth(
         glow: glow(primaryGlow, 0.5, 7, 0),
         borderColor: p.borderBright,
-      ).scaled(glowScale),
+      ).scaled(biasedGlowScale),
       depthActive: AurisDepth(
         glow: glow(primaryGlow, 0.72, 9, 1),
         borderColor: active,
-      ).scaled(glowScale),
+      ).scaled(biasedGlowScale),
       depthDanger: AurisDepth(
         glow: glow(brighten(AurisTokens.dangerBright, 0.12), 0.6, 8, 1),
         borderColor: AurisTokens.dangerBright,
-      ).scaled(glowScale),
+      ).scaled(biasedGlowScale),
       depthSecondary: AurisDepth(
         glow: glow(secondaryGlow, 0.55, 8, 1),
         borderColor: p.secondary,
-      ).scaled(glowScale),
+      ).scaled(biasedGlowScale),
     );
+  }
+
+  /// The contrast ratio (vs the light panel) the canonical amber rung clears —
+  /// an accent override is darkened until it matches this, so every accent is
+  /// corrected to the same depth amber was hand-tuned to (≈ WCAG AA + margin).
+  static const double _kAccentContrastTarget = 5.5;
+
+  /// The WCAG relative luminance of [c] (ignoring alpha), from its linearized
+  /// sRGB channels.
+  static double _luminance(Color c) {
+    double lin(double channel) => channel <= 0.03928
+        ? channel / 12.92
+        : math.pow((channel + 0.055) / 1.055, 2.4).toDouble();
+    return 0.2126 * lin(c.r) + 0.7152 * lin(c.g) + 0.0722 * lin(c.b);
+  }
+
+  /// The WCAG contrast ratio between [a] and [b].
+  static double _contrast(Color a, Color b) {
+    final double la = _luminance(a);
+    final double lb = _luminance(b);
+    return (math.max(la, lb) + 0.05) / (math.min(la, lb) + 0.05);
+  }
+
+  /// Darken [c] (hue and saturation held, lightness lowered) until it clears
+  /// [target] contrast against [bg]. Used to contrast-correct a bright accent
+  /// override for the light surface the same way the canonical amber rung is a
+  /// deep bronze. A color already dark enough is returned unchanged.
+  static Color _darkenForContrast(Color c, Color bg, double target) {
+    HSLColor hsl = HSLColor.fromColor(c);
+    while (_contrast(hsl.toColor(), bg) < target && hsl.lightness > 0.0) {
+      hsl = hsl.withLightness((hsl.lightness - 0.01).clamp(0.0, 1.0));
+    }
+    return hsl.toColor();
   }
 
   /// Re-express a tinted role as [accent]'s hue at the given [saturation] and

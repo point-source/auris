@@ -97,30 +97,40 @@ void main() {
     test('accent reaches colorScheme.primary and the attached extension', () {
       final ThemeData theme = AurisTheme.light(accent: kAccent);
 
-      expect(theme.colorScheme.primary, kAccent);
-
       final AurisScheme? ext = theme.extension<AurisScheme>();
       expect(ext, isNotNull);
-      expect(ext!.primaryActive, kAccent);
+      // The light override is darkened for contrast (not used raw): a bright
+      // accent would not clear AA on the light surface.
+      expect(ext!.primaryActive, isNot(kAccent));
+      expect(
+        ext.primaryActive.computeLuminance(),
+        lessThan(kAccent.computeLuminance()),
+      );
+      // The component color scheme tracks that same darkened ramp.
+      expect(theme.colorScheme.primary, ext.primaryActive);
     });
 
     test(
         'accent reaches the primary-ramp component themes '
         '(filled button background + slider active track)', () {
       final ThemeData themed = AurisTheme.light(accent: kAccent);
+      // The resolved (contrast-darkened) accent — neither the raw override nor
+      // the default gold — is what the component themes must carry.
+      final Color active = themed.extension<AurisScheme>()!.primaryActive;
+      expect(active, isNot(kAccent));
+      expect(active, isNot(AurisTokens.gold));
 
-      // Filled button background resolves to the accent, not the default gold.
+      // Filled button background resolves to the resolved accent ramp.
       final Color? buttonBg = themed.filledButtonTheme.style?.backgroundColor
           ?.resolve(<WidgetState>{});
-      expect(buttonBg, kAccent);
-      expect(buttonBg, isNot(AurisTokens.gold));
+      expect(buttonBg, active);
 
-      // Slider active track / thumb resolve to the accent too.
-      expect(themed.sliderTheme.activeTrackColor, kAccent);
-      expect(themed.sliderTheme.thumbColor, kAccent);
+      // Slider active track / thumb resolve to the same ramp.
+      expect(themed.sliderTheme.activeTrackColor, active);
+      expect(themed.sliderTheme.thumbColor, active);
 
       // Progress indicator (data theme on the primary ramp) recolors as well.
-      expect(themed.progressIndicatorTheme.color, kAccent);
+      expect(themed.progressIndicatorTheme.color, active);
     });
 
     test('bevelScale reaches a component theme shape (chip border)', () {

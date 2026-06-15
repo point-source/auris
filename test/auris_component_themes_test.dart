@@ -152,13 +152,18 @@ void main() {
     test('a non-default accent flows into the button fill', () {
       const Color accent = Color(0xFF00FF99);
       final ThemeData themed = AurisTheme.light(accent: accent);
+      // The light override is contrast-darkened; the components carry the
+      // resolved ramp, not the raw bright accent.
+      final Color active = themed.extension<AurisScheme>()!.primaryActive;
+      expect(active, isNot(accent));
+
       final Color? bg = themed.filledButtonTheme.style!.backgroundColor!
           .resolve(<WidgetState>{});
-      expect(bg, accent);
+      expect(bg, active);
       // And into the checkbox selected fill.
       final Color? checked = themed.checkboxTheme.fillColor!
           .resolve(<WidgetState>{WidgetState.selected});
-      expect(checked, accent);
+      expect(checked, active);
     });
   });
 }
