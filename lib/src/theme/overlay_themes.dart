@@ -76,6 +76,7 @@ abstract final class AurisOverlayThemes {
       shape: _bevelOutlined(scheme.bevel.xl, scheme.borderBright),
       titleTextStyle: TextStyle(
         fontFamily: AurisTokens.fontDisplay,
+        fontFamilyFallback: AurisTokens.fontDisplayFallback,
         fontWeight: FontWeight.w600,
         fontSize: 20,
         letterSpacing: AurisTokens.trackingHeading,
@@ -83,6 +84,7 @@ abstract final class AurisOverlayThemes {
       ),
       contentTextStyle: TextStyle(
         fontFamily: AurisTokens.fontBody,
+        fontFamilyFallback: AurisTokens.fontBodyFallback,
         fontSize: 14,
         height: 1.43,
         letterSpacing: AurisTokens.trackingBody,
@@ -109,6 +111,7 @@ abstract final class AurisOverlayThemes {
       shape: _bevelOutlined(scheme.bevel.md, scheme.borderBright),
       contentTextStyle: TextStyle(
         fontFamily: AurisTokens.fontMono,
+        fontFamilyFallback: AurisTokens.fontMonoFallback,
         fontSize: 13,
         letterSpacing: AurisTokens.trackingLabel,
         color: scheme.textBright,
@@ -136,6 +139,7 @@ abstract final class AurisOverlayThemes {
       elevation: 0,
       contentTextStyle: TextStyle(
         fontFamily: AurisTokens.fontMono,
+        fontFamilyFallback: AurisTokens.fontMonoFallback,
         fontSize: 13,
         letterSpacing: AurisTokens.trackingLabel,
         color: scheme.textBright,
@@ -208,6 +212,7 @@ abstract final class AurisOverlayThemes {
       ),
       textStyle: TextStyle(
         fontFamily: AurisTokens.fontMono,
+        fontFamilyFallback: AurisTokens.fontMonoFallback,
         fontSize: 12,
         letterSpacing: AurisTokens.trackingLabel,
         color: scheme.textBright,
@@ -236,6 +241,7 @@ abstract final class AurisOverlayThemes {
               : scheme.textBright;
           return TextStyle(
             fontFamily: AurisTokens.fontMono,
+            fontFamilyFallback: AurisTokens.fontMonoFallback,
             fontSize: 13,
             letterSpacing: AurisTokens.trackingLabel,
             color: color,
@@ -306,6 +312,7 @@ abstract final class AurisOverlayThemes {
           WidgetStatePropertyAll<OutlinedBorder>(_bevel(scheme.bevel.sm)),
       headerHeadlineStyle: TextStyle(
         fontFamily: AurisTokens.fontDisplay,
+        fontFamilyFallback: AurisTokens.fontDisplayFallback,
         fontWeight: FontWeight.w600,
         fontSize: 30,
         letterSpacing: AurisTokens.trackingHeading,
@@ -313,23 +320,27 @@ abstract final class AurisOverlayThemes {
       ),
       headerHelpStyle: TextStyle(
         fontFamily: AurisTokens.fontMono,
+        fontFamilyFallback: AurisTokens.fontMonoFallback,
         fontSize: 12,
         letterSpacing: AurisTokens.trackingLabel,
         color: scheme.primaryActive,
       ),
       weekdayStyle: TextStyle(
         fontFamily: AurisTokens.fontMono,
+        fontFamilyFallback: AurisTokens.fontMonoFallback,
         fontSize: 12,
         letterSpacing: AurisTokens.trackingLabel,
         color: scheme.textMid,
       ),
       dayStyle: const TextStyle(
         fontFamily: AurisTokens.fontMono,
+        fontFamilyFallback: AurisTokens.fontMonoFallback,
         fontSize: 13,
         letterSpacing: AurisTokens.trackingBody,
       ),
       yearStyle: const TextStyle(
         fontFamily: AurisTokens.fontMono,
+        fontFamilyFallback: AurisTokens.fontMonoFallback,
         fontSize: 14,
         letterSpacing: AurisTokens.trackingBody,
       ),
@@ -381,21 +392,25 @@ abstract final class AurisOverlayThemes {
       entryModeIconColor: scheme.primaryDim,
       hourMinuteTextStyle: const TextStyle(
         fontFamily: AurisTokens.fontMono,
+        fontFamilyFallback: AurisTokens.fontMonoFallback,
         fontSize: 44,
         letterSpacing: AurisTokens.trackingBody,
       ),
       dayPeriodTextStyle: const TextStyle(
         fontFamily: AurisTokens.fontMono,
+        fontFamilyFallback: AurisTokens.fontMonoFallback,
         fontSize: 14,
         letterSpacing: AurisTokens.trackingLabel,
       ),
       dialTextStyle: const TextStyle(
         fontFamily: AurisTokens.fontMono,
+        fontFamilyFallback: AurisTokens.fontMonoFallback,
         fontSize: 15,
         letterSpacing: AurisTokens.trackingBody,
       ),
       helpTextStyle: TextStyle(
         fontFamily: AurisTokens.fontMono,
+        fontFamilyFallback: AurisTokens.fontMonoFallback,
         fontSize: 12,
         letterSpacing: AurisTokens.trackingLabel,
         color: scheme.primaryActive,

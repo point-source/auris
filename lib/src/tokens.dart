@@ -105,6 +105,36 @@ abstract final class AurisTokens {
   /// Data / monospace family (Share Tech Mono).
   static const String fontMono = 'packages/auris/ShareTechMono';
 
+  // Font fallback chains — guarantee text still renders if a bundled font fails
+  // to load (a missing glyph or a font asset that did not resolve falls through
+  // to a platform font rather than tofu/blank). Every `TextStyle` that sets a
+  // family here SHOULD pair it with the matching fallback list (§spec:packaging
+  // "degrades gracefully if a font is absent"). The chains name generic CSS-style
+  // families that Flutter's engine maps to whatever sans/mono the host platform
+  // provides, so they work cross-platform with no extra consumer setup.
+
+  /// Fallback chain for the display family ([fontDisplay]) — a sans-serif stack.
+  static const List<String> fontDisplayFallback = <String>[
+    'Roboto',
+    'Helvetica Neue',
+    'Arial',
+    'sans-serif',
+  ];
+
+  /// Fallback chain for the body family ([fontBody]) — a sans-serif stack
+  /// (shared with the display family; both are sans-serif).
+  static const List<String> fontBodyFallback = fontDisplayFallback;
+
+  /// Fallback chain for the data / monospace family ([fontMono]) — a monospace
+  /// stack so data readouts keep their fixed-width alignment under fallback.
+  static const List<String> fontMonoFallback = <String>[
+    'Roboto Mono',
+    'Menlo',
+    'Consolas',
+    'Courier New',
+    'monospace',
+  ];
+
   /// Letter spacing for label roles.
   static const double trackingLabel = 1.5;
 

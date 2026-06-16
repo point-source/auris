@@ -72,6 +72,54 @@ void main() {
     });
   });
 
+  group('font fallback', () {
+    // The bundled fonts are the design intent, but text must still render in a
+    // sensible system font if a bundled font fails to load — so every text role
+    // pairs its family with a fallback chain (§spec:packaging "degrades
+    // gracefully if a font is absent").
+    test('every TextTheme role declares the matching fallback chain', () {
+      final TextTheme text = AurisTheme.dark().textTheme;
+
+      final List<TextStyle?> displayRoles = <TextStyle?>[
+        text.displayLarge,
+        text.displayMedium,
+        text.displaySmall,
+        text.headlineLarge,
+        text.headlineMedium,
+        text.headlineSmall,
+        text.titleLarge,
+        text.titleMedium,
+        text.titleSmall,
+      ];
+      for (final TextStyle? style in displayRoles) {
+        expect(style!.fontFamily, AurisTokens.fontDisplay);
+        expect(style.fontFamilyFallback, AurisTokens.fontDisplayFallback);
+      }
+
+      final List<TextStyle?> bodyRoles = <TextStyle?>[
+        text.bodyLarge,
+        text.bodyMedium,
+        text.bodySmall,
+        text.labelLarge,
+        text.labelMedium,
+        text.labelSmall,
+      ];
+      for (final TextStyle? style in bodyRoles) {
+        expect(style!.fontFamily, AurisTokens.fontBody);
+        expect(style.fontFamilyFallback, AurisTokens.fontBodyFallback);
+      }
+    });
+
+    test('fallback chains end in a generic CSS family the engine can map', () {
+      // The last entry of each chain is a generic family Flutter's engine maps
+      // to a platform font on every OS, so the chain never dead-ends in a name
+      // that might be absent everywhere.
+      expect(AurisTokens.fontDisplayFallback.last, 'sans-serif');
+      expect(AurisTokens.fontBodyFallback.last, 'sans-serif');
+      expect(AurisTokens.fontMonoFallback.last, 'monospace');
+    });
+  });
+
   group('AurisTheme.light builds the light variant', () {
     test('is a light-brightness theme with light surfaces and dark text', () {
       final ThemeData theme = AurisTheme.light();

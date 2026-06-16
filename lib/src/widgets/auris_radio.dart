@@ -120,6 +120,7 @@ class _AurisRadioState<T> extends State<AurisRadio<T>> {
             widget.label!,
             style: TextStyle(
               fontFamily: AurisTokens.fontBody,
+              fontFamilyFallback: AurisTokens.fontBodyFallback,
               fontSize: 13,
               letterSpacing: AurisTokens.trackingBody,
               color: _enabled ? scheme.textBright : scheme.textDim,

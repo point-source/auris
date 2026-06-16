@@ -65,6 +65,7 @@ abstract final class AurisNavigationThemes {
       actionsIconTheme: IconThemeData(color: scheme.primaryActive),
       titleTextStyle: TextStyle(
         fontFamily: AurisTokens.fontDisplay,
+        fontFamilyFallback: AurisTokens.fontDisplayFallback,
         fontWeight: FontWeight.w600,
         fontSize: 20,
         letterSpacing: AurisTokens.trackingHeading,
@@ -113,6 +114,7 @@ abstract final class AurisNavigationThemes {
               : scheme.textMid;
           return TextStyle(
             fontFamily: AurisTokens.fontMono,
+            fontFamilyFallback: AurisTokens.fontMonoFallback,
             fontSize: 11,
             letterSpacing: AurisTokens.trackingLabel,
             color: color,
@@ -151,12 +153,14 @@ abstract final class AurisNavigationThemes {
       showUnselectedLabels: true,
       selectedLabelStyle: TextStyle(
         fontFamily: AurisTokens.fontMono,
+        fontFamilyFallback: AurisTokens.fontMonoFallback,
         fontSize: 11,
         letterSpacing: AurisTokens.trackingLabel,
         color: scheme.primaryActive,
       ),
       unselectedLabelStyle: TextStyle(
         fontFamily: AurisTokens.fontMono,
+        fontFamilyFallback: AurisTokens.fontMonoFallback,
         fontSize: 11,
         letterSpacing: AurisTokens.trackingLabel,
         color: scheme.textMid,
@@ -188,6 +192,7 @@ abstract final class AurisNavigationThemes {
               : scheme.textMid;
           return TextStyle(
             fontFamily: AurisTokens.fontMono,
+            fontFamilyFallback: AurisTokens.fontMonoFallback,
             fontSize: 13,
             letterSpacing: AurisTokens.trackingLabel,
             color: color,
@@ -222,12 +227,14 @@ abstract final class AurisNavigationThemes {
       unselectedIconTheme: IconThemeData(color: scheme.primaryDim, size: 24),
       selectedLabelTextStyle: TextStyle(
         fontFamily: AurisTokens.fontMono,
+        fontFamilyFallback: AurisTokens.fontMonoFallback,
         fontSize: 11,
         letterSpacing: AurisTokens.trackingLabel,
         color: scheme.primaryActive,
       ),
       unselectedLabelTextStyle: TextStyle(
         fontFamily: AurisTokens.fontMono,
+        fontFamilyFallback: AurisTokens.fontMonoFallback,
         fontSize: 11,
         letterSpacing: AurisTokens.trackingLabel,
         color: scheme.textMid,
@@ -253,12 +260,14 @@ abstract final class AurisNavigationThemes {
       splashFactory: NoSplash.splashFactory,
       labelStyle: TextStyle(
         fontFamily: AurisTokens.fontMono,
+        fontFamilyFallback: AurisTokens.fontMonoFallback,
         fontSize: 13,
         letterSpacing: AurisTokens.trackingLabel,
         color: scheme.primaryActive,
       ),
       unselectedLabelStyle: TextStyle(
         fontFamily: AurisTokens.fontMono,
+        fontFamilyFallback: AurisTokens.fontMonoFallback,
         fontSize: 13,
         letterSpacing: AurisTokens.trackingLabel,
         color: scheme.textMid,

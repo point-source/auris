@@ -72,6 +72,7 @@ class AurisPanel extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontFamily: AurisTokens.fontDisplay,
+                        fontFamilyFallback: AurisTokens.fontDisplayFallback,
                         fontWeight: FontWeight.w600,
                         fontSize: 15,
                         letterSpacing: AurisTokens.trackingHeading,
@@ -87,6 +88,7 @@ class AurisPanel extends StatelessWidget {
                       code!,
                       style: TextStyle(
                         fontFamily: AurisTokens.fontMono,
+                        fontFamilyFallback: AurisTokens.fontMonoFallback,
                         fontSize: 11,
                         letterSpacing: AurisTokens.trackingLabel,
                         color: scheme.textMid,

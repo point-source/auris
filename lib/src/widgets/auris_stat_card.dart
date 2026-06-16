@@ -57,6 +57,7 @@ class AurisStatCard extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
               fontFamily: AurisTokens.fontBody,
+              fontFamilyFallback: AurisTokens.fontBodyFallback,
               fontSize: 12,
               letterSpacing: AurisTokens.trackingLabel,
               color: scheme.textMid,
@@ -72,6 +73,7 @@ class AurisStatCard extends StatelessWidget {
                   text: value,
                   style: TextStyle(
                     fontFamily: AurisTokens.fontDisplay,
+                    fontFamilyFallback: AurisTokens.fontDisplayFallback,
                     fontWeight: FontWeight.w600,
                     fontSize: 34,
                     height: 1.0,
@@ -85,6 +87,7 @@ class AurisStatCard extends StatelessWidget {
                     text: ' ${unit!}',
                     style: TextStyle(
                       fontFamily: AurisTokens.fontMono,
+                      fontFamilyFallback: AurisTokens.fontMonoFallback,
                       fontSize: 14,
                       color: scheme.textMid,
                     ),
@@ -136,6 +139,7 @@ class _Delta extends StatelessWidget {
           delta,
           style: TextStyle(
             fontFamily: AurisTokens.fontMono,
+            fontFamilyFallback: AurisTokens.fontMonoFallback,
             fontSize: 13,
             letterSpacing: AurisTokens.trackingBody,
             color: color,

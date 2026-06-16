@@ -75,6 +75,7 @@ class AurisBadge extends StatelessWidget {
         label.toUpperCase(),
         style: TextStyle(
           fontFamily: AurisTokens.fontMono,
+          fontFamilyFallback: AurisTokens.fontMonoFallback,
           fontSize: 11,
           height: 1.0,
           letterSpacing: AurisTokens.trackingLabel,

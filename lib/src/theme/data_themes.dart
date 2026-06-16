@@ -70,12 +70,14 @@ abstract final class AurisDataThemes {
       dividerThickness: 1,
       headingTextStyle: TextStyle(
         fontFamily: AurisTokens.fontMono,
+        fontFamilyFallback: AurisTokens.fontMonoFallback,
         fontSize: 12,
         letterSpacing: AurisTokens.trackingLabel,
         color: scheme.primaryActive,
       ),
       dataTextStyle: TextStyle(
         fontFamily: AurisTokens.fontMono,
+        fontFamilyFallback: AurisTokens.fontMonoFallback,
         fontSize: 13,
         letterSpacing: AurisTokens.trackingBody,
         color: scheme.textBright,
@@ -99,6 +101,7 @@ abstract final class AurisDataThemes {
       tileColor: Colors.transparent,
       titleTextStyle: TextStyle(
         fontFamily: AurisTokens.fontBody,
+        fontFamilyFallback: AurisTokens.fontBodyFallback,
         fontWeight: FontWeight.w600,
         fontSize: 14,
         letterSpacing: AurisTokens.trackingButton,
@@ -106,12 +109,14 @@ abstract final class AurisDataThemes {
       ),
       subtitleTextStyle: TextStyle(
         fontFamily: AurisTokens.fontBody,
+        fontFamilyFallback: AurisTokens.fontBodyFallback,
         fontSize: 12,
         letterSpacing: AurisTokens.trackingBody,
         color: scheme.textMid,
       ),
       leadingAndTrailingTextStyle: TextStyle(
         fontFamily: AurisTokens.fontMono,
+        fontFamilyFallback: AurisTokens.fontMonoFallback,
         fontSize: 12,
         letterSpacing: AurisTokens.trackingLabel,
         color: scheme.primaryDim,
@@ -183,6 +188,7 @@ abstract final class AurisDataThemes {
       textColor: scheme.onPrimary,
       textStyle: TextStyle(
         fontFamily: AurisTokens.fontMono,
+        fontFamilyFallback: AurisTokens.fontMonoFallback,
         fontWeight: FontWeight.w600,
         fontSize: 11,
         letterSpacing: AurisTokens.trackingBody,
@@ -222,6 +228,7 @@ abstract final class AurisDataThemes {
       textStyle: WidgetStatePropertyAll<TextStyle>(
         TextStyle(
           fontFamily: AurisTokens.fontBody,
+          fontFamilyFallback: AurisTokens.fontBodyFallback,
           fontSize: 14,
           letterSpacing: AurisTokens.trackingBody,
           color: scheme.textBright,
@@ -230,6 +237,7 @@ abstract final class AurisDataThemes {
       hintStyle: WidgetStatePropertyAll<TextStyle>(
         TextStyle(
           fontFamily: AurisTokens.fontMono,
+          fontFamilyFallback: AurisTokens.fontMonoFallback,
           fontSize: 13,
           letterSpacing: AurisTokens.trackingLabel,
           color: scheme.textDim,
@@ -254,12 +262,14 @@ abstract final class AurisDataThemes {
       dividerColor: scheme.borderResting,
       headerTextStyle: TextStyle(
         fontFamily: AurisTokens.fontBody,
+        fontFamilyFallback: AurisTokens.fontBodyFallback,
         fontSize: 14,
         letterSpacing: AurisTokens.trackingBody,
         color: scheme.textBright,
       ),
       headerHintStyle: TextStyle(
         fontFamily: AurisTokens.fontMono,
+        fontFamilyFallback: AurisTokens.fontMonoFallback,
         fontSize: 13,
         letterSpacing: AurisTokens.trackingLabel,
         color: scheme.textDim,

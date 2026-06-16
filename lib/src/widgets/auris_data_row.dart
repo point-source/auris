@@ -61,6 +61,7 @@ class AurisDataRow extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 fontFamily: AurisTokens.fontBody,
+                fontFamilyFallback: AurisTokens.fontBodyFallback,
                 fontSize: 12,
                 letterSpacing: AurisTokens.trackingLabel,
                 color: scheme.textMid,
@@ -72,6 +73,7 @@ class AurisDataRow extends StatelessWidget {
               value!,
               style: TextStyle(
                 fontFamily: AurisTokens.fontMono,
+                fontFamilyFallback: AurisTokens.fontMonoFallback,
                 fontSize: 13,
                 fontWeight: highlight ? FontWeight.w600 : FontWeight.w400,
                 letterSpacing: AurisTokens.trackingBody,

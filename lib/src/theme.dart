@@ -206,6 +206,7 @@ abstract final class AurisTheme {
       // Display — Rajdhani, uppercase, wide heading tracking.
       displayLarge: TextStyle(
         fontFamily: AurisTokens.fontDisplay,
+        fontFamilyFallback: AurisTokens.fontDisplayFallback,
         fontWeight: FontWeight.w600,
         fontSize: 57,
         height: 1.12,
@@ -214,6 +215,7 @@ abstract final class AurisTheme {
       ),
       displayMedium: TextStyle(
         fontFamily: AurisTokens.fontDisplay,
+        fontFamilyFallback: AurisTokens.fontDisplayFallback,
         fontWeight: FontWeight.w600,
         fontSize: 45,
         height: 1.16,
@@ -222,6 +224,7 @@ abstract final class AurisTheme {
       ),
       displaySmall: TextStyle(
         fontFamily: AurisTokens.fontDisplay,
+        fontFamilyFallback: AurisTokens.fontDisplayFallback,
         fontWeight: FontWeight.w500,
         fontSize: 36,
         height: 1.22,
@@ -231,6 +234,7 @@ abstract final class AurisTheme {
       // Headline — Rajdhani. Headline-large is uppercase + tracked.
       headlineLarge: TextStyle(
         fontFamily: AurisTokens.fontDisplay,
+        fontFamilyFallback: AurisTokens.fontDisplayFallback,
         fontWeight: FontWeight.w500,
         fontSize: 32,
         height: 1.25,
@@ -239,6 +243,7 @@ abstract final class AurisTheme {
       ),
       headlineMedium: TextStyle(
         fontFamily: AurisTokens.fontDisplay,
+        fontFamilyFallback: AurisTokens.fontDisplayFallback,
         fontWeight: FontWeight.w500,
         fontSize: 28,
         height: 1.29,
@@ -247,6 +252,7 @@ abstract final class AurisTheme {
       ),
       headlineSmall: TextStyle(
         fontFamily: AurisTokens.fontDisplay,
+        fontFamilyFallback: AurisTokens.fontDisplayFallback,
         fontWeight: FontWeight.w500,
         fontSize: 24,
         height: 1.33,
@@ -256,6 +262,7 @@ abstract final class AurisTheme {
       // Title — Rajdhani.
       titleLarge: TextStyle(
         fontFamily: AurisTokens.fontDisplay,
+        fontFamilyFallback: AurisTokens.fontDisplayFallback,
         // w500 (Rajdhani Medium, a real bundled weight) reads a touch lighter
         // than the w600 SemiBold, which felt slightly heavy at this size.
         fontWeight: FontWeight.w500,
@@ -266,6 +273,7 @@ abstract final class AurisTheme {
       ),
       titleMedium: TextStyle(
         fontFamily: AurisTokens.fontDisplay,
+        fontFamilyFallback: AurisTokens.fontDisplayFallback,
         fontWeight: FontWeight.w500,
         fontSize: 16,
         height: 1.5,
@@ -274,6 +282,7 @@ abstract final class AurisTheme {
       ),
       titleSmall: TextStyle(
         fontFamily: AurisTokens.fontDisplay,
+        fontFamilyFallback: AurisTokens.fontDisplayFallback,
         fontWeight: FontWeight.w500,
         fontSize: 14,
         height: 1.43,
@@ -283,6 +292,7 @@ abstract final class AurisTheme {
       // Body — Exo 2.
       bodyLarge: TextStyle(
         fontFamily: AurisTokens.fontBody,
+        fontFamilyFallback: AurisTokens.fontBodyFallback,
         fontWeight: FontWeight.w400,
         fontSize: 16,
         height: 1.5,
@@ -291,6 +301,7 @@ abstract final class AurisTheme {
       ),
       bodyMedium: TextStyle(
         fontFamily: AurisTokens.fontBody,
+        fontFamilyFallback: AurisTokens.fontBodyFallback,
         fontWeight: FontWeight.w400,
         fontSize: 14,
         height: 1.43,
@@ -299,6 +310,7 @@ abstract final class AurisTheme {
       ),
       bodySmall: TextStyle(
         fontFamily: AurisTokens.fontBody,
+        fontFamilyFallback: AurisTokens.fontBodyFallback,
         fontWeight: FontWeight.w400,
         fontSize: 12,
         height: 1.33,
@@ -309,6 +321,7 @@ abstract final class AurisTheme {
       // tracking.
       labelLarge: TextStyle(
         fontFamily: AurisTokens.fontBody,
+        fontFamilyFallback: AurisTokens.fontBodyFallback,
         fontWeight: FontWeight.w500,
         fontSize: 14,
         height: 1.43,
@@ -317,6 +330,7 @@ abstract final class AurisTheme {
       ),
       labelMedium: TextStyle(
         fontFamily: AurisTokens.fontBody,
+        fontFamilyFallback: AurisTokens.fontBodyFallback,
         fontWeight: FontWeight.w500,
         fontSize: 12,
         height: 1.33,
@@ -325,6 +339,7 @@ abstract final class AurisTheme {
       ),
       labelSmall: TextStyle(
         fontFamily: AurisTokens.fontBody,
+        fontFamilyFallback: AurisTokens.fontBodyFallback,
         fontWeight: FontWeight.w500,
         fontSize: 11,
         height: 1.45,

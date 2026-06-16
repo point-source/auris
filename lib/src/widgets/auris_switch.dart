@@ -137,6 +137,7 @@ class _AurisSwitchState extends State<AurisSwitch>
             widget.label!,
             style: TextStyle(
               fontFamily: AurisTokens.fontBody,
+              fontFamilyFallback: AurisTokens.fontBodyFallback,
               fontSize: 14,
               letterSpacing: AurisTokens.trackingBody,
               color: scheme.textBright,
@@ -198,6 +199,7 @@ class _AurisSwitchState extends State<AurisSwitch>
       text.toUpperCase(),
       style: TextStyle(
         fontFamily: AurisTokens.fontMono,
+        fontFamilyFallback: AurisTokens.fontMonoFallback,
         fontSize: 12,
         letterSpacing: AurisTokens.trackingLabel,
         color: color,

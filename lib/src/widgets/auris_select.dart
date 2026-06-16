@@ -213,6 +213,7 @@ class _AurisSelectState<T> extends State<AurisSelect<T>>
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontFamily: AurisTokens.fontMono,
+                    fontFamilyFallback: AurisTokens.fontMonoFallback,
                     fontSize: 13,
                     letterSpacing: AurisTokens.trackingLabel,
                     color: hasValue ? scheme.textBright : scheme.textMid,
@@ -394,6 +395,7 @@ class _SelectRow<T> extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontFamily: AurisTokens.fontMono,
+                      fontFamilyFallback: AurisTokens.fontMonoFallback,
                       fontSize: 13,
                       letterSpacing: AurisTokens.trackingLabel,
                       color: textColor,

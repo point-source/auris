@@ -216,6 +216,7 @@ class _TerminalRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextStyle style = TextStyle(
       fontFamily: AurisTokens.fontMono,
+      fontFamilyFallback: AurisTokens.fontMonoFallback,
       fontSize: 12.5,
       height: 1.5,
       letterSpacing: 0.5,

@@ -144,6 +144,7 @@ class AurisNotification extends StatelessWidget {
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     fontFamily: AurisTokens.fontDisplay,
+                                    fontFamilyFallback: AurisTokens.fontDisplayFallback,
                                     fontWeight: FontWeight.w600,
                                     fontSize: 14,
                                     letterSpacing: AurisTokens.trackingLabel,
@@ -157,6 +158,7 @@ class AurisNotification extends StatelessWidget {
                                   code!,
                                   style: TextStyle(
                                     fontFamily: AurisTokens.fontMono,
+                                    fontFamilyFallback: AurisTokens.fontMonoFallback,
                                     fontSize: 11,
                                     letterSpacing: AurisTokens.trackingLabel,
                                     color: scheme.textDim,
@@ -171,6 +173,7 @@ class AurisNotification extends StatelessWidget {
                               message!,
                               style: TextStyle(
                                 fontFamily: AurisTokens.fontBody,
+                                fontFamilyFallback: AurisTokens.fontBodyFallback,
                                 fontSize: 13,
                                 height: 1.3,
                                 letterSpacing: AurisTokens.trackingBody,

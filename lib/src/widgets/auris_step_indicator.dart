@@ -119,6 +119,7 @@ class AurisStepIndicator extends StatelessWidget {
       '$step',
       style: TextStyle(
         fontFamily: AurisTokens.fontMono,
+        fontFamilyFallback: AurisTokens.fontMonoFallback,
         fontSize: size * 0.42,
         height: 1.0,
         color: color,

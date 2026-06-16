@@ -45,6 +45,7 @@ abstract final class AurisInputThemes {
   /// A monospace, uppercase label style for input labels.
   static TextStyle _labelStyle(AurisScheme scheme, Color color) => TextStyle(
         fontFamily: AurisTokens.fontMono,
+        fontFamilyFallback: AurisTokens.fontMonoFallback,
         fontSize: 13,
         letterSpacing: AurisTokens.trackingLabel,
         color: color,
@@ -79,6 +80,7 @@ abstract final class AurisInputThemes {
       floatingLabelStyle: _labelStyle(scheme, scheme.primaryActive),
       hintStyle: TextStyle(
         fontFamily: AurisTokens.fontBody,
+        fontFamilyFallback: AurisTokens.fontBodyFallback,
         fontSize: 14,
         letterSpacing: AurisTokens.trackingBody,
         color: scheme.textDim,
@@ -86,6 +88,7 @@ abstract final class AurisInputThemes {
       helperStyle: _labelStyle(scheme, scheme.textMid).copyWith(fontSize: 11),
       errorStyle: TextStyle(
         fontFamily: AurisTokens.fontMono,
+        fontFamilyFallback: AurisTokens.fontMonoFallback,
         fontSize: 11,
         letterSpacing: AurisTokens.trackingLabel,
         color: scheme.dangerBright,
@@ -106,6 +109,7 @@ abstract final class AurisInputThemes {
       inputDecorationTheme: inputDecoration(scheme),
       textStyle: TextStyle(
         fontFamily: AurisTokens.fontBody,
+        fontFamilyFallback: AurisTokens.fontBodyFallback,
         fontSize: 14,
         letterSpacing: AurisTokens.trackingBody,
         color: scheme.textBright,
@@ -156,6 +160,7 @@ abstract final class AurisInputThemes {
         textStyle: const WidgetStatePropertyAll<TextStyle>(
           TextStyle(
             fontFamily: AurisTokens.fontMono,
+            fontFamilyFallback: AurisTokens.fontMonoFallback,
             fontSize: 13,
             letterSpacing: AurisTokens.trackingBody,
           ),
@@ -367,6 +372,7 @@ abstract final class AurisInputThemes {
           const RoundSliderOverlayShape(overlayRadius: 16),
       valueIndicatorTextStyle: TextStyle(
         fontFamily: AurisTokens.fontMono,
+        fontFamilyFallback: AurisTokens.fontMonoFallback,
         fontSize: 12,
         letterSpacing: AurisTokens.trackingLabel,
         color: scheme.textBright,
@@ -400,6 +406,7 @@ abstract final class AurisInputThemes {
       // ChoiceChip's secondaryLabelStyle).
       labelStyle: TextStyle(
         fontFamily: AurisTokens.fontMono,
+        fontFamilyFallback: AurisTokens.fontMonoFallback,
         fontSize: 12,
         letterSpacing: AurisTokens.trackingLabel,
         color: WidgetStateColor.resolveWith(
@@ -410,6 +417,7 @@ abstract final class AurisInputThemes {
       ),
       secondaryLabelStyle: TextStyle(
         fontFamily: AurisTokens.fontMono,
+        fontFamilyFallback: AurisTokens.fontMonoFallback,
         fontSize: 12,
         letterSpacing: AurisTokens.trackingLabel,
         color: scheme.onPrimary,

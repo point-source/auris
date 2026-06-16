@@ -206,6 +206,7 @@ class _AurisProgressBarState extends State<AurisProgressBar>
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontFamily: AurisTokens.fontMono,
+                      fontFamilyFallback: AurisTokens.fontMonoFallback,
                       fontSize: 11,
                       letterSpacing: AurisTokens.trackingLabel,
                       color: scheme.primaryDim,
@@ -217,6 +218,7 @@ class _AurisProgressBarState extends State<AurisProgressBar>
                   widget.valueLabel!,
                   style: TextStyle(
                     fontFamily: AurisTokens.fontMono,
+                    fontFamilyFallback: AurisTokens.fontMonoFallback,
                     fontSize: 11,
                     letterSpacing: AurisTokens.trackingLabel,
                     color: scheme.textDim,
