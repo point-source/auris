@@ -249,7 +249,7 @@ values.
 
 ## Theme layer — complete Material re-skin §spec:theme-layer
 
-*Status: in progress*
+*Status: complete*
 
 Cites: §req:success-criteria, §req:user-stories, §req:priorities
 
@@ -325,11 +325,12 @@ them where it matters, and the rationale is recorded rather than the workaround
 re-specified.
 
 **Verification path.** Coverage is checked two ways. A component-theme **census**
-enumerates every `ThemeData` slot and marks each one populated or
-excluded-with-reason, so no slot is silently skipped — a widget missing from the
-demo is exactly how a gap hides. The showcase (§spec:showcase) then renders every
-populated component so a reviewer confirms none falls back to default Material
-styling: the census guarantees completeness, the showcase is the visual proof.
+(`doc/component-theme-census.md`) enumerates every `ThemeData` slot and marks each
+one populated or excluded-with-reason, so no slot is silently skipped — a widget
+missing from the demo is exactly how a gap hides. The showcase (§spec:showcase)
+then renders every populated component so a reviewer confirms none falls back to
+default Material styling: the census guarantees completeness, the showcase is the
+visual proof.
 
 ---
 
