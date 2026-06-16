@@ -36,7 +36,10 @@ dependencies:
 > Until then, depend on it via git or a local `path:`.
 
 The required fonts (Rajdhani, Exo 2, Share Tech Mono) are **bundled** under the
-SIL Open Font License — no manual font setup.
+SIL Open Font License — no manual font setup. If a bundled font ever fails to
+load, every text role falls back to a platform sans-serif (or monospace for data
+readouts), so text always renders rather than showing tofu — there is nothing
+for a consumer to configure.
 
 ## Quick start
 
