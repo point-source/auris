@@ -21,6 +21,10 @@ class _Variant {
   final double glowScale;
 }
 
+/// A persistent controller for the harness scrollbar render (so the same
+/// controller drives both the `Scrollbar` and its `ListView`).
+final ScrollController _harnessScroll = ScrollController();
+
 // Load the bundled fonts so glyphs render for real instead of as Ahem blocks
 // (needed to judge a glyph-hugging glow).
 Future<void> _loadFonts() async {
@@ -149,6 +153,234 @@ void main() {
       File('${outDir.path}/${v.name}.png').writeAsBytesSync(png!);
     });
   }
+
+  // The component themes the census surfaced as missing, rendered together so
+  // they can be eyeballed against the Auris aesthetic (gold-on-near-black,
+  // chamfer, mono labels). Date/time pickers are dialogs (rendered separately
+  // below); these are the inline-able ones.
+  testWidgets('missing_components', (WidgetTester tester) async {
+    final Directory outDir = Directory('/tmp/auris_renders')
+      ..createSync(recursive: true);
+    tester.view.physicalSize = const Size(1100, 1500);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+    await _loadFonts();
+
+    await tester.pumpWidget(
+      MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: AurisTheme.dark(),
+        home: Builder(
+          builder: (BuildContext context) {
+            final ThemeData theme = Theme.of(context);
+            final AurisScheme scheme = theme.extension<AurisScheme>()!;
+            Widget label(String s) => Padding(
+                  padding: const EdgeInsets.only(top: 18, bottom: 6),
+                  child: Text(
+                    s,
+                    style: TextStyle(
+                      fontFamily: 'packages/auris/ShareTechMono',
+                      fontSize: 12,
+                      letterSpacing: 1.5,
+                      color: scheme.primaryDim,
+                    ),
+                  ),
+                );
+            return Scaffold(
+              backgroundColor: scheme.surfacePage,
+              body: RepaintBoundary(
+                key: const ValueKey<String>('shot'),
+                child: ColoredBox(
+                  color: scheme.surfacePage,
+                  child: Padding(
+                    padding: const EdgeInsets.all(32),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        label('TOGGLE BUTTONS'),
+                        ToggleButtons(
+                          isSelected: const <bool>[false, true, false],
+                          onPressed: (_) {},
+                          children: const <Widget>[
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 16),
+                              child: Text('LOW'),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 16),
+                              child: Text('MED'),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 16),
+                              child: Text('HIGH'),
+                            ),
+                          ],
+                        ),
+                        label('TEXT SELECTION (caret + highlight)'),
+                        SizedBox(
+                          width: 320,
+                          child: TextField(
+                            controller: TextEditingController(
+                              text: 'SELECTED TELEMETRY',
+                            ),
+                          ),
+                        ),
+                        label('MATERIAL BANNER'),
+                        DecoratedBox(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: scheme.borderResting),
+                          ),
+                          child: MaterialBanner(
+                            leading: const Icon(Icons.warning_amber),
+                            content: const Text('REACTOR DRIFT DETECTED'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {},
+                                child: const Text('DISMISS'),
+                              ),
+                            ],
+                          ),
+                        ),
+                        label('BOTTOM NAVIGATION BAR'),
+                        BottomNavigationBar(
+                          currentIndex: 1,
+                          onTap: (_) {},
+                          items: const <BottomNavigationBarItem>[
+                            BottomNavigationBarItem(
+                              icon: Icon(Icons.radar),
+                              label: 'SCAN',
+                            ),
+                            BottomNavigationBarItem(
+                              icon: Icon(Icons.bolt),
+                              label: 'POWER',
+                            ),
+                            BottomNavigationBarItem(
+                              icon: Icon(Icons.terminal),
+                              label: 'LOG',
+                            ),
+                          ],
+                        ),
+                        label('NAVIGATION DRAWER'),
+                        SizedBox(
+                          height: 220,
+                          width: 300,
+                          child: NavigationDrawer(
+                            selectedIndex: 1,
+                            onDestinationSelected: (_) {},
+                            children: const <Widget>[
+                              NavigationDrawerDestination(
+                                icon: Icon(Icons.dashboard_outlined),
+                                selectedIcon: Icon(Icons.dashboard),
+                                label: Text('HUD'),
+                              ),
+                              NavigationDrawerDestination(
+                                icon: Icon(Icons.sensors_outlined),
+                                selectedIcon: Icon(Icons.sensors),
+                                label: Text('SENSORS'),
+                              ),
+                              NavigationDrawerDestination(
+                                icon: Icon(Icons.settings_outlined),
+                                selectedIcon: Icon(Icons.settings),
+                                label: Text('CONFIG'),
+                              ),
+                            ],
+                          ),
+                        ),
+                        label('SCROLLBAR'),
+                        SizedBox(
+                          height: 80,
+                          width: 320,
+                          child: Scrollbar(
+                            thumbVisibility: true,
+                            controller: _harnessScroll,
+                            child: ListView.builder(
+                              controller: _harnessScroll,
+                              itemCount: 20,
+                              itemBuilder: (BuildContext context, int i) =>
+                                  Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 8,
+                                ),
+                                child: Text(
+                                  'FRAME $i',
+                                  style: TextStyle(color: scheme.textBright),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+    await tester.pump(const Duration(milliseconds: 400));
+    final RenderRepaintBoundary boundary = tester.renderObject(
+      find.byKey(const ValueKey<String>('shot')),
+    );
+    final Uint8List? png = await tester.runAsync(() async {
+      final ui.Image image = await boundary.toImage(pixelRatio: 1.8);
+      final ByteData? bytes =
+          await image.toByteData(format: ui.ImageByteFormat.png);
+      return bytes!.buffer.asUint8List();
+    });
+    File('${outDir.path}/missing_components.png').writeAsBytesSync(png!);
+  });
+
+  // The themed DatePicker dialog, rendered open so the chamfer + gold selected
+  // day are visible.
+  testWidgets('date_picker', (WidgetTester tester) async {
+    final Directory outDir = Directory('/tmp/auris_renders')
+      ..createSync(recursive: true);
+    tester.view.physicalSize = const Size(900, 1100);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+    await _loadFonts();
+
+    await tester.pumpWidget(
+      MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: AurisTheme.dark(),
+        home: Builder(
+          builder: (BuildContext context) {
+            final AurisScheme scheme =
+                Theme.of(context).extension<AurisScheme>()!;
+            return Scaffold(
+              backgroundColor: scheme.surfacePage,
+              body: Center(
+                child: RepaintBoundary(
+                  key: const ValueKey<String>('shot'),
+                  child: DatePickerDialog(
+                    initialDate: DateTime(2026, 6, 16),
+                    firstDate: DateTime(2024),
+                    lastDate: DateTime(2028),
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+    await tester.pump(const Duration(milliseconds: 400));
+    final RenderRepaintBoundary boundary = tester.renderObject(
+      find.byKey(const ValueKey<String>('shot')),
+    );
+    final Uint8List? png = await tester.runAsync(() async {
+      final ui.Image image = await boundary.toImage(pixelRatio: 2.0);
+      final ByteData? bytes =
+          await image.toByteData(format: ui.ImageByteFormat.png);
+      return bytes!.buffer.asUint8List();
+    });
+    File('${outDir.path}/date_picker.png').writeAsBytesSync(png!);
+  });
 
   // Side-by-side comparison of active-step glow candidates, overriding
   // depthActive per cell so several tightness options render in one image.

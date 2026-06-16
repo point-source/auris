@@ -45,12 +45,16 @@ const List<_ScaleStep> _scaleSteps = <_ScaleStep>[
 ];
 
 /// The showcase: a scrollable app that applies [AurisTheme.light] and renders
-/// the re-skinned Material widgets — buttons, inputs, selection controls and
-/// sliders; surfaces and overlays (cards, dialog, snackbar, bottom sheet,
-/// tooltip, popup menu); navigation chrome (tab bar, navigation bar); and
-/// data / feedback widgets (data table, list / expansion tile, progress, badge,
-/// stepper) — each section introduced by a monospace uppercase amber header
-/// (§spec:showcase).
+/// the re-skinned Material widgets — buttons (incl. segmented and toggle
+/// buttons), inputs, selection controls and sliders; surfaces and overlays
+/// (cards, dialog, snackbar, material banner, bottom sheet, tooltip, popup menu,
+/// date and time pickers); menus (menu anchor / menu bar); navigation chrome
+/// (tab bar, navigation bar, bottom navigation bar, bottom app bar, navigation
+/// drawer); and data / feedback widgets (data table, scrollbar, list / expansion
+/// tile, progress, badge, carousel, stepper) — each section introduced by a
+/// monospace uppercase amber header (§spec:showcase). Every newly themed
+/// component is rendered so a reviewer can confirm none falls back to default
+/// Material (§road:showcase-missing-components).
 ///
 /// It is stateful so the customization control near the top can lift the live
 /// accent / bevel / glow overrides up to here; changing any of them rebuilds the
@@ -143,8 +147,15 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
   String _segment = 'AUTO';
   String? _dropdown = 'ALPHA';
   int _navIndex = 0;
+  int _bottomNavIndex = 0;
+  int _drawerIndex = 0;
+  final Set<int> _toggle = <int>{1};
   int _step = 1;
   bool _showError = true;
+  DateTime? _date;
+  TimeOfDay? _time;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final ScrollController _scrollbarController = ScrollController();
 
   // Live-appending terminal: a Timer pushes a new log line periodically.
   final List<AurisTerminalLine> _log = <AurisTerminalLine>[
@@ -187,6 +198,7 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
   @override
   void dispose() {
     _logTimer?.cancel();
+    _scrollbarController.dispose();
     super.dispose();
   }
 
@@ -200,9 +212,39 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
     final AurisScheme scheme = theme.extension<AurisScheme>()!;
 
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text('AURIS // CORE CONTROLS', style: text.titleLarge),
         backgroundColor: scheme.surfacePanel,
+      ),
+      // A themed NavigationDrawer — chamfered gold indicator, mono labels.
+      drawer: NavigationDrawer(
+        selectedIndex: _drawerIndex,
+        onDestinationSelected: (int i) {
+          setState(() => _drawerIndex = i);
+          _scaffoldKey.currentState?.closeDrawer();
+        },
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.fromLTRB(28, 24, 16, 12),
+            child: Text('NAVIGATION', style: text.titleMedium),
+          ),
+          const NavigationDrawerDestination(
+            icon: Icon(Icons.dashboard_outlined),
+            selectedIcon: Icon(Icons.dashboard),
+            label: Text('HUD'),
+          ),
+          const NavigationDrawerDestination(
+            icon: Icon(Icons.sensors_outlined),
+            selectedIcon: Icon(Icons.sensors),
+            label: Text('SENSORS'),
+          ),
+          const NavigationDrawerDestination(
+            icon: Icon(Icons.settings_outlined),
+            selectedIcon: Icon(Icons.settings),
+            label: Text('CONFIG'),
+          ),
+        ],
       ),
       body: Center(
         child: ConstrainedBox(
@@ -316,6 +358,36 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
                   showSelectedIcon: false,
                   onSelectionChanged: (Set<String> s) =>
                       setState(() => _segment = s.first),
+                ),
+                const SizedBox(height: 12),
+                // ToggleButtons — the legacy M2 segmented group, themed gold.
+                ToggleButtons(
+                  isSelected: <bool>[
+                    _toggle.contains(0),
+                    _toggle.contains(1),
+                    _toggle.contains(2),
+                  ],
+                  onPressed: (int i) => setState(() {
+                    if (_toggle.contains(i)) {
+                      _toggle.remove(i);
+                    } else {
+                      _toggle.add(i);
+                    }
+                  }),
+                  children: const <Widget>[
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      child: Text('LOW'),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      child: Text('MED'),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      child: Text('HIGH'),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 12),
                 // Disabled variants — null onPressed dims to 50% with no hover.
@@ -572,7 +644,105 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
                         ),
                       ],
                     ),
+                    OutlinedButton(
+                      onPressed: _showBanner,
+                      child: const Text('BANNER'),
+                    ),
+                    OutlinedButton(
+                      onPressed: _pickDate,
+                      child: const Text('DATE'),
+                    ),
+                    OutlinedButton(
+                      onPressed: _pickTime,
+                      child: const Text('TIME'),
+                    ),
                   ],
+                ),
+                const SizedBox(height: 8),
+                // The chosen date / time, proving the picker round-trips a value.
+                Text(
+                  'SELECTED: '
+                  '${_date == null ? '—' : '${_date!.year}-'
+                      '${_date!.month.toString().padLeft(2, '0')}-'
+                      '${_date!.day.toString().padLeft(2, '0')}'} '
+                  '${_time == null ? '' : _time!.format(context)}',
+                  style: text.labelMedium,
+                ),
+
+                // ---- MENUS --------------------------------------------------
+                // MenuAnchor + MenuBar exercise the menu / menuBar / menuButton
+                // themes (the MenuAnchor surfaces) — chamfered panel popups with
+                // monospace rows.
+                const _SectionHeader('MENUS'),
+                Text('MENU ANCHOR', style: text.labelMedium),
+                const SizedBox(height: 8),
+                MenuAnchor(
+                  builder: (
+                    BuildContext context,
+                    MenuController controller,
+                    Widget? child,
+                  ) {
+                    return OutlinedButton.icon(
+                      onPressed: () => controller.isOpen
+                          ? controller.close()
+                          : controller.open(),
+                      icon: const Icon(Icons.expand_more),
+                      label: const Text('ACTIONS'),
+                    );
+                  },
+                  menuChildren: <Widget>[
+                    MenuItemButton(
+                      leadingIcon: const Icon(Icons.play_arrow),
+                      onPressed: () {},
+                      child: const Text('ENGAGE'),
+                    ),
+                    MenuItemButton(
+                      leadingIcon: const Icon(Icons.pause),
+                      onPressed: () {},
+                      child: const Text('HOLD'),
+                    ),
+                    MenuItemButton(
+                      leadingIcon: const Icon(Icons.stop),
+                      onPressed: () {},
+                      child: const Text('ABORT'),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Text('MENU BAR', style: text.labelMedium),
+                const SizedBox(height: 8),
+                SizedBox(
+                  height: 48,
+                  child: MenuBar(
+                    children: <Widget>[
+                      SubmenuButton(
+                        menuChildren: <Widget>[
+                          MenuItemButton(
+                            onPressed: () {},
+                            child: const Text('NEW SCAN'),
+                          ),
+                          MenuItemButton(
+                            onPressed: () {},
+                            child: const Text('CALIBRATE'),
+                          ),
+                        ],
+                        child: const Text('SYSTEM'),
+                      ),
+                      SubmenuButton(
+                        menuChildren: <Widget>[
+                          MenuItemButton(
+                            onPressed: () {},
+                            child: const Text('TELEMETRY'),
+                          ),
+                          MenuItemButton(
+                            onPressed: () {},
+                            child: const Text('DIAGNOSTICS'),
+                          ),
+                        ],
+                        child: const Text('VIEW'),
+                      ),
+                    ],
+                  ),
                 ),
 
                 // ---- NAVIGATION ---------------------------------------------
@@ -638,6 +808,63 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
                     ),
                   ],
                 ),
+                const SizedBox(height: 16),
+                Text('BOTTOM NAVIGATION BAR', style: text.labelMedium),
+                const SizedBox(height: 8),
+                BottomNavigationBar(
+                  currentIndex: _bottomNavIndex,
+                  onTap: (int i) => setState(() => _bottomNavIndex = i),
+                  items: const <BottomNavigationBarItem>[
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.radar),
+                      label: 'SCAN',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.bolt),
+                      label: 'POWER',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.terminal),
+                      label: 'LOG',
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Text('BOTTOM APP BAR', style: text.labelMedium),
+                const SizedBox(height: 8),
+                SizedBox(
+                  height: 64,
+                  child: BottomAppBar(
+                    child: Row(
+                      children: <Widget>[
+                        IconButton(
+                          onPressed: () {},
+                          icon: const Icon(Icons.menu),
+                        ),
+                        const Spacer(),
+                        IconButton(
+                          onPressed: () {},
+                          icon: const Icon(Icons.search),
+                        ),
+                        IconButton(
+                          onPressed: () {},
+                          icon: const Icon(Icons.more_vert),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Text('NAVIGATION DRAWER', style: text.labelMedium),
+                const SizedBox(height: 8),
+                // The drawer opens off-canvas; an inline preview also renders the
+                // themed destinations so the indicator / labels are visible
+                // without opening it.
+                OutlinedButton.icon(
+                  onPressed: () => _scaffoldKey.currentState?.openDrawer(),
+                  icon: const Icon(Icons.menu_open),
+                  label: const Text('OPEN DRAWER'),
+                ),
 
                 // ---- DATA ----------------------------------------------------
                 const _SectionHeader('DATA'),
@@ -679,6 +906,27 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
                           ],
                         ),
                       ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Text('SCROLLBAR', style: text.labelMedium),
+                const SizedBox(height: 8),
+                // An always-visible themed Scrollbar over a short scrolling list,
+                // so the gold thumb on the inset track is demonstrable.
+                SizedBox(
+                  height: 96,
+                  child: Scrollbar(
+                    thumbVisibility: true,
+                    controller: _scrollbarController,
+                    child: ListView.builder(
+                      controller: _scrollbarController,
+                      itemCount: 20,
+                      itemBuilder: (BuildContext context, int i) => ListTile(
+                        dense: true,
+                        leading: const Icon(Icons.circle, size: 10),
+                        title: Text('TELEMETRY FRAME ${i.toString().padLeft(3, '0')}'),
+                      ),
                     ),
                   ),
                 ),
@@ -747,6 +995,28 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
                       child: Icon(Icons.cloud_outlined),
                     ),
                   ],
+                ),
+                const SizedBox(height: 16),
+                Text('CAROUSEL', style: text.labelMedium),
+                const SizedBox(height: 8),
+                // A themed CarouselView — chamfered items on the inset surface.
+                SizedBox(
+                  height: 120,
+                  child: CarouselView(
+                    itemExtent: 160,
+                    itemSnapping: true,
+                    children: <Widget>[
+                      for (final String label in <String>[
+                        'SECTOR A',
+                        'SECTOR B',
+                        'SECTOR C',
+                        'SECTOR D',
+                      ])
+                        Center(
+                          child: Text(label, style: text.titleMedium),
+                        ),
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 16),
                 Text('STEPPER', style: text.labelMedium),
@@ -1087,6 +1357,53 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
         );
       },
     );
+  }
+
+  /// Show a themed [MaterialBanner] — inset surface, gold action, mono content.
+  void _showBanner() {
+    final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
+    messenger.clearMaterialBanners();
+    messenger.showMaterialBanner(
+      MaterialBanner(
+        leading: const Icon(Icons.warning_amber),
+        content: const Text('REACTOR DRIFT DETECTED — REVIEW TELEMETRY'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: messenger.hideCurrentMaterialBanner,
+            child: const Text('DISMISS'),
+          ),
+          FilledButton(
+            onPressed: messenger.hideCurrentMaterialBanner,
+            child: const Text('REVIEW'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Open the themed [DatePickerDialog] and keep the chosen date.
+  Future<void> _pickDate() async {
+    final DateTime now = DateTime.now();
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _date ?? now,
+      firstDate: DateTime(now.year - 2),
+      lastDate: DateTime(now.year + 2),
+    );
+    if (picked != null) {
+      setState(() => _date = picked);
+    }
+  }
+
+  /// Open the themed [TimePickerDialog] and keep the chosen time.
+  Future<void> _pickTime() async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: _time ?? TimeOfDay.now(),
+    );
+    if (picked != null) {
+      setState(() => _time = picked);
+    }
   }
 
   /// Show a chamfered, flat snackbar with a gold action.
