@@ -336,7 +336,7 @@ visual proof.
 
 ## Custom widget library §spec:custom-widgets
 
-*Status: in progress*
+*Status: complete*
 
 Cites: §req:user-stories, §req:success-criteria, §req:priorities
 
@@ -492,7 +492,7 @@ motion is both an accessibility and a performance affordance.
 
 ## Fonts and packaging §spec:packaging
 
-*Status: in progress*
+*Status: complete*
 
 Cites: §req:success-criteria, §req:constraints, §req:priorities
 
@@ -518,7 +518,7 @@ to be publication-ready, but v0.1.0 does not publish.
 
 ## Example showcase §spec:showcase
 
-*Status: in progress*
+*Status: complete*
 
 Cites: §req:success-criteria, §req:user-stories
 
