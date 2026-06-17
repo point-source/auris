@@ -41,7 +41,7 @@ load, every text role falls back to a platform sans-serif (or monospace for data
 readouts), so text always renders rather than showing tofu — there is nothing
 for a consumer to configure.
 
-## Quick start
+## Usage
 
 ```dart
 import 'package:auris/auris.dart';
@@ -107,6 +107,29 @@ MaterialApp(
 ```
 
 ![Auris accent customization](doc/images/accents.png)
+
+## API
+
+Two import surfaces:
+
+- **`package:auris/auris.dart`** — the theme layer: `AurisTheme` (the `ThemeData`
+  factory), `AurisScheme` (the resolved design scheme that custom widgets read
+  from via `Theme.of(context).extension<AurisScheme>()`), and the design tokens.
+- **`package:auris/auris_widgets.dart`** — the standalone HUD widget library (the
+  [custom widgets](#custom-widgets) reference below).
+
+`AurisTheme` exposes two static constructors, each returning a fully specified
+`ThemeData` for a `MaterialApp`:
+
+| Constructor | Returns |
+| --- | --- |
+| `AurisTheme.dark({Color? accent, double bevelScale = 1.0, double glowScale = 1.0})` | Canonical amber-on-near-black theme. |
+| `AurisTheme.light({Color? accent, double bevelScale = 1.0, double glowScale = 1.0})` | AA-tuned light variant, same amber identity. |
+
+The `accent` / `bevelScale` / `glowScale` overrides resolve into a single
+`AurisScheme` that propagates through both the themed Material widgets and the
+custom widgets — see [Customize without forking](#customize-without-forking).
+[`SPEC.md`](SPEC.md) (§spec:scheme, §spec:customization) is the full reference.
 
 ## Custom widgets
 
