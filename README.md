@@ -5,7 +5,7 @@ chamfered **"augmentation-era" sci-fi** aesthetic — the angular, glowing HUD l
 of early-2010s sci-fi games, as a drop-in theme plus a library of custom HUD
 widgets.
 
-![Auris dark gallery](doc/images/gallery-dark.png)
+![Auris dark gallery](https://raw.githubusercontent.com/point-source/auris/main/doc/images/gallery-dark.png)
 
 Auris ships as **two cooperating layers**:
 
@@ -88,7 +88,7 @@ technical light variant that keeps the same amber identity (accent darkened for
 AA contrast on light surfaces). Both are one resolution with a different
 `Brightness` input and accept the same overrides.
 
-![Auris light gallery](doc/images/gallery-light.png)
+![Auris light gallery](https://raw.githubusercontent.com/point-source/auris/main/doc/images/gallery-light.png)
 
 ## Customize without forking
 
@@ -106,7 +106,7 @@ MaterialApp(
 );
 ```
 
-![Auris accent customization](doc/images/accents.png)
+![Auris accent customization](https://raw.githubusercontent.com/point-source/auris/main/doc/images/accents.png)
 
 ## API
 
