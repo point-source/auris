@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Only lint when governance files are staged
+# Run the FULL governance contract (the same checks CI's Governance Lint job
+# runs) whenever a governance file is staged — not just markdownlint, which is
+# why heading-slug, status-line, reference-resolution and Vale failures used to
+# surface only on CI. See scripts/governance-lint.sh.
 staged=$(git diff --cached --name-only)
-if echo "$staged" | grep -qE '^(SPEC|ROADMAP|README)\.md$'; then
-  npx markdownlint-cli2 SPEC.md ROADMAP.md README.md
+if echo "$staged" | grep -qE '^(SPEC|ROADMAP|README|REQUIREMENTS)\.md$'; then
+  exec bash scripts/governance-lint.sh
 fi
