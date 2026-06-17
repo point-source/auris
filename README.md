@@ -7,6 +7,9 @@ widgets.
 
 ![Auris dark gallery](https://raw.githubusercontent.com/point-source/auris/main/doc/images/gallery-dark.png)
 
+**▶ [Try the live demo](https://point-source.github.io/auris/)** — play with
+every widget in your browser, flip the accent and glow, no install required.
+
 Auris ships as **two cooperating layers**:
 
 1. **`AurisTheme`** — a fully specified `ThemeData`. Add it to your `MaterialApp`

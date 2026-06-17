@@ -1,0 +1,69 @@
+# Builds the showcase example for the web and publishes it to GitHub Pages as
+# the public "try before you adopt" live demo (§spec:live-demo). It runs on
+# every push to main so the demo always reflects the tip.
+#
+# Broken-build guard (§req:success-criteria #10): the deploy job `needs` the
+# build job, and the build job runs the project's analyze/test gates before the
+# web build. Any failure fails the build job, so the deploy job never runs and
+# the previously published demo stays live untouched.
+#
+# One-time repo setting: Settings → Pages → Build and deployment → Source =
+# "GitHub Actions". The site is served from the project subpath, which is why
+# the web build sets --base-href /auris/.
+name: Deploy demo
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Least-privilege token: only what Pages deployment requires.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Serialize deploys; never cancel an in-flight one mid-publish.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      # Quality gates — the demo only deploys from a green tree.
+      - name: Analyze package
+        run: |
+          flutter pub get
+          flutter analyze
+      - name: Test package (incl. goldens)
+        run: flutter test
+
+      # Build the showcase for the web at the project base path. A failure here
+      # fails the job before the artifact is uploaded, so deploy is skipped.
+      - name: Build web demo
+        working-directory: example
+        run: |
+          flutter pub get
+          flutter build web --release --base-href /auris/
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: example/build/web
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/deploy-pages@v4
+        id: deployment

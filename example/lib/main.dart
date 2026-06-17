@@ -216,6 +216,15 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
     // and drive the section headers and AppBar from its role colors.
     final AurisScheme scheme = theme.extension<AurisScheme>()!;
 
+    // The showcase doubles as the hosted live demo, which must stay legible on
+    // a phone browser as well as a desktop one (§spec:live-demo,
+    // §road:example-responsive-layout). The single column already reflows —
+    // it caps at maxWidth and centres on wide viewports — so the only phone
+    // concession needed is tighter side padding so narrow screens keep usable
+    // content width.
+    final double viewportWidth = MediaQuery.sizeOf(context).width;
+    final double horizontalPad = viewportWidth < 400 ? 16 : 24;
+
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -255,7 +264,7 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 560),
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
+            padding: EdgeInsets.symmetric(horizontal: horizontalPad, vertical: 24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
