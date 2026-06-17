@@ -4,7 +4,7 @@
 <!-- assumptions later sections depend on. Completed work leaves from -->
 <!-- the head; new work enters at the tail. -->
 
-## Live web demo
+## Live web demo §road:live-demo
 
 Host the showcase example as a public web app on GitHub Pages, auto-deployed
 on every push to `main` and linked from the README, so prospects can try the
