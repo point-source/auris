@@ -170,15 +170,13 @@ class _AurisSwitchState extends State<AurisSwitch>
         return KeyEventResult.ignored;
       },
       child: MouseRegion(
-        cursor:
-            _enabled ? SystemMouseCursors.click : SystemMouseCursors.forbidden,
+        cursor: _enabled
+            ? SystemMouseCursors.click
+            : SystemMouseCursors.forbidden,
         child: GestureDetector(
           onTap: _toggle,
           behavior: HitTestBehavior.opaque,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: rowChildren,
-          ),
+          child: Row(mainAxisSize: MainAxisSize.min, children: rowChildren),
         ),
       ),
     );

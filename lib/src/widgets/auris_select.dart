@@ -152,15 +152,19 @@ class _AurisSelectState<T> extends State<AurisSelect<T>>
     }
     if (key == LogicalKeyboardKey.arrowDown) {
       setState(
-        () => _highlighted =
-            (_highlighted + 1).clamp(0, widget.options.length - 1),
+        () => _highlighted = (_highlighted + 1).clamp(
+          0,
+          widget.options.length - 1,
+        ),
       );
       return KeyEventResult.handled;
     }
     if (key == LogicalKeyboardKey.arrowUp) {
       setState(
-        () => _highlighted =
-            (_highlighted - 1).clamp(0, widget.options.length - 1),
+        () => _highlighted = (_highlighted - 1).clamp(
+          0,
+          widget.options.length - 1,
+        ),
       );
       return KeyEventResult.handled;
     }
@@ -366,9 +370,7 @@ class _SelectRow<T> extends StatelessWidget {
         : (isHighlighted ? scheme.textBright : scheme.textMid);
     final Color? fill = isSelected
         ? scheme.primaryActive.withValues(alpha: 0.12)
-        : (isHighlighted
-            ? scheme.primaryActive.withValues(alpha: 0.05)
-            : null);
+        : (isHighlighted ? scheme.primaryActive.withValues(alpha: 0.05) : null);
 
     return MouseRegion(
       cursor: SystemMouseCursors.click,
@@ -380,9 +382,7 @@ class _SelectRow<T> extends StatelessWidget {
           decoration: BoxDecoration(
             color: fill,
             border: showDivider
-                ? Border(
-                    bottom: BorderSide(color: scheme.borderResting),
-                  )
+                ? Border(bottom: BorderSide(color: scheme.borderResting))
                 : null,
           ),
           child: Padding(

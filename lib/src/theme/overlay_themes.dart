@@ -35,7 +35,10 @@ abstract final class AurisOverlayThemes {
   /// A chamfered border with a visible resting outline, for surfaces that read
   /// better with an explicit edge (dialogs, menus, sheets).
   static AurisChamferBorder _bevelOutlined(double size, Color color) =>
-      AurisChamferBorder(cut: size, side: BorderSide(color: color));
+      AurisChamferBorder(
+        cut: size,
+        side: BorderSide(color: color),
+      );
 
   /// A bare chamfered rectangle (no outline), for the small inner cells inside
   /// the pickers (calendar days, year tiles, hour / minute fields).
@@ -103,8 +106,7 @@ abstract final class AurisOverlayThemes {
     return SnackBarThemeData(
       backgroundColor: scheme.surfaceInset,
       actionTextColor: scheme.primaryActive,
-      disabledActionTextColor:
-          scheme.primaryActive.withValues(alpha: 0.5),
+      disabledActionTextColor: scheme.primaryActive.withValues(alpha: 0.5),
       closeIconColor: scheme.primaryDim,
       elevation: 0,
       behavior: SnackBarBehavior.floating,
@@ -234,20 +236,20 @@ abstract final class AurisOverlayThemes {
       iconColor: scheme.primaryDim,
       elevation: 0,
       shape: _bevelOutlined(scheme.bevel.md, scheme.borderBright),
-      labelTextStyle: WidgetStateProperty.resolveWith<TextStyle?>(
-        (Set<WidgetState> states) {
-          final Color color = states.contains(WidgetState.disabled)
-              ? scheme.textMid.withValues(alpha: 0.5)
-              : scheme.textBright;
-          return TextStyle(
-            fontFamily: AurisTokens.fontMono,
-            fontFamilyFallback: AurisTokens.fontMonoFallback,
-            fontSize: 13,
-            letterSpacing: AurisTokens.trackingLabel,
-            color: color,
-          );
-        },
-      ),
+      labelTextStyle: WidgetStateProperty.resolveWith<TextStyle?>((
+        Set<WidgetState> states,
+      ) {
+        final Color color = states.contains(WidgetState.disabled)
+            ? scheme.textMid.withValues(alpha: 0.5)
+            : scheme.textBright;
+        return TextStyle(
+          fontFamily: AurisTokens.fontMono,
+          fontFamilyFallback: AurisTokens.fontMonoFallback,
+          fontSize: 13,
+          letterSpacing: AurisTokens.trackingLabel,
+          color: color,
+        );
+      }),
     );
   }
 
@@ -272,17 +274,17 @@ abstract final class AurisOverlayThemes {
       dividerColor: scheme.borderResting,
       // The selected day reads gold-on-near-black; unselected days use bright
       // text; disabled days dim. A WidgetStateColor resolves all three.
-      dayForegroundColor: WidgetStateProperty.resolveWith<Color?>(
-        (Set<WidgetState> states) {
-          if (states.contains(WidgetState.disabled)) {
-            return scheme.textDim;
-          }
-          if (states.contains(WidgetState.selected)) {
-            return scheme.onPrimary;
-          }
-          return scheme.textBright;
-        },
-      ),
+      dayForegroundColor: WidgetStateProperty.resolveWith<Color?>((
+        Set<WidgetState> states,
+      ) {
+        if (states.contains(WidgetState.disabled)) {
+          return scheme.textDim;
+        }
+        if (states.contains(WidgetState.selected)) {
+          return scheme.onPrimary;
+        }
+        return scheme.textBright;
+      }),
       dayBackgroundColor: WidgetStateProperty.resolveWith<Color?>(
         (Set<WidgetState> states) =>
             states.contains(WidgetState.selected) ? scheme.primaryActive : null,
@@ -290,26 +292,24 @@ abstract final class AurisOverlayThemes {
       dayOverlayColor: WidgetStatePropertyAll<Color>(
         scheme.primaryActive.withValues(alpha: 0.12),
       ),
-      dayShape:
-          WidgetStatePropertyAll<OutlinedBorder>(_bevel(scheme.bevel.xs)),
-      todayForegroundColor:
-          WidgetStatePropertyAll<Color>(scheme.primaryActive),
+      dayShape: WidgetStatePropertyAll<OutlinedBorder>(_bevel(scheme.bevel.xs)),
+      todayForegroundColor: WidgetStatePropertyAll<Color>(scheme.primaryActive),
       todayBackgroundColor: const WidgetStatePropertyAll<Color>(
         Colors.transparent,
       ),
       todayBorder: BorderSide(color: scheme.primaryActive),
       yearForegroundColor: WidgetStateProperty.resolveWith<Color?>(
-        (Set<WidgetState> states) =>
-            states.contains(WidgetState.selected)
-                ? scheme.onPrimary
-                : scheme.textBright,
+        (Set<WidgetState> states) => states.contains(WidgetState.selected)
+            ? scheme.onPrimary
+            : scheme.textBright,
       ),
       yearBackgroundColor: WidgetStateProperty.resolveWith<Color?>(
         (Set<WidgetState> states) =>
             states.contains(WidgetState.selected) ? scheme.primaryActive : null,
       ),
-      yearShape:
-          WidgetStatePropertyAll<OutlinedBorder>(_bevel(scheme.bevel.sm)),
+      yearShape: WidgetStatePropertyAll<OutlinedBorder>(
+        _bevel(scheme.bevel.sm),
+      ),
       headerHeadlineStyle: TextStyle(
         fontFamily: AurisTokens.fontDisplay,
         fontFamilyFallback: AurisTokens.fontDisplayFallback,

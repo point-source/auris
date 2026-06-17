@@ -48,9 +48,9 @@ class AurisProgressBar extends StatefulWidget {
     this.variant = AurisProgressVariant.primary,
     this.height = 10,
     this.spacing = 2,
-  })  : animated = false,
-        assert(value >= 0 && value <= 1, 'value must be in 0..1'),
-        assert(segments > 0, 'segments must be positive');
+  }) : animated = false,
+       assert(value >= 0 && value <= 1, 'value must be in 0..1'),
+       assert(segments > 0, 'segments must be positive');
 
   /// Creates a segmented progress meter that animates fills on [value] change.
   const AurisProgressBar.animated({
@@ -62,9 +62,9 @@ class AurisProgressBar extends StatefulWidget {
     this.variant = AurisProgressVariant.primary,
     this.height = 10,
     this.spacing = 2,
-  })  : animated = true,
-        assert(value >= 0 && value <= 1, 'value must be in 0..1'),
-        assert(segments > 0, 'segments must be positive');
+  }) : animated = true,
+       assert(value >= 0 && value <= 1, 'value must be in 0..1'),
+       assert(segments > 0, 'segments must be positive');
 
   /// The fill fraction in `0..1`.
   final double value;
@@ -130,9 +130,10 @@ class _AurisProgressBarState extends State<AurisProgressBar>
         _controller.value = 1.0;
         return;
       }
-      _value = Tween<double>(begin: oldWidget.value, end: widget.value).animate(
-        CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-      );
+      _value = Tween<double>(
+        begin: oldWidget.value,
+        end: widget.value,
+      ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
       _controller.forward(from: 0);
     }
   }
@@ -159,8 +160,10 @@ class _AurisProgressBarState extends State<AurisProgressBar>
       animation: _value,
       builder: (BuildContext context, _) {
         // The count of fully filled segments and which one leads (glows).
-        final int filledCount =
-            (_value.value * widget.segments).round().clamp(0, widget.segments);
+        final int filledCount = (_value.value * widget.segments).round().clamp(
+          0,
+          widget.segments,
+        );
         final int leadingIndex = filledCount - 1;
         return SizedBox(
           height: widget.height,
@@ -178,7 +181,9 @@ class _AurisProgressBarState extends State<AurisProgressBar>
                     leading: i == leadingIndex,
                     fillColor: v.filled,
                     dimColor: scheme.borderBright,
-                    glow: i == leadingIndex ? v.depth.glow : const <BoxShadow>[],
+                    glow: i == leadingIndex
+                        ? v.depth.glow
+                        : const <BoxShadow>[],
                   ),
                 ),
               ],

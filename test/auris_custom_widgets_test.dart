@@ -45,9 +45,7 @@ void main() {
       WidgetTester tester,
     ) async {
       await tester.pumpWidget(
-        host(
-          const AurisContainer(clipChild: false, child: Text('NOCLIP')),
-        ),
+        host(const AurisContainer(clipChild: false, child: Text('NOCLIP'))),
       );
       expect(find.byType(ClipPath), findsNothing);
     });
@@ -107,12 +105,11 @@ void main() {
       WidgetTester tester,
     ) async {
       await tester.pumpWidget(
-        host(
-          const AurisPanel(title: 'P', accent: true, child: Text('B')),
-        ),
+        host(const AurisPanel(title: 'P', accent: true, child: Text('B'))),
       );
-      final AurisContainer container =
-          tester.widget<AurisContainer>(find.byType(AurisContainer));
+      final AurisContainer container = tester.widget<AurisContainer>(
+        find.byType(AurisContainer),
+      );
       expect(container.depth, scheme.depthSubtle);
       expect(container.borderColor, scheme.primaryActive);
     });
@@ -143,12 +140,7 @@ void main() {
     ) async {
       int dismissed = 0;
       await tester.pumpWidget(
-        host(
-          AurisNotification(
-            title: 'ALERT',
-            onDismiss: () => dismissed++,
-          ),
-        ),
+        host(AurisNotification(title: 'ALERT', onDismiss: () => dismissed++)),
       );
       await tester.tap(find.byIcon(Icons.close));
       expect(dismissed, 1);
@@ -184,9 +176,7 @@ void main() {
       WidgetTester tester,
     ) async {
       await tester.pumpWidget(
-        host(
-          const AurisDataRow(label: 'F', value: 'CRIT', highlight: true),
-        ),
+        host(const AurisDataRow(label: 'F', value: 'CRIT', highlight: true)),
       );
       final Text value = tester.widget<Text>(find.text('CRIT'));
       expect(value.style!.color, scheme.primaryHighlight);
@@ -217,9 +207,7 @@ void main() {
       WidgetTester tester,
     ) async {
       await tester.pumpWidget(
-        host(
-          const AurisStatCard(label: 'L', value: '12', delta: '-3.1%'),
-        ),
+        host(const AurisStatCard(label: 'L', value: '12', delta: '-3.1%')),
       );
       expect(find.byIcon(Icons.arrow_downward), findsOneWidget);
     });
@@ -262,8 +250,9 @@ void main() {
           .widget<Opacity>(find.byType(Opacity).first)
           .opacity;
       await tester.pump(const Duration(milliseconds: 175));
-      final double mid =
-          tester.widget<Opacity>(find.byType(Opacity).first).opacity;
+      final double mid = tester
+          .widget<Opacity>(find.byType(Opacity).first)
+          .opacity;
       expect(mid, isNot(start));
       // Settle the repeating animation so the test can dispose cleanly.
       await tester.pumpWidget(host(const SizedBox.shrink()));
@@ -279,8 +268,9 @@ void main() {
         ),
       );
       await tester.pump();
-      final double opacity =
-          tester.widget<Opacity>(find.byType(Opacity).first).opacity;
+      final double opacity = tester
+          .widget<Opacity>(find.byType(Opacity).first)
+          .opacity;
       expect(opacity, 1.0);
       // No animation should be running under reduced motion.
       expect(tester.hasRunningAnimations, isFalse);
@@ -322,10 +312,7 @@ void main() {
       );
       // Tapping a disabled radio is a no-op; it renders at half opacity.
       await tester.tap(find.byType(AurisRadio<int>));
-      expect(
-        tester.widget<Opacity>(find.byType(Opacity).first).opacity,
-        0.5,
-      );
+      expect(tester.widget<Opacity>(find.byType(Opacity).first).opacity, 0.5);
     });
   });
 }

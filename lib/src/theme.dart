@@ -133,8 +133,9 @@ abstract final class AurisTheme {
       appBarTheme: AurisNavigationThemes.appBar(scheme),
       bottomAppBarTheme: AurisNavigationThemes.bottomAppBar(scheme),
       navigationBarTheme: AurisNavigationThemes.navigationBar(scheme),
-      bottomNavigationBarTheme:
-          AurisNavigationThemes.bottomNavigationBar(scheme),
+      bottomNavigationBarTheme: AurisNavigationThemes.bottomNavigationBar(
+        scheme,
+      ),
       navigationRailTheme: AurisNavigationThemes.navigationRail(scheme),
       navigationDrawerTheme: AurisNavigationThemes.navigationDrawer(scheme),
       tabBarTheme: AurisNavigationThemes.tabBar(scheme),

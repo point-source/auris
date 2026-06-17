@@ -14,11 +14,7 @@ import 'tokens.dart';
 /// — without any widget changing (§spec:scheme "Depth as a role").
 @immutable
 class AurisDepth {
-  const AurisDepth({
-    required this.glow,
-    this.borderColor,
-    this.insetColor,
-  });
+  const AurisDepth({required this.glow, this.borderColor, this.insetColor});
 
   /// The resting depth cue — no glow, no emphasis.
   static const AurisDepth none = AurisDepth(glow: <BoxShadow>[]);
@@ -99,7 +95,11 @@ class AurisBevelScale {
   /// Extra-large bevel — panels / dialogs.
   final double xl;
 
-  static AurisBevelScale? _lerp(AurisBevelScale? a, AurisBevelScale? b, double t) {
+  static AurisBevelScale? _lerp(
+    AurisBevelScale? a,
+    AurisBevelScale? b,
+    double t,
+  ) {
     if (a == null || b == null) return t < 0.5 ? a : b;
     return AurisBevelScale(
       xs: lerpDouble(a.xs, b.xs, t),
@@ -390,16 +390,21 @@ class AurisScheme extends ThemeExtension<AurisScheme> {
     // low saturation and the role's target lightness, so it reads as a clean
     // desaturated accent ("dimmed cyan") that shares the kit's single hue. With
     // no override the warm canonical tokens are used verbatim.
-    final Color textBright =
-        accent == null ? AurisTokens.brightWhite : _accentRole(active, 0.22, 0.88);
-    final Color textMid =
-        accent == null ? AurisTokens.textMid : _accentRole(active, 0.32, 0.60);
-    final Color textDim =
-        accent == null ? AurisTokens.textDim : _accentRole(active, 0.30, 0.34);
-    final Color borderResting =
-        accent == null ? AurisTokens.border : _accentRole(active, 0.45, 0.13);
-    final Color borderBright =
-        accent == null ? AurisTokens.borderBright : _accentRole(active, 0.45, 0.22);
+    final Color textBright = accent == null
+        ? AurisTokens.brightWhite
+        : _accentRole(active, 0.22, 0.88);
+    final Color textMid = accent == null
+        ? AurisTokens.textMid
+        : _accentRole(active, 0.32, 0.60);
+    final Color textDim = accent == null
+        ? AurisTokens.textDim
+        : _accentRole(active, 0.30, 0.34);
+    final Color borderResting = accent == null
+        ? AurisTokens.border
+        : _accentRole(active, 0.45, 0.13);
+    final Color borderBright = accent == null
+        ? AurisTokens.borderBright
+        : _accentRole(active, 0.45, 0.22);
 
     return AurisScheme(
       brightness: Brightness.dark,
@@ -499,7 +504,9 @@ class AurisScheme extends ThemeExtension<AurisScheme> {
     // and the glow always matches whatever accent is active.
     Color brighten(Color c, double byLightness) {
       final HSLColor h = HSLColor.fromColor(c);
-      return h.withLightness((h.lightness + byLightness).clamp(0.0, 1.0)).toColor();
+      return h
+          .withLightness((h.lightness + byLightness).clamp(0.0, 1.0))
+          .toColor();
     }
 
     // The primary glow is the highlight rung, NOT a raw brightening of the deep
@@ -722,8 +729,11 @@ class AurisScheme extends ThemeExtension<AurisScheme> {
       textDim: Color.lerp(textDim, other.textDim, t)!,
       primaryDim: Color.lerp(primaryDim, other.primaryDim, t)!,
       primaryActive: Color.lerp(primaryActive, other.primaryActive, t)!,
-      primaryHighlight:
-          Color.lerp(primaryHighlight, other.primaryHighlight, t)!,
+      primaryHighlight: Color.lerp(
+        primaryHighlight,
+        other.primaryHighlight,
+        t,
+      )!,
       onPrimary: Color.lerp(onPrimary, other.onPrimary, t)!,
       secondary: Color.lerp(secondary, other.secondary, t)!,
       secondaryDim: Color.lerp(secondaryDim, other.secondaryDim, t)!,
@@ -738,8 +748,11 @@ class AurisScheme extends ThemeExtension<AurisScheme> {
       depthSubtle: AurisDepth._lerp(depthSubtle, other.depthSubtle, t)!,
       depthActive: AurisDepth._lerp(depthActive, other.depthActive, t)!,
       depthDanger: AurisDepth._lerp(depthDanger, other.depthDanger, t)!,
-      depthSecondary:
-          AurisDepth._lerp(depthSecondary, other.depthSecondary, t)!,
+      depthSecondary: AurisDepth._lerp(
+        depthSecondary,
+        other.depthSecondary,
+        t,
+      )!,
     );
   }
 }

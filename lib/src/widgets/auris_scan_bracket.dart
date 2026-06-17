@@ -66,8 +66,8 @@ class _AurisScanBracketState extends State<AurisScanBracket>
   void _syncAnimation() {
     // Pulse only when requested AND reduced motion is not active; otherwise
     // render the steady full-opacity end state (§spec:motion-performance).
-    final bool reduceMotion = MediaQuery.maybeDisableAnimationsOf(context) ??
-        false;
+    final bool reduceMotion =
+        MediaQuery.maybeDisableAnimationsOf(context) ?? false;
     final bool shouldPulse = widget.pulse && !reduceMotion;
     if (shouldPulse) {
       if (!_controller.isAnimating) {

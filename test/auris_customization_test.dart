@@ -110,8 +110,7 @@ void main() {
       expect(theme.colorScheme.primary, ext.primaryActive);
     });
 
-    test(
-        'accent reaches the primary-ramp component themes '
+    test('accent reaches the primary-ramp component themes '
         '(filled button background + slider active track)', () {
       final ThemeData themed = AurisTheme.light(accent: kAccent);
       // The resolved (contrast-darkened) accent — neither the raw override nor
@@ -160,7 +159,10 @@ void main() {
       final AurisScheme themed = AurisScheme.resolve(accent: kAccent);
 
       // Default keeps the canonical amber active glow untouched.
-      expect(base.depthActive.glow.first.color, AurisTokens.glowActive.first.color);
+      expect(
+        base.depthActive.glow.first.color,
+        AurisTokens.glowActive.first.color,
+      );
 
       // Under an accent the active glow takes the accent hue (alpha preserved),
       // so a teal element no longer wears an amber halo.
@@ -172,8 +174,9 @@ void main() {
     });
 
     test('text tints toward the accent yet primary text stays WCAG AA', () {
-      double lin(double c) =>
-          c <= 0.03928 ? c / 12.92 : math.pow((c + 0.055) / 1.055, 2.4).toDouble();
+      double lin(double c) => c <= 0.03928
+          ? c / 12.92
+          : math.pow((c + 0.055) / 1.055, 2.4).toDouble();
       double lum(Color c) =>
           0.2126 * lin(c.r) + 0.7152 * lin(c.g) + 0.0722 * lin(c.b);
       double contrast(Color fg, Color bg) {
@@ -196,7 +199,10 @@ void main() {
         expect(s.textBright, isNot(base.textBright));
         expect(s.borderBright, isNot(base.borderBright));
         // …but primary text still clears AA (4.5:1) on the page surface.
-        expect(contrast(s.textBright, s.surfacePage), greaterThanOrEqualTo(4.5));
+        expect(
+          contrast(s.textBright, s.surfacePage),
+          greaterThanOrEqualTo(4.5),
+        );
       }
     });
 

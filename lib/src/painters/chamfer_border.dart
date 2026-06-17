@@ -65,10 +65,7 @@ Path aurisChamferPath(Rect rect, double cut) {
 class AurisChamferBorder extends OutlinedBorder {
   /// Creates a chamfered border whose top-left and bottom-right corners are cut
   /// by [cut] (the length of each 45° leg, in logical pixels).
-  const AurisChamferBorder({
-    this.cut = 0,
-    super.side = BorderSide.none,
-  });
+  const AurisChamferBorder({this.cut = 0, super.side = BorderSide.none});
 
   /// The length of each 45° cut leg, in logical pixels. Clamped per-rect so it
   /// never exceeds half the shorter side.
@@ -104,18 +101,12 @@ class AurisChamferBorder extends OutlinedBorder {
 
   @override
   AurisChamferBorder copyWith({BorderSide? side, double? cut}) {
-    return AurisChamferBorder(
-      cut: cut ?? this.cut,
-      side: side ?? this.side,
-    );
+    return AurisChamferBorder(cut: cut ?? this.cut, side: side ?? this.side);
   }
 
   @override
   AurisChamferBorder scale(double t) {
-    return AurisChamferBorder(
-      cut: cut * t,
-      side: side.scale(t),
-    );
+    return AurisChamferBorder(cut: cut * t, side: side.scale(t));
   }
 
   @override
@@ -210,10 +201,7 @@ class AurisChamferInputBorder extends InputBorder {
 
     // No floating label → stroke the whole chamfered outline.
     if (gapStart == null || gapExtent <= 0.0 || gapPercentage == 0.0) {
-      canvas.drawPath(
-        getOuterPath(rect, textDirection: textDirection),
-        paint,
-      );
+      canvas.drawPath(getOuterPath(rect, textDirection: textDirection), paint);
       return;
     }
 
@@ -225,8 +213,11 @@ class AurisChamferInputBorder extends InputBorder {
     final double c = aurisEffectiveChamferCut(rect, cut);
     final double topStart = rect.left + c;
     final double topEnd = rect.right;
-    final double extent =
-        lerpDouble(0.0, gapExtent + gapPadding * 2.0, gapPercentage)!;
+    final double extent = lerpDouble(
+      0.0,
+      gapExtent + gapPadding * 2.0,
+      gapPercentage,
+    )!;
 
     double gapLeft;
     double gapRight;

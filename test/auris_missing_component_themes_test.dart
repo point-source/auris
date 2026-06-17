@@ -37,7 +37,10 @@ void main() {
   group('role colors / shapes derive from the scheme', () {
     test('ToggleButtons selects with the primary role', () {
       expect(theme.toggleButtonsTheme.selectedColor, scheme.primaryActive);
-      expect(theme.toggleButtonsTheme.selectedBorderColor, scheme.primaryActive);
+      expect(
+        theme.toggleButtonsTheme.selectedBorderColor,
+        scheme.primaryActive,
+      );
     });
 
     test('text selection uses the gold cursor / handles', () {
@@ -50,10 +53,12 @@ void main() {
     });
 
     test('Menu and MenuBar surfaces are beveled on the panel surface', () {
-      final OutlinedBorder? menuShape =
-          theme.menuTheme.style!.shape!.resolve(<WidgetState>{});
-      final OutlinedBorder? barShape =
-          theme.menuBarTheme.style!.shape!.resolve(<WidgetState>{});
+      final OutlinedBorder? menuShape = theme.menuTheme.style!.shape!.resolve(
+        <WidgetState>{},
+      );
+      final OutlinedBorder? barShape = theme.menuBarTheme.style!.shape!.resolve(
+        <WidgetState>{},
+      );
       expect(isBeveled(menuShape), isTrue);
       expect(isBeveled(barShape), isTrue);
       expect(
@@ -92,7 +97,10 @@ void main() {
         theme.bottomNavigationBarTheme.selectedItemColor,
         scheme.primaryActive,
       );
-      expect(theme.bottomNavigationBarTheme.backgroundColor, scheme.surfacePanel);
+      expect(
+        theme.bottomNavigationBarTheme.backgroundColor,
+        scheme.surfacePanel,
+      );
       expect(theme.bottomNavigationBarTheme.elevation, 0);
     });
 
@@ -105,8 +113,9 @@ void main() {
     });
 
     test('Scrollbar thumb brightens to the primary role on hover', () {
-      final Color? hovered = theme.scrollbarTheme.thumbColor!
-          .resolve(<WidgetState>{WidgetState.hovered});
+      final Color? hovered = theme.scrollbarTheme.thumbColor!.resolve(
+        <WidgetState>{WidgetState.hovered},
+      );
       expect(hovered, scheme.primaryActive);
       expect(
         theme.scrollbarTheme.trackColor!.resolve(<WidgetState>{}),
@@ -135,13 +144,15 @@ void main() {
       expect(themed.timePickerTheme.dialHandColor, active);
       expect(themed.bottomNavigationBarTheme.selectedItemColor, active);
       expect(
-        themed.datePickerTheme.dayBackgroundColor!
-            .resolve(<WidgetState>{WidgetState.selected}),
+        themed.datePickerTheme.dayBackgroundColor!.resolve(<WidgetState>{
+          WidgetState.selected,
+        }),
         active,
       );
       expect(
-        themed.scrollbarTheme.thumbColor!
-            .resolve(<WidgetState>{WidgetState.hovered}),
+        themed.scrollbarTheme.thumbColor!.resolve(<WidgetState>{
+          WidgetState.hovered,
+        }),
         active,
       );
     });

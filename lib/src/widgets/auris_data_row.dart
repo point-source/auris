@@ -21,9 +21,9 @@ class AurisDataRow extends StatelessWidget {
     this.highlight = false,
     this.height = 40,
   }) : assert(
-          value != null || trailing != null,
-          'Provide a value, a trailing widget, or both.',
-        );
+         value != null || trailing != null,
+         'Provide a value, a trailing widget, or both.',
+       );
 
   /// The key / label (rendered uppercase).
   final String label;
@@ -43,15 +43,14 @@ class AurisDataRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AurisScheme scheme = Theme.of(context).extension<AurisScheme>()!;
-    final Color valueColor =
-        highlight ? scheme.primaryHighlight : scheme.textBright;
+    final Color valueColor = highlight
+        ? scheme.primaryHighlight
+        : scheme.textBright;
 
     return Container(
       height: height,
       decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(color: scheme.borderResting),
-        ),
+        border: Border(bottom: BorderSide(color: scheme.borderResting)),
       ),
       child: Row(
         children: <Widget>[

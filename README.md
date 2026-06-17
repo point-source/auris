@@ -22,7 +22,7 @@ and has **zero runtime dependencies** beyond the Flutter SDK.
 
 ## Install
 
-Requires **Flutter ≥ 3.22** / **Dart ≥ 3.4**.
+Requires **Flutter ≥ 3.35** / **Dart ≥ 3.9**.
 
 ```yaml
 # pubspec.yaml
@@ -181,4 +181,4 @@ showcase targets 60fps including glow, chamfer clipping, and segmented bars.
 
 ## License
 
-BSD 3-Clause — see [`LICENSE.md`](LICENSE.md).
+BSD 3-Clause — see [`LICENSE`](LICENSE).

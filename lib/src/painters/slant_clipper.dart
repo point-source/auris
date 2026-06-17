@@ -41,10 +41,7 @@ class SlantClipper extends CustomClipper<Path> {
 /// counterpart of `AurisChamferBorder` for data controls.
 class AurisSlantBorder extends OutlinedBorder {
   /// Creates a slant border with the given [slant] leg length.
-  const AurisSlantBorder({
-    this.slant = 0,
-    super.side = BorderSide.none,
-  });
+  const AurisSlantBorder({this.slant = 0, super.side = BorderSide.none});
 
   /// The horizontal lean, in logical pixels.
   final double slant;

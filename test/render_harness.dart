@@ -51,8 +51,9 @@ void main() {
           theme: AurisTheme.light(accent: v.accent, glowScale: v.glowScale),
           home: Builder(
             builder: (BuildContext context) {
-              final AurisScheme scheme =
-                  Theme.of(context).extension<AurisScheme>()!;
+              final AurisScheme scheme = Theme.of(
+                context,
+              ).extension<AurisScheme>()!;
               return Scaffold(
                 backgroundColor: scheme.surfacePage,
                 body: Center(
@@ -68,13 +69,29 @@ void main() {
                           children: <Widget>[
                             Row(
                               children: <Widget>[
-                                const AurisStepIndicator(step: 1, state: AurisStepState.complete, size: 64),
+                                const AurisStepIndicator(
+                                  step: 1,
+                                  state: AurisStepState.complete,
+                                  size: 64,
+                                ),
                                 const SizedBox(width: 28),
-                                const AurisStepIndicator(step: 2, state: AurisStepState.active, size: 64),
+                                const AurisStepIndicator(
+                                  step: 2,
+                                  state: AurisStepState.active,
+                                  size: 64,
+                                ),
                                 const SizedBox(width: 28),
-                                const AurisStepIndicator(step: 3, state: AurisStepState.inactive, size: 64),
+                                const AurisStepIndicator(
+                                  step: 3,
+                                  state: AurisStepState.inactive,
+                                  size: 64,
+                                ),
                                 const SizedBox(width: 28),
-                                const AurisStepIndicator(step: 4, state: AurisStepState.error, size: 64),
+                                const AurisStepIndicator(
+                                  step: 4,
+                                  state: AurisStepState.error,
+                                  size: 64,
+                                ),
                                 const SizedBox(width: 28),
                                 AurisRadio<int>(
                                   value: 0,
@@ -123,8 +140,9 @@ void main() {
       );
       final Uint8List? png = await tester.runAsync(() async {
         final ui.Image image = await boundary.toImage(pixelRatio: 2.0);
-        final ByteData? bytes =
-            await image.toByteData(format: ui.ImageByteFormat.png);
+        final ByteData? bytes = await image.toByteData(
+          format: ui.ImageByteFormat.png,
+        );
         return bytes!.buffer.asUint8List();
       });
       File('${outDir.path}/${v.name}.png').writeAsBytesSync(png!);
@@ -152,17 +170,17 @@ void main() {
             final ThemeData theme = Theme.of(context);
             final AurisScheme scheme = theme.extension<AurisScheme>()!;
             Widget label(String s) => Padding(
-                  padding: const EdgeInsets.only(top: 18, bottom: 6),
-                  child: Text(
-                    s,
-                    style: TextStyle(
-                      fontFamily: 'packages/auris/ShareTechMono',
-                      fontSize: 12,
-                      letterSpacing: 1.5,
-                      color: scheme.primaryDim,
-                    ),
-                  ),
-                );
+              padding: const EdgeInsets.only(top: 18, bottom: 6),
+              child: Text(
+                s,
+                style: TextStyle(
+                  fontFamily: 'packages/auris/ShareTechMono',
+                  fontSize: 12,
+                  letterSpacing: 1.5,
+                  color: scheme.primaryDim,
+                ),
+              ),
+            );
             return Scaffold(
               backgroundColor: scheme.surfacePage,
               body: RepaintBoundary(
@@ -276,15 +294,17 @@ void main() {
                               itemCount: 20,
                               itemBuilder: (BuildContext context, int i) =>
                                   Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                  vertical: 8,
-                                ),
-                                child: Text(
-                                  'FRAME $i',
-                                  style: TextStyle(color: scheme.textBright),
-                                ),
-                              ),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 8,
+                                    ),
+                                    child: Text(
+                                      'FRAME $i',
+                                      style: TextStyle(
+                                        color: scheme.textBright,
+                                      ),
+                                    ),
+                                  ),
                             ),
                           ),
                         ),
@@ -304,8 +324,9 @@ void main() {
     );
     final Uint8List? png = await tester.runAsync(() async {
       final ui.Image image = await boundary.toImage(pixelRatio: 1.8);
-      final ByteData? bytes =
-          await image.toByteData(format: ui.ImageByteFormat.png);
+      final ByteData? bytes = await image.toByteData(
+        format: ui.ImageByteFormat.png,
+      );
       return bytes!.buffer.asUint8List();
     });
     File('${outDir.path}/missing_components.png').writeAsBytesSync(png!);
@@ -327,8 +348,9 @@ void main() {
         theme: AurisTheme.dark(),
         home: Builder(
           builder: (BuildContext context) {
-            final AurisScheme scheme =
-                Theme.of(context).extension<AurisScheme>()!;
+            final AurisScheme scheme = Theme.of(
+              context,
+            ).extension<AurisScheme>()!;
             return Scaffold(
               backgroundColor: scheme.surfacePage,
               body: Center(
@@ -352,8 +374,9 @@ void main() {
     );
     final Uint8List? png = await tester.runAsync(() async {
       final ui.Image image = await boundary.toImage(pixelRatio: 2.0);
-      final ByteData? bytes =
-          await image.toByteData(format: ui.ImageByteFormat.png);
+      final ByteData? bytes = await image.toByteData(
+        format: ui.ImageByteFormat.png,
+      );
       return bytes!.buffer.asUint8List();
     });
     File('${outDir.path}/date_picker.png').writeAsBytesSync(png!);
@@ -367,35 +390,39 @@ void main() {
     tester.view.physicalSize = const Size(1600, 500);
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.reset);
-      await loadAurisFonts();
+    await loadAurisFonts();
 
     const Color amber = Color(0xFFF0A500);
-    final List<({String label, List<BoxShadow> glow})> candidates =
-        <({String label, List<BoxShadow> glow})>[
+    final List<({String label, List<BoxShadow> glow})>
+    candidates = <({String label, List<BoxShadow> glow})>[
       (label: 'A none', glow: const <BoxShadow>[]),
       (
         label: 'B b1 s0',
         glow: const <BoxShadow>[
           BoxShadow(color: Color(0x66F0A500), blurRadius: 1),
-        ]
+        ],
       ),
       (
         label: 'C b2 s-1',
         glow: const <BoxShadow>[
           BoxShadow(color: Color(0x4DF0A500), blurRadius: 2, spreadRadius: -1),
-        ]
+        ],
       ),
       (
         label: 'D b3 s-1 (cur~)',
         glow: const <BoxShadow>[
           BoxShadow(color: Color(0x3DF0A500), blurRadius: 3, spreadRadius: -1),
-        ]
+        ],
       ),
       (
         label: 'E b6 s1 (wide)',
         glow: <BoxShadow>[
-          BoxShadow(color: amber.withValues(alpha: 0.4), blurRadius: 6, spreadRadius: 1),
-        ]
+          BoxShadow(
+            color: amber.withValues(alpha: 0.4),
+            blurRadius: 6,
+            spreadRadius: 1,
+          ),
+        ],
       ),
     ];
 
@@ -428,8 +455,7 @@ void main() {
                                   data: base.copyWith(
                                     extensions: <ThemeExtension<dynamic>>[
                                       scheme.copyWith(
-                                        depthActive:
-                                            AurisDepth(glow: c.glow),
+                                        depthActive: AurisDepth(glow: c.glow),
                                       ),
                                     ],
                                   ),
@@ -468,8 +494,9 @@ void main() {
     );
     final Uint8List? png = await tester.runAsync(() async {
       final ui.Image image = await boundary.toImage(pixelRatio: 2.5);
-      final ByteData? bytes =
-          await image.toByteData(format: ui.ImageByteFormat.png);
+      final ByteData? bytes = await image.toByteData(
+        format: ui.ImageByteFormat.png,
+      );
       return bytes!.buffer.asUint8List();
     });
     File('${outDir.path}/glow_compare.png').writeAsBytesSync(png!);
@@ -480,9 +507,9 @@ void main() {
   // is fully accent-configurable (the glow follows the override too).
   const List<({String name, Color? accent})> lightGalleries =
       <({String name, Color? accent})>[
-    (name: 'light_amber', accent: null),
-    (name: 'light_accent_magenta', accent: Color(0xFFE048B0)),
-  ];
+        (name: 'light_amber', accent: null),
+        (name: 'light_accent_magenta', accent: Color(0xFFE048B0)),
+      ];
   for (int variant = 0; variant < lightGalleries.length; variant++) {
     final ({String name, Color? accent}) g = lightGalleries[variant];
     testWidgets(g.name, (WidgetTester tester) async {
@@ -611,7 +638,9 @@ void main() {
                           ),
                           const SizedBox(height: 12),
                           const TextField(
-                            decoration: InputDecoration(labelText: 'ACCESS KEY'),
+                            decoration: InputDecoration(
+                              labelText: 'ACCESS KEY',
+                            ),
                           ),
                         ],
                       ),
@@ -629,12 +658,12 @@ void main() {
       );
       final Uint8List? png = await tester.runAsync(() async {
         final ui.Image image = await boundary.toImage(pixelRatio: 1.6);
-        final ByteData? bytes =
-            await image.toByteData(format: ui.ImageByteFormat.png);
+        final ByteData? bytes = await image.toByteData(
+          format: ui.ImageByteFormat.png,
+        );
         return bytes!.buffer.asUint8List();
       });
-      File('${outDir.path}/${g.name}.png')
-          .writeAsBytesSync(png!);
+      File('${outDir.path}/${g.name}.png').writeAsBytesSync(png!);
     });
   }
 
@@ -648,18 +677,18 @@ void main() {
     await loadAurisFonts();
 
     Widget sample(String w, FontWeight weight) => Padding(
-          padding: const EdgeInsets.symmetric(vertical: 6),
-          child: Text(
-            'SYSTEM ONLINE  ·  94.2  ($w)',
-            style: TextStyle(
-              fontFamily: 'packages/auris/Rajdhani',
-              fontWeight: weight,
-              fontSize: 40,
-              letterSpacing: 1.8,
-              color: const Color(0xFFF0E8D0),
-            ),
-          ),
-        );
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Text(
+        'SYSTEM ONLINE  ·  94.2  ($w)',
+        style: TextStyle(
+          fontFamily: 'packages/auris/Rajdhani',
+          fontWeight: weight,
+          fontSize: 40,
+          letterSpacing: 1.8,
+          color: const Color(0xFFF0E8D0),
+        ),
+      ),
+    );
 
     await tester.pumpWidget(
       MaterialApp(
@@ -690,8 +719,9 @@ void main() {
     );
     final Uint8List? png = await tester.runAsync(() async {
       final ui.Image image = await boundary.toImage(pixelRatio: 2.0);
-      final ByteData? bytes =
-          await image.toByteData(format: ui.ImageByteFormat.png);
+      final ByteData? bytes = await image.toByteData(
+        format: ui.ImageByteFormat.png,
+      );
       return bytes!.buffer.asUint8List();
     });
     File('${outDir.path}/weights_compare.png').writeAsBytesSync(png!);
@@ -791,8 +821,9 @@ void main() {
     );
     final Uint8List? png = await tester.runAsync(() async {
       final ui.Image image = await boundary.toImage(pixelRatio: 2.5);
-      final ByteData? bytes =
-          await image.toByteData(format: ui.ImageByteFormat.png);
+      final ByteData? bytes = await image.toByteData(
+        format: ui.ImageByteFormat.png,
+      );
       return bytes!.buffer.asUint8List();
     });
     File('${outDir.path}/typography.png').writeAsBytesSync(png!);
@@ -814,8 +845,9 @@ void main() {
         theme: AurisTheme.dark(),
         home: Builder(
           builder: (BuildContext context) {
-            final AurisScheme scheme =
-                Theme.of(context).extension<AurisScheme>()!;
+            final AurisScheme scheme = Theme.of(
+              context,
+            ).extension<AurisScheme>()!;
             return Scaffold(
               backgroundColor: scheme.surfacePage,
               body: RepaintBoundary(
@@ -828,12 +860,16 @@ void main() {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        const Text('CONTINUOUS',
-                            style: TextStyle(color: Color(0xFFA09060)),),
+                        const Text(
+                          'CONTINUOUS',
+                          style: TextStyle(color: Color(0xFFA09060)),
+                        ),
                         Slider(value: 0.4, onChanged: (_) {}),
                         const SizedBox(height: 16),
-                        const Text('STEPPED divisions:10',
-                            style: TextStyle(color: Color(0xFFA09060)),),
+                        const Text(
+                          'STEPPED divisions:10',
+                          style: TextStyle(color: Color(0xFFA09060)),
+                        ),
                         Slider(
                           value: 0.4,
                           divisions: 10,
@@ -856,8 +892,9 @@ void main() {
     );
     final Uint8List? png = await tester.runAsync(() async {
       final ui.Image image = await boundary.toImage(pixelRatio: 2.5);
-      final ByteData? bytes =
-          await image.toByteData(format: ui.ImageByteFormat.png);
+      final ByteData? bytes = await image.toByteData(
+        format: ui.ImageByteFormat.png,
+      );
       return bytes!.buffer.asUint8List();
     });
     File('${outDir.path}/sliders.png').writeAsBytesSync(png!);
@@ -871,7 +908,7 @@ void main() {
     tester.view.physicalSize = const Size(900, 1100);
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.reset);
-      await loadAurisFonts();
+    await loadAurisFonts();
 
     await tester.pumpWidget(
       MaterialApp(
@@ -879,8 +916,9 @@ void main() {
         theme: AurisTheme.dark(),
         home: Builder(
           builder: (BuildContext context) {
-            final AurisScheme scheme =
-                Theme.of(context).extension<AurisScheme>()!;
+            final AurisScheme scheme = Theme.of(
+              context,
+            ).extension<AurisScheme>()!;
             return Scaffold(
               backgroundColor: scheme.surfacePage,
               body: RepaintBoundary(
@@ -920,9 +958,10 @@ void main() {
                               final AurisStepState s = switch (state) {
                                 StepState.complete => AurisStepState.complete,
                                 StepState.error => AurisStepState.error,
-                                _ => i == 1
-                                    ? AurisStepState.active
-                                    : AurisStepState.inactive,
+                                _ =>
+                                  i == 1
+                                      ? AurisStepState.active
+                                      : AurisStepState.inactive,
                               };
                               return AurisStepIndicator(
                                 step: i + 1,
@@ -942,10 +981,7 @@ void main() {
                                 content: Text('Spin up.'),
                                 isActive: true,
                               ),
-                              Step(
-                                title: Text('LAUNCH'),
-                                content: Text('Go.'),
-                              ),
+                              Step(title: Text('LAUNCH'), content: Text('Go.')),
                             ],
                           ),
                         ),
@@ -965,8 +1001,9 @@ void main() {
     );
     final Uint8List? png = await tester.runAsync(() async {
       final ui.Image image = await boundary.toImage(pixelRatio: 2.5);
-      final ByteData? bytes =
-          await image.toByteData(format: ui.ImageByteFormat.png);
+      final ByteData? bytes = await image.toByteData(
+        format: ui.ImageByteFormat.png,
+      );
       return bytes!.buffer.asUint8List();
     });
     File('${outDir.path}/stepper.png').writeAsBytesSync(png!);

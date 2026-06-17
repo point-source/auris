@@ -1,14 +1,15 @@
 name: auris
 description: >-
-  A Flutter UI kit and Material 3 theme system with a warm amber-on-near-black,
-  chamfered "augmentation-era" sci-fi aesthetic. Ships a drop-in ThemeData plus
-  a library of custom HUD widgets.
+  A Flutter UI kit and Material 3 theme with a warm amber-on-near-black,
+  chamfered sci-fi aesthetic — a drop-in ThemeData plus a library of custom
+  HUD widgets.
 version: 0.1.0
-publish_to: none
+repository: https://github.com/PointSource/auris
+homepage: https://github.com/PointSource/auris
 
 environment:
-  sdk: ">=3.4.0 <4.0.0"
-  flutter: ">=3.22.0"
+  sdk: ">=3.9.0 <4.0.0"
+  flutter: ">=3.35.0"
 
 dependencies:
   flutter:

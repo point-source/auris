@@ -99,8 +99,7 @@ class _AurisExampleAppState extends State<AurisExampleApp> {
         onAccentChanged: (Color? c) => setState(() => _accent = c),
         onBevelChanged: (double v) => setState(() => _bevelScale = v),
         onGlowChanged: (double v) => setState(() => _glowScale = v),
-        onBrightnessChanged: (Brightness b) =>
-            setState(() => _brightness = b),
+        onBrightnessChanged: (Brightness b) => setState(() => _brightness = b),
       ),
     );
   }
@@ -159,18 +158,24 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
 
   // Live-appending terminal: a Timer pushes a new log line periodically.
   final List<AurisTerminalLine> _log = <AurisTerminalLine>[
-    const AurisTerminalLine('> boot sequence initiated', type: AurisTerminalLineType.augment),
-    const AurisTerminalLine('  loading core modules ... ok', type: AurisTerminalLineType.ok),
+    const AurisTerminalLine('> boot sequence initiated',
+        type: AurisTerminalLineType.augment),
+    const AurisTerminalLine('  loading core modules ... ok',
+        type: AurisTerminalLineType.ok),
   ];
   Timer? _logTimer;
   int _logTick = 0;
 
   static const List<AurisTerminalLine> _logSamples = <AurisTerminalLine>[
-    AurisTerminalLine('  diagnostic pass complete', type: AurisTerminalLineType.ok),
+    AurisTerminalLine('  diagnostic pass complete',
+        type: AurisTerminalLineType.ok),
     AurisTerminalLine('  telemetry uplink nominal'),
-    AurisTerminalLine('! thermal margin low', type: AurisTerminalLineType.warning),
-    AurisTerminalLine('  augment graft synced', type: AurisTerminalLineType.augment),
-    AurisTerminalLine('x packet checksum mismatch', type: AurisTerminalLineType.error),
+    AurisTerminalLine('! thermal margin low',
+        type: AurisTerminalLineType.warning),
+    AurisTerminalLine('  augment graft synced',
+        type: AurisTerminalLineType.augment),
+    AurisTerminalLine('x packet checksum mismatch',
+        type: AurisTerminalLineType.error),
   ];
 
   @override
@@ -518,7 +523,8 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
                       onChanged: (bool v) => setState(() => _switchOff = v),
                       label: 'CLOAK',
                     ),
-                    const AurisSwitch(value: false, onChanged: null, label: 'AUX'),
+                    const AurisSwitch(
+                        value: false, onChanged: null, label: 'AUX'),
                   ],
                 ),
                 const SizedBox(height: 16),
@@ -925,7 +931,8 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
                       itemBuilder: (BuildContext context, int i) => ListTile(
                         dense: true,
                         leading: const Icon(Icons.circle, size: 10),
-                        title: Text('TELEMETRY FRAME ${i.toString().padLeft(3, '0')}'),
+                        title: Text(
+                            'TELEMETRY FRAME ${i.toString().padLeft(3, '0')}'),
                       ),
                     ),
                   ),
@@ -1043,8 +1050,8 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
                       );
                     },
                     onStepTapped: (int s) => setState(() => _step = s),
-                    controlsBuilder: (BuildContext context,
-                        ControlsDetails details) {
+                    controlsBuilder:
+                        (BuildContext context, ControlsDetails details) {
                       return Padding(
                         padding: const EdgeInsets.only(top: 12),
                         child: Row(
@@ -1062,10 +1069,10 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
                         ),
                       );
                     },
-                    onStepContinue: () => setState(
-                        () => _step = (_step + 1).clamp(0, 2)),
-                    onStepCancel: () => setState(
-                        () => _step = (_step - 1).clamp(0, 2)),
+                    onStepContinue: () =>
+                        setState(() => _step = (_step + 1).clamp(0, 2)),
+                    onStepCancel: () =>
+                        setState(() => _step = (_step - 1).clamp(0, 2)),
                     steps: const <Step>[
                       Step(
                         title: Text('CALIBRATE'),
@@ -1282,8 +1289,7 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
                     Expanded(
                       child: Slider(
                         value: _progress,
-                        onChanged: (double v) =>
-                            setState(() => _progress = v),
+                        onChanged: (double v) => setState(() => _progress = v),
                       ),
                     ),
                   ],
@@ -1679,8 +1685,7 @@ class _SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AurisScheme scheme =
-        Theme.of(context).extension<AurisScheme>()!;
+    final AurisScheme scheme = Theme.of(context).extension<AurisScheme>()!;
     return Padding(
       padding: const EdgeInsets.only(top: 8, bottom: 16),
       child: Row(

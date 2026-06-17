@@ -13,7 +13,9 @@ void main() {
   double linearize(double c) =>
       c <= 0.03928 ? c / 12.92 : math.pow((c + 0.055) / 1.055, 2.4).toDouble();
   double luminance(Color c) =>
-      0.2126 * linearize(c.r) + 0.7152 * linearize(c.g) + 0.0722 * linearize(c.b);
+      0.2126 * linearize(c.r) +
+      0.7152 * linearize(c.g) +
+      0.0722 * linearize(c.b);
   double contrast(Color fg, Color bg) {
     final Color solid = fg.a >= 1.0 ? fg : Color.alphaBlend(fg, bg);
     final double hi = math.max(luminance(solid), luminance(bg));
@@ -47,8 +49,14 @@ void main() {
 
   group('primary text meets AA on every surface', () {
     surfaces.forEach((String name, Color bg) {
-      test('textBright on $name', () => expectAA('textBright/$name', scheme.textBright, bg));
-      test('textMid on $name', () => expectAA('textMid/$name', scheme.textMid, bg));
+      test(
+        'textBright on $name',
+        () => expectAA('textBright/$name', scheme.textBright, bg),
+      );
+      test(
+        'textMid on $name',
+        () => expectAA('textMid/$name', scheme.textMid, bg),
+      );
     });
   });
 

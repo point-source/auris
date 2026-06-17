@@ -80,9 +80,11 @@ class _AurisRadioState<T> extends State<AurisRadio<T>> {
     final Color border = !_enabled
         ? (_selected ? scheme.primaryDim : scheme.borderResting)
         : _focused
-            ? scheme.primaryHighlight
-            : (_selected ? scheme.primaryActive : scheme.borderBright);
-    final double borderWidth = (_enabled && (_selected || _focused)) ? 2.0 : 1.0;
+        ? scheme.primaryHighlight
+        : (_selected ? scheme.primaryActive : scheme.borderBright);
+    final double borderWidth = (_enabled && (_selected || _focused))
+        ? 2.0
+        : 1.0;
 
     final Widget indicator = SizedBox(
       // 18px box + breathing room around it.
@@ -96,7 +98,9 @@ class _AurisRadioState<T> extends State<AurisRadio<T>> {
           fill: scheme.surfaceInset,
           borderColor: border,
           borderWidth: borderWidth,
-          depth: _enabled && (_selected || _focused) ? scheme.depthSubtle : null,
+          depth: _enabled && (_selected || _focused)
+              ? scheme.depthSubtle
+              : null,
           alignment: Alignment.center,
           child: _selected
               ? DecoratedBox(
@@ -145,8 +149,9 @@ class _AurisRadioState<T> extends State<AurisRadio<T>> {
         return KeyEventResult.ignored;
       },
       child: MouseRegion(
-        cursor:
-            _enabled ? SystemMouseCursors.click : SystemMouseCursors.forbidden,
+        cursor: _enabled
+            ? SystemMouseCursors.click
+            : SystemMouseCursors.forbidden,
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () {

@@ -127,8 +127,9 @@ class _Delta extends StatelessWidget {
     final bool isNegative = delta.trimLeft().startsWith('-');
     final bool isGood = isNegative ? !positiveIsGood : positiveIsGood;
     final Color color = isGood ? scheme.successBright : scheme.dangerBright;
-    final IconData arrow =
-        isNegative ? Icons.arrow_downward : Icons.arrow_upward;
+    final IconData arrow = isNegative
+        ? Icons.arrow_downward
+        : Icons.arrow_upward;
 
     return Row(
       mainAxisSize: MainAxisSize.min,

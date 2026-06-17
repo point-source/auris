@@ -43,10 +43,10 @@ class AurisPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AurisScheme scheme = Theme.of(context).extension<AurisScheme>()!;
-    final Color titleColor =
-        accent ? scheme.primaryActive : scheme.textBright;
-    final Color bracketColor =
-        accent ? scheme.primaryActive : scheme.primaryDim;
+    final Color titleColor = accent ? scheme.primaryActive : scheme.textBright;
+    final Color bracketColor = accent
+        ? scheme.primaryActive
+        : scheme.primaryDim;
 
     return AurisContainer(
       cut: scheme.bevel.lg,

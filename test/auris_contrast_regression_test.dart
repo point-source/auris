@@ -18,16 +18,19 @@ void main() {
   final AurisScheme scheme = theme.extension<AurisScheme>()!;
 
   group('SegmentedButton selected-label contrast', () {
-    test('selected foreground is onPrimary, unselected is the gold primary', () {
-      final WidgetStateProperty<Color?> fg =
-          theme.segmentedButtonTheme.style!.foregroundColor!;
-      expect(
-        fg.resolve(<WidgetState>{WidgetState.selected}),
-        scheme.onPrimary,
-        reason: 'gold-filled selected segment needs near-black text',
-      );
-      expect(fg.resolve(<WidgetState>{}), scheme.primaryActive);
-    });
+    test(
+      'selected foreground is onPrimary, unselected is the gold primary',
+      () {
+        final WidgetStateProperty<Color?> fg =
+            theme.segmentedButtonTheme.style!.foregroundColor!;
+        expect(
+          fg.resolve(<WidgetState>{WidgetState.selected}),
+          scheme.onPrimary,
+          reason: 'gold-filled selected segment needs near-black text',
+        );
+        expect(fg.resolve(<WidgetState>{}), scheme.primaryActive);
+      },
+    );
   });
 
   group('Checkbox chamfer weight', () {

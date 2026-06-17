@@ -273,8 +273,9 @@ void main() {
       await tester.pumpWidget(
         host(const AurisStepIndicator(step: 1, state: AurisStepState.active)),
       );
-      final AurisContainer container =
-          tester.widget<AurisContainer>(find.byType(AurisContainer));
+      final AurisContainer container = tester.widget<AurisContainer>(
+        find.byType(AurisContainer),
+      );
       expect(container.borderColor, scheme.primaryActive);
       // The glow rides on the number as a tight glyph shadow (so it hugs the
       // digit), not on the box behind a translucent fill (which read as an orb).
@@ -321,11 +322,7 @@ void main() {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  AurisTerminal(
-                    showCursor: false,
-                    height: 120,
-                    lines: lines,
-                  ),
+                  AurisTerminal(showCursor: false, height: 120, lines: lines),
                   TextButton(
                     onPressed: () => setState(
                       () => lines.add(const AurisTerminalLine('NEWEST')),
@@ -391,8 +388,7 @@ void main() {
                 AurisSelectOption<String>(value: 'a', label: 'Alpha'),
                 AurisSelectOption<String>(value: 'b', label: 'Beta'),
               ],
-              onChanged: onChanged ??
-                  (String v) => setState(() => value = v),
+              onChanged: onChanged ?? (String v) => setState(() => value = v),
             );
           },
         ),
@@ -414,9 +410,7 @@ void main() {
       WidgetTester tester,
     ) async {
       String? chosen;
-      await tester.pumpWidget(
-        selectHost(onChanged: (String v) => chosen = v),
-      );
+      await tester.pumpWidget(selectHost(onChanged: (String v) => chosen = v));
       await tester.tap(find.byType(AurisSelect<String>));
       await tester.pumpAndSettle();
       await tester.tap(find.text('BETA'));

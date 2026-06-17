@@ -38,8 +38,9 @@ Future<void> _shoot(
       theme: theme,
       home: Builder(
         builder: (BuildContext context) {
-          final AurisScheme scheme =
-              Theme.of(context).extension<AurisScheme>()!;
+          final AurisScheme scheme = Theme.of(
+            context,
+          ).extension<AurisScheme>()!;
           return Scaffold(
             backgroundColor: scheme.surfacePage,
             body: Center(
@@ -66,8 +67,9 @@ Future<void> _shoot(
   );
   final Uint8List? png = await tester.runAsync(() async {
     final ui.Image image = await boundary.toImage(pixelRatio: pixelRatio);
-    final ByteData? bytes =
-        await image.toByteData(format: ui.ImageByteFormat.png);
+    final ByteData? bytes = await image.toByteData(
+      format: ui.ImageByteFormat.png,
+    );
     return bytes!.buffer.asUint8List();
   });
   File('${outDir.path}/$name.png').writeAsBytesSync(png!);
@@ -227,9 +229,7 @@ Widget _rightColumn(BuildContext context, TextTheme text) {
         ],
       ),
       const SizedBox(height: 12),
-      const TextField(
-        decoration: InputDecoration(labelText: 'ACCESS KEY'),
-      ),
+      const TextField(decoration: InputDecoration(labelText: 'ACCESS KEY')),
       const SizedBox(height: 14),
       const AurisTerminal(
         title: 'SYSTEM LOG',
@@ -238,14 +238,22 @@ Widget _rightColumn(BuildContext context, TextTheme text) {
         showCursor: true,
         lines: <AurisTerminalLine>[
           AurisTerminalLine(r'$ auris --boot'),
-          AurisTerminalLine('loading scheme ........ ok',
-              type: AurisTerminalLineType.ok,),
-          AurisTerminalLine('augment online',
-              type: AurisTerminalLineType.augment,),
-          AurisTerminalLine('cache miss on sector 3',
-              type: AurisTerminalLineType.warning,),
-          AurisTerminalLine('link lost: node 7',
-              type: AurisTerminalLineType.error,),
+          AurisTerminalLine(
+            'loading scheme ........ ok',
+            type: AurisTerminalLineType.ok,
+          ),
+          AurisTerminalLine(
+            'augment online',
+            type: AurisTerminalLineType.augment,
+          ),
+          AurisTerminalLine(
+            'cache miss on sector 3',
+            type: AurisTerminalLineType.warning,
+          ),
+          AurisTerminalLine(
+            'link lost: node 7',
+            type: AurisTerminalLineType.error,
+          ),
           AurisTerminalLine('retry ok', type: AurisTerminalLineType.ok),
         ],
       ),
@@ -334,9 +342,7 @@ void main() {
           final ThemeData t = AurisTheme.dark(accent: accent);
           return Theme(
             data: t,
-            child: Builder(
-              builder: (BuildContext c) => _accentCard(c, tag),
-            ),
+            child: Builder(builder: (BuildContext c) => _accentCard(c, tag)),
           );
         }
 

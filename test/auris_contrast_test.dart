@@ -49,8 +49,7 @@ void main() {
 
   // The dark (amber-on-near-black) variant; the light variant's AA is verified
   // separately once its palette is finalized.
-  final AurisScheme scheme =
-      AurisTheme.dark().extension<AurisScheme>()!;
+  final AurisScheme scheme = AurisTheme.dark().extension<AurisScheme>()!;
 
   // The three surfaces a primary foreground can be drawn on.
   final Map<String, Color> surfaces = <String, Color>{
@@ -69,7 +68,8 @@ void main() {
     expect(
       ratio,
       greaterThanOrEqualTo(threshold),
-      reason: '$label = ${ratio.toStringAsFixed(2)}:1, '
+      reason:
+          '$label = ${ratio.toStringAsFixed(2)}:1, '
           'below the $threshold:1 AA threshold',
     );
   }
@@ -149,33 +149,37 @@ void main() {
     });
   });
 
-  group('Decorative-only tokens are intentionally below AA (locked contract)',
-      () {
-    // These tokens are documented decorative-only (§spec:accessibility); they
-    // must NOT be used for primary content. Asserting they are below AA locks
-    // that intent — if someone "fixes" them by brightening they break this
-    // contract test and must instead re-evaluate the role.
-    surfaces.forEach((String name, Color bg) {
-      test('textDim stays decorative (below AA) on $name', () {
+  group(
+    'Decorative-only tokens are intentionally below AA (locked contract)',
+    () {
+      // These tokens are documented decorative-only (§spec:accessibility); they
+      // must NOT be used for primary content. Asserting they are below AA locks
+      // that intent — if someone "fixes" them by brightening they break this
+      // contract test and must instead re-evaluate the role.
+      surfaces.forEach((String name, Color bg) {
+        test('textDim stays decorative (below AA) on $name', () {
+          expect(
+            contrast(scheme.textDim, bg),
+            lessThan(aaNormal),
+            reason:
+                'textDim is decorative-only; if it now clears AA, confirm '
+                'it is not being promoted to a primary text role.',
+          );
+        });
+      });
+
+      test('resting/hover borders are supplementary (below the 3:1 boundary '
+          'threshold on page)', () {
         expect(
-          contrast(scheme.textDim, bg),
-          lessThan(aaNormal),
-          reason: 'textDim is decorative-only; if it now clears AA, confirm '
-              'it is not being promoted to a primary text role.',
+          contrast(scheme.borderBright, scheme.surfacePage),
+          lessThan(aaLargeOrBoundary),
+          reason:
+              'borderBright is a supplementary outline, not the sole control '
+              'affordance; the gold focus ring + inset fill carry identification.',
         );
       });
-    });
-
-    test('resting/hover borders are supplementary (below the 3:1 boundary '
-        'threshold on page)', () {
-      expect(
-        contrast(scheme.borderBright, scheme.surfacePage),
-        lessThan(aaLargeOrBoundary),
-        reason: 'borderBright is a supplementary outline, not the sole control '
-            'affordance; the gold focus ring + inset fill carry identification.',
-      );
-    });
-  });
+    },
+  );
 
   group('WCAG formula self-check', () {
     test('black-on-white is 21:1 and identical colors are 1:1', () {

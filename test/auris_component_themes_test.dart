@@ -30,14 +30,16 @@ void main() {
     });
 
     test('FilledButton uses the primary-active role as its fill', () {
-      final Color? bg = theme.filledButtonTheme.style!.backgroundColor!
-          .resolve(<WidgetState>{});
+      final Color? bg = theme.filledButtonTheme.style!.backgroundColor!.resolve(
+        <WidgetState>{},
+      );
       expect(bg, scheme.primaryActive);
     });
 
     test('buttons are flat (elevation 0) at all states', () {
-      final double? elev = theme.filledButtonTheme.style!.elevation!
-          .resolve(<WidgetState>{WidgetState.pressed});
+      final double? elev = theme.filledButtonTheme.style!.elevation!.resolve(
+        <WidgetState>{WidgetState.pressed},
+      );
       expect(elev, 0);
     });
 
@@ -45,14 +47,8 @@ void main() {
       final WidgetStateProperty<Color?> overlay =
           theme.outlinedButtonTheme.style!.overlayColor!;
       expect(overlay.resolve(<WidgetState>{}), isNull);
-      expect(
-        overlay.resolve(<WidgetState>{WidgetState.hovered}),
-        isNotNull,
-      );
-      expect(
-        overlay.resolve(<WidgetState>{WidgetState.pressed}),
-        isNotNull,
-      );
+      expect(overlay.resolve(<WidgetState>{WidgetState.hovered}), isNotNull);
+      expect(overlay.resolve(<WidgetState>{WidgetState.pressed}), isNotNull);
       expect(
         theme.outlinedButtonTheme.style!.splashFactory,
         NoSplash.splashFactory,
@@ -65,10 +61,7 @@ void main() {
         theme.floatingActionButtonTheme.backgroundColor,
         scheme.primaryActive,
       );
-      expect(
-        theme.floatingActionButtonTheme.shape,
-        isA<AurisChamferBorder>(),
-      );
+      expect(theme.floatingActionButtonTheme.shape, isA<AurisChamferBorder>());
     });
 
     test('disabled foreground dims to 50% opacity', () {
@@ -113,8 +106,9 @@ void main() {
 
   group('selection control themes', () {
     test('Checkbox fill uses the primary role when selected', () {
-      final Color? selected = theme.checkboxTheme.fillColor!
-          .resolve(<WidgetState>{WidgetState.selected});
+      final Color? selected = theme.checkboxTheme.fillColor!.resolve(
+        <WidgetState>{WidgetState.selected},
+      );
       expect(selected, scheme.primaryActive);
     });
 
@@ -124,15 +118,17 @@ void main() {
     });
 
     test('Radio fill uses the primary role when selected', () {
-      final Color? selected = theme.radioTheme.fillColor!
-          .resolve(<WidgetState>{WidgetState.selected});
+      final Color? selected = theme.radioTheme.fillColor!.resolve(<WidgetState>{
+        WidgetState.selected,
+      });
       expect(selected, scheme.primaryActive);
       expect(theme.radioTheme.splashRadius, 0);
     });
 
     test('Switch thumb uses the primary role when selected', () {
-      final Color? thumb = theme.switchTheme.thumbColor!
-          .resolve(<WidgetState>{WidgetState.selected});
+      final Color? thumb = theme.switchTheme.thumbColor!.resolve(<WidgetState>{
+        WidgetState.selected,
+      });
       expect(thumb, scheme.primaryActive);
     });
 
@@ -161,8 +157,9 @@ void main() {
           .resolve(<WidgetState>{});
       expect(bg, active);
       // And into the checkbox selected fill.
-      final Color? checked = themed.checkboxTheme.fillColor!
-          .resolve(<WidgetState>{WidgetState.selected});
+      final Color? checked = themed.checkboxTheme.fillColor!.resolve(
+        <WidgetState>{WidgetState.selected},
+      );
       expect(checked, active);
     });
   });

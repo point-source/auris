@@ -129,8 +129,9 @@ void main() {
     });
 
     test('DataTable selected row tints with the primary role', () {
-      final Color? selected = theme.dataTableTheme.dataRowColor!
-          .resolve(<WidgetState>{WidgetState.selected});
+      final Color? selected = theme.dataTableTheme.dataRowColor!.resolve(
+        <WidgetState>{WidgetState.selected},
+      );
       expect(selected, isNotNull);
       expect(selected!.r, closeTo(scheme.primaryActive.r, 0.001));
     });
@@ -168,10 +169,7 @@ void main() {
         isBeveled(theme.searchBarTheme.shape!.resolve(<WidgetState>{})),
         isTrue,
       );
-      expect(
-        theme.searchBarTheme.elevation!.resolve(<WidgetState>{}),
-        0,
-      );
+      expect(theme.searchBarTheme.elevation!.resolve(<WidgetState>{}), 0);
       expect(
         theme.searchBarTheme.backgroundColor!.resolve(<WidgetState>{}),
         scheme.surfaceInset,

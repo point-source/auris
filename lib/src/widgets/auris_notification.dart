@@ -86,8 +86,9 @@ class AurisNotification extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AurisScheme scheme = Theme.of(context).extension<AurisScheme>()!;
-    final ({Color accent, AurisDepth depth, IconData icon}) v =
-        _resolve(scheme);
+    final ({Color accent, AurisDepth depth, IconData icon}) v = _resolve(
+      scheme,
+    );
 
     return AurisContainer(
       cut: scheme.bevel.md,
@@ -144,7 +145,8 @@ class AurisNotification extends StatelessWidget {
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     fontFamily: AurisTokens.fontDisplay,
-                                    fontFamilyFallback: AurisTokens.fontDisplayFallback,
+                                    fontFamilyFallback:
+                                        AurisTokens.fontDisplayFallback,
                                     fontWeight: FontWeight.w600,
                                     fontSize: 14,
                                     letterSpacing: AurisTokens.trackingLabel,
@@ -158,7 +160,8 @@ class AurisNotification extends StatelessWidget {
                                   code!,
                                   style: TextStyle(
                                     fontFamily: AurisTokens.fontMono,
-                                    fontFamilyFallback: AurisTokens.fontMonoFallback,
+                                    fontFamilyFallback:
+                                        AurisTokens.fontMonoFallback,
                                     fontSize: 11,
                                     letterSpacing: AurisTokens.trackingLabel,
                                     color: scheme.textDim,
@@ -173,7 +176,8 @@ class AurisNotification extends StatelessWidget {
                               message!,
                               style: TextStyle(
                                 fontFamily: AurisTokens.fontBody,
-                                fontFamilyFallback: AurisTokens.fontBodyFallback,
+                                fontFamilyFallback:
+                                    AurisTokens.fontBodyFallback,
                                 fontSize: 13,
                                 height: 1.3,
                                 letterSpacing: AurisTokens.trackingBody,

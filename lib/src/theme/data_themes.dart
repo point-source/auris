@@ -38,7 +38,10 @@ abstract final class AurisDataThemes {
 
   /// A chamfered border with a visible resting outline.
   static AurisChamferBorder _bevelOutlined(double size, Color color) =>
-      AurisChamferBorder(cut: size, side: BorderSide(color: color));
+      AurisChamferBorder(
+        cut: size,
+        side: BorderSide(color: color),
+      );
 
   // ---------------------------------------------------------------------------
   // DataTable — mono cells, panel surface, gold-tinted selection, bright rules.
@@ -55,17 +58,17 @@ abstract final class AurisDataThemes {
           side: BorderSide(color: scheme.borderBright),
         ),
       ),
-      dataRowColor: WidgetStateProperty.resolveWith<Color?>(
-        (Set<WidgetState> states) {
-          if (states.contains(WidgetState.selected)) {
-            return scheme.primaryActive.withValues(alpha: 0.16);
-          }
-          if (states.contains(WidgetState.hovered)) {
-            return scheme.surfaceInset;
-          }
-          return null;
-        },
-      ),
+      dataRowColor: WidgetStateProperty.resolveWith<Color?>((
+        Set<WidgetState> states,
+      ) {
+        if (states.contains(WidgetState.selected)) {
+          return scheme.primaryActive.withValues(alpha: 0.16);
+        }
+        if (states.contains(WidgetState.hovered)) {
+          return scheme.surfaceInset;
+        }
+        return null;
+      }),
       headingRowColor: WidgetStatePropertyAll<Color>(scheme.surfaceInset),
       dividerThickness: 1,
       headingTextStyle: TextStyle(
@@ -206,20 +209,19 @@ abstract final class AurisDataThemes {
   static SearchBarThemeData searchBar(AurisScheme scheme) {
     return SearchBarThemeData(
       backgroundColor: WidgetStatePropertyAll<Color>(scheme.surfaceInset),
-      surfaceTintColor:
-          const WidgetStatePropertyAll<Color>(Colors.transparent),
+      surfaceTintColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
       shadowColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
-      overlayColor: WidgetStateProperty.resolveWith<Color?>(
-        (Set<WidgetState> states) {
-          if (states.contains(WidgetState.pressed)) {
-            return scheme.primaryActive.withValues(alpha: 0.24);
-          }
-          if (states.contains(WidgetState.hovered)) {
-            return scheme.primaryActive.withValues(alpha: 0.12);
-          }
-          return null;
-        },
-      ),
+      overlayColor: WidgetStateProperty.resolveWith<Color?>((
+        Set<WidgetState> states,
+      ) {
+        if (states.contains(WidgetState.pressed)) {
+          return scheme.primaryActive.withValues(alpha: 0.24);
+        }
+        if (states.contains(WidgetState.hovered)) {
+          return scheme.primaryActive.withValues(alpha: 0.12);
+        }
+        return null;
+      }),
       elevation: const WidgetStatePropertyAll<double>(0),
       side: WidgetStatePropertyAll<BorderSide>(
         BorderSide(color: scheme.borderBright),
@@ -289,15 +291,15 @@ abstract final class AurisDataThemes {
   /// chamfer path.
   static ScrollbarThemeData scrollbar(AurisScheme scheme) {
     return ScrollbarThemeData(
-      thumbColor: WidgetStateProperty.resolveWith<Color?>(
-        (Set<WidgetState> states) {
-          if (states.contains(WidgetState.dragged) ||
-              states.contains(WidgetState.hovered)) {
-            return scheme.primaryActive;
-          }
-          return scheme.primaryDim;
-        },
-      ),
+      thumbColor: WidgetStateProperty.resolveWith<Color?>((
+        Set<WidgetState> states,
+      ) {
+        if (states.contains(WidgetState.dragged) ||
+            states.contains(WidgetState.hovered)) {
+          return scheme.primaryActive;
+        }
+        return scheme.primaryDim;
+      }),
       trackColor: WidgetStatePropertyAll<Color>(scheme.surfaceInset),
       trackBorderColor: WidgetStatePropertyAll<Color>(scheme.borderResting),
       thumbVisibility: const WidgetStatePropertyAll<bool>(false),
@@ -320,17 +322,17 @@ abstract final class AurisDataThemes {
       backgroundColor: scheme.surfaceInset,
       elevation: 0,
       shape: _bevelOutlined(scheme.bevel.md, scheme.borderBright),
-      overlayColor: WidgetStateProperty.resolveWith<Color?>(
-        (Set<WidgetState> states) {
-          if (states.contains(WidgetState.pressed)) {
-            return scheme.primaryActive.withValues(alpha: 0.24);
-          }
-          if (states.contains(WidgetState.hovered)) {
-            return scheme.primaryActive.withValues(alpha: 0.12);
-          }
-          return null;
-        },
-      ),
+      overlayColor: WidgetStateProperty.resolveWith<Color?>((
+        Set<WidgetState> states,
+      ) {
+        if (states.contains(WidgetState.pressed)) {
+          return scheme.primaryActive.withValues(alpha: 0.24);
+        }
+        if (states.contains(WidgetState.hovered)) {
+          return scheme.primaryActive.withValues(alpha: 0.12);
+        }
+        return null;
+      }),
     );
   }
 }

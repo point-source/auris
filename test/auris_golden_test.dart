@@ -36,8 +36,9 @@ Future<void> _expectGolden(WidgetTester tester, _GoldenCase c) async {
       theme: AurisTheme.dark(),
       home: Builder(
         builder: (BuildContext context) {
-          final AurisScheme scheme =
-              Theme.of(context).extension<AurisScheme>()!;
+          final AurisScheme scheme = Theme.of(
+            context,
+          ).extension<AurisScheme>()!;
           return Scaffold(
             backgroundColor: scheme.surfacePage,
             body: Center(

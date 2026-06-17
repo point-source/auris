@@ -26,10 +26,12 @@ void main() {
       expect(path.contains(const Offset(2, 2)), isFalse);
     });
 
-    test('bottom-right corner is cut (point just inside is OUTSIDE the path)',
-        () {
-      expect(path.contains(const Offset(98, 58)), isFalse);
-    });
+    test(
+      'bottom-right corner is cut (point just inside is OUTSIDE the path)',
+      () {
+        expect(path.contains(const Offset(98, 58)), isFalse);
+      },
+    );
 
     test('top-right corner stays square (point just inside is INSIDE)', () {
       expect(path.contains(const Offset(98, 2)), isTrue);
@@ -117,8 +119,10 @@ void main() {
     test('lerp against a non-chamfer border falls back (returns null mid)', () {
       // OutlinedBorder.lerp between unrelated types yields null at the
       // midpoint when neither side knows how to interpolate the other.
-      final ShapeBorder? r =
-          border.lerpFrom(const RoundedRectangleBorder(), 0.5);
+      final ShapeBorder? r = border.lerpFrom(
+        const RoundedRectangleBorder(),
+        0.5,
+      );
       expect(r, isNull);
     });
   });
