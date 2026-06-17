@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1]
+
+- Fix the `repository` / `homepage` URLs to the correct `point-source` org
+  (was `PointSource`, a different GitHub handle). pub.dev rewrites the README's
+  relative image paths against `repository`, so the wrong owner 404'd every
+  gallery image on the package page.
+
 ## [0.1.0]
 
 Initial release.
