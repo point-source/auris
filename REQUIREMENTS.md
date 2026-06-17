@@ -98,6 +98,14 @@ Each criterion is observable from the product's visible surface.
    (README with installation and usage example, license, runnable example)
    such that publishing it is a non-event. *Testable:* inspect package layout
    against pub.dev requirements.
+10. **Try-before-adopt live demo.** The showcase example is reachable as a
+    hosted web app at a stable public URL, kept current with `main` and
+    linked prominently from the README, so a prospect can interact with the
+    real widgets in their browser before adding the dependency. A failing or
+    broken build must not replace a working live demo. *Testable:* open the
+    published URL on a desktop and a phone browser, interact with the
+    showcase, and follow the README link to reach it; push a change to `main`
+    and confirm the demo updates.
 
 ## User stories §req:user-stories
 
@@ -119,6 +127,10 @@ Each criterion is observable from the product's visible surface.
   genuinely drop-in. *(→ 8)*
 - As a maintainer preparing to share Auris, I want the package **ready to
   publish** on pub.dev so distribution is a non-event. *(→ 9)*
+- As a developer deciding whether to adopt Auris, I want to **open a live web
+  demo from a link in the README and play with the real widgets in my browser**
+  — on my laptop or my phone — so I can evaluate the look and feel without
+  cloning the repo or adding a dependency. *(→ 10)*
 
 ## Quality attributes §req:quality-attributes
 
@@ -141,6 +153,11 @@ Each criterion is observable from the product's visible surface.
   for v0.1.0; mobile-first (no web/desktop-specific adaptation in v0.1.0).
 - **Footprint.** Zero runtime pub dependencies; package size kept reasonable
   given bundled fonts.
+- **Demo reach.** The hosted showcase must be navigable and legible on a phone
+  browser, not only a desktop one — the evaluation surface meets prospects on
+  whatever device they open the link with. This responsiveness requirement
+  applies to the *demo surface*; the kit's widgets themselves remain
+  mobile-first per the compatibility note above.
 
 ## Constraints §req:constraints
 
@@ -157,8 +174,11 @@ Each criterion is observable from the product's visible surface.
   Rajdhani, Exo 2, and Share Tech Mono are SIL Open Font License, which
   permits bundling; the kit must still degrade gracefully if a font is
   missing.
-- **Scope exclusions for v0.1.0** — no localization / RTL, no web/desktop
-  adaptations, no Storybook/Widgetbook integration.
+- **Scope exclusions for v0.1.0** — no localization / RTL, no Storybook/
+  Widgetbook integration, and no web/desktop adaptation *of the kit's
+  widgets*. The one carve-out: the **hosted showcase demo** runs on the web
+  and must stay legible on phone browsers (see Demo reach), so the example
+  app — not the package — carries whatever responsive layout that requires.
 - **Open-source** — distributed under the repository's existing license, aimed
   at pub.dev.
 
@@ -188,6 +208,10 @@ Ordered by user impact.
 
 - Publication-ready packaging (README with usage + example, pub metadata,
   license) so publishing is a non-event.
+- Hosted live demo of the showcase, auto-deployed on every push to `main`,
+  phone-browser-legible, and linked prominently from the README — the
+  "try before you adopt" path. Elevated above pub.dev publication itself
+  because it lets prospects evaluate the kit with zero setup.
 
 **Nice-to-have / deferred (post-v0.1.0):**
 
