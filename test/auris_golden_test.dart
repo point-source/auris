@@ -11,6 +11,14 @@
 // glyphs render as real type rather than Ahem blocks — so the goldens depend
 // only on the widget code, not the host. Generate / refresh with:
 //   flutter test --update-goldens test/auris_golden_test.dart
+//
+// Tagged `golden` so platform-sensitive image comparisons can be excluded from
+// gates that run on a different host than the goldens were generated on (the
+// live-demo deploy runs on Linux; goldens are authored on macOS). Run them
+// with `flutter test --tags golden`.
+@Tags(<String>['golden'])
+library;
+
 import 'package:auris/auris.dart';
 import 'package:auris/auris_widgets.dart';
 import 'package:flutter/material.dart';

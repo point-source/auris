@@ -43,8 +43,12 @@ jobs:
         run: |
           flutter pub get
           flutter analyze
-      - name: Test package (incl. goldens)
-        run: flutter test
+      # Goldens are excluded: they are platform-sensitive (Skia anti-aliasing
+      # differs between the macOS host they are authored on and this Linux
+      # runner), so they belong on a host-matched golden job, not on the
+      # demo-deploy gate. Behavioural and contrast tests still gate the deploy.
+      - name: Test package (excluding goldens)
+        run: flutter test --exclude-tags golden
 
       # Build the showcase for the web at the project base path. A failure here
       # fails the job before the artifact is uploaded, so deploy is skipped.

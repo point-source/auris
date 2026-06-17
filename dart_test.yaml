@@ -1,0 +1,8 @@
+# Declares test tags so `--tags` / `--exclude-tags` don't warn about unknown
+# tags. See test/auris_golden_test.dart.
+tags:
+  golden:
+    description: >-
+      Golden-image visual regression tests. Platform-sensitive (Skia
+      anti-aliasing differs across hosts), so they are authored on macOS and
+      excluded from gates running on other hosts.

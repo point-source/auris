@@ -152,7 +152,7 @@ and avoid the failure modes that small elements invite:
   rather than ballooning into a cloud.
 - *Glow intensity and accent come from the scheme, never hardcoded.* A widget
   requests depth by intent through the resolved `depth*` cues (already
-  accent-tinted and glow-scaled). A widget that must synthesize a custom-shaped
+  accent-tinted and glow-scaled). A widget that has to synthesize a custom-shaped
   glow the depth token cannot express takes its hue from the accent role and
   scales its alpha by `scheme.glowScale`, so both the accent and glow knobs reach
   it; a literal blur/alpha/color silently ignores customization
@@ -417,7 +417,7 @@ overrides pays no resolution cost beyond the default scheme.
 **Propagation invariant.** Because both layers read the one resolved scheme,
 every design-defining value a surface renders — ramp/accent color, the
 amber→accent tint of the neutral text and border roles, the bevel, and **glow
-intensity** — must be obtained from the resolved `AurisScheme`: a semantic role,
+intensity** — shall be obtained from the resolved `AurisScheme`: a semantic role,
 or, where a widget synthesizes a value the scheme does not pre-resolve, the
 override factors the scheme carries for that purpose. The scheme therefore
 exposes not only resolved roles and `depth*` cues but the raw `glowScale` factor,
@@ -542,7 +542,7 @@ readouts; and hex / corner-bracket ornamentation (§req:success-criteria #3).
 
 **Rationale.** A single comprehensive showcase doubles as the evaluation
 surface for prospective adopters and the manual acceptance harness for the
-team, which is why it must cover every component group rather than a curated
+team, which is why it covers every component group rather than a curated
 subset.
 
 **Visual regression.** The rendered appearance of the geometry- and
@@ -597,11 +597,16 @@ live demo reflects it after the deploy completes.
   expected to stay releasable and the alternative (stale demo) is worse for
   evaluation.
 - **A broken build never replaces a working demo.** The publish step is gated
-  behind a successful web build (and the existing analyze / test / golden
-  gates) within the same workflow run. If the build fails, the job fails before
-  publishing and the previously deployed site stays live untouched
+  behind a successful web build and the package's analyze + behavioural/contrast
+  test gates within the same workflow run. If any gate fails, the job fails
+  before publishing and the previously deployed site stays live untouched
   (§req:success-criteria #10). This is why the deploy is one fail-fast pipeline,
-  not an unconditional upload.
+  not an unconditional upload. Golden-image tests (§spec:showcase "Visual
+  regression") are deliberately *excluded* from this gate: Skia anti-aliasing
+  differs between the macOS host the goldens are authored on and the Linux
+  deploy runner, so gating the public demo on them would block legitimate
+  deploys on host-only pixel drift. Goldens belong on a host-matched job, not on
+  the demo-freshness path.
 - **Project-Pages base path.** The site is served from a repository subpath
   (`/auris/`), not a domain root, so the web build is configured with that base
   href; the default root base href would break asset and route resolution. This

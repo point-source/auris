@@ -28,7 +28,7 @@ incomplete in result:
   default styling, breaking the illusion.
 - The signature HUD components (segmented bars, terminals, chamfered glowing
   panels, targeting-reticle ornaments) do not exist in Material at all and
-  must be built from scratch with custom painters and clippers.
+  have to be built from scratch with custom painters and clippers.
 - Existing third-party Flutter UI kits target mainstream or playful
   aesthetics; none serve this specific niche.
 
@@ -102,7 +102,7 @@ Each criterion is observable from the product's visible surface.
     hosted web app at a stable public URL, kept current with `main` and
     linked prominently from the README, so a prospect can interact with the
     real widgets in their browser before adding the dependency. A failing or
-    broken build must not replace a working live demo. *Testable:* open the
+    broken build shall not replace a working live demo. *Testable:* open the
     published URL on a desktop and a phone browser, interact with the
     showcase, and follow the README link to reach it; push a change to `main`
     and confirm the demo updates.
@@ -135,7 +135,7 @@ Each criterion is observable from the product's visible surface.
 ## Quality attributes §req:quality-attributes
 
 - **Performance.** 60fps scroll and animation in the showcase; glow shadows,
-  clippers, and segmented bars must not cause visible frame drops on a normal
+  clippers, and segmented bars shall not cause visible frame drops on a normal
   screen. Animations respect the platform reduced-motion setting.
 - **Accessibility.** Primary text and interactive controls meet WCAG AA
   contrast; intentionally dim tokens are decorative-only. All interactive
@@ -153,7 +153,7 @@ Each criterion is observable from the product's visible surface.
   for v0.1.0; mobile-first (no web/desktop-specific adaptation in v0.1.0).
 - **Footprint.** Zero runtime pub dependencies; package size kept reasonable
   given bundled fonts.
-- **Demo reach.** The hosted showcase must be navigable and legible on a phone
+- **Demo reach.** The hosted showcase shall be navigable and legible on a phone
   browser, not only a desktop one — the evaluation surface meets prospects on
   whatever device they open the link with. This responsiveness requirement
   applies to the *demo surface*; the kit's widgets themselves remain
@@ -169,15 +169,15 @@ Each criterion is observable from the product's visible surface.
   dark theme and a clean technical light theme (same amber accent, adjusted for
   light), both from
   one resolver via a `Brightness` seam. A *higher-contrast* variant remains an
-  anticipated future requirement the design must not preclude.
+  anticipated future requirement the design shall not preclude.
 - **Font licensing** — fonts may be bundled only if legally redistributable.
   Rajdhani, Exo 2, and Share Tech Mono are SIL Open Font License, which
-  permits bundling; the kit must still degrade gracefully if a font is
+  permits bundling; the kit shall still degrade gracefully if a font is
   missing.
 - **Scope exclusions for v0.1.0** — no localization / RTL, no Storybook/
   Widgetbook integration, and no web/desktop adaptation *of the kit's
   widgets*. The one carve-out: the **hosted showcase demo** runs on the web
-  and must stay legible on phone browsers (see Demo reach), so the example
+  and shall stay legible on phone browsers (see Demo reach), so the example
   app — not the package — carries whatever responsive layout that requires.
 - **Open-source** — distributed under the repository's existing license, aimed
   at pub.dev.
@@ -186,7 +186,7 @@ Each criterion is observable from the product's visible surface.
 
 Ordered by user impact.
 
-**Must-have (v0.1.0):**
+**Essential (v0.1.0):**
 
 1. Complete Material 3 widget re-skin via the theme — no widget renders
    unstyled (directly addresses the top abandonment risk).
@@ -194,7 +194,7 @@ Ordered by user impact.
    stat tiles, segmented progress, terminal, data rows, and the supporting
    primitives).
 3. Customization knobs for accent color, bevel, and glow — elevated to
-   must-have because "too rigid to customize" is an identified abandonment
+   essential because "too rigid to customize" is an identified abandonment
    driver.
 4. Showcase example app covering every component group.
 5. WCAG AA for primary text and interactive controls.
