@@ -156,6 +156,10 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final ScrollController _scrollbarController = ScrollController();
 
+  // Width of each CarouselView item; reused as the OverflowBox max width so the
+  // trailing partial item lays out at full width and clips cleanly.
+  static const double _carouselItemExtent = 160;
+
   // Live-appending terminal: a Timer pushes a new log line periodically.
   final List<AurisTerminalLine> _log = <AurisTerminalLine>[
     const AurisTerminalLine('> boot sequence initiated',
@@ -1019,7 +1023,7 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
                 SizedBox(
                   height: 120,
                   child: CarouselView(
-                    itemExtent: 160,
+                    itemExtent: _carouselItemExtent,
                     itemSnapping: true,
                     children: <Widget>[
                       for (final String label in <String>[
@@ -1028,8 +1032,21 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
                         'SECTOR C',
                         'SECTOR D',
                       ])
-                        Center(
-                          child: Text(label, style: text.titleMedium),
+                        // Pin the label to the full itemExtent so the trailing
+                        // partially-visible item lays out at a stable width and
+                        // the carousel clips the sliver cleanly — otherwise the
+                        // squeezed item's text reflows to one letter per line.
+                        // Left-align so a squeezed item shows the start of its
+                        // label ("SEC…") rather than the middle.
+                        OverflowBox(
+                          maxWidth: _carouselItemExtent,
+                          alignment: Alignment.centerLeft,
+                          child: Container(
+                            width: _carouselItemExtent,
+                            alignment: Alignment.centerLeft,
+                            padding: const EdgeInsets.only(left: 24),
+                            child: Text(label, style: text.titleMedium),
+                          ),
                         ),
                     ],
                   ),
