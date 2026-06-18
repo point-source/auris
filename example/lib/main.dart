@@ -162,24 +162,36 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
 
   // Live-appending terminal: a Timer pushes a new log line periodically.
   final List<AurisTerminalLine> _log = <AurisTerminalLine>[
-    const AurisTerminalLine('> boot sequence initiated',
-        type: AurisTerminalLineType.augment),
-    const AurisTerminalLine('  loading core modules ... ok',
-        type: AurisTerminalLineType.ok),
+    const AurisTerminalLine(
+      '> boot sequence initiated',
+      type: AurisTerminalLineType.augment,
+    ),
+    const AurisTerminalLine(
+      '  loading core modules ... ok',
+      type: AurisTerminalLineType.ok,
+    ),
   ];
   Timer? _logTimer;
   int _logTick = 0;
 
   static const List<AurisTerminalLine> _logSamples = <AurisTerminalLine>[
-    AurisTerminalLine('  diagnostic pass complete',
-        type: AurisTerminalLineType.ok),
+    AurisTerminalLine(
+      '  diagnostic pass complete',
+      type: AurisTerminalLineType.ok,
+    ),
     AurisTerminalLine('  telemetry uplink nominal'),
-    AurisTerminalLine('! thermal margin low',
-        type: AurisTerminalLineType.warning),
-    AurisTerminalLine('  augment graft synced',
-        type: AurisTerminalLineType.augment),
-    AurisTerminalLine('x packet checksum mismatch',
-        type: AurisTerminalLineType.error),
+    AurisTerminalLine(
+      '! thermal margin low',
+      type: AurisTerminalLineType.warning,
+    ),
+    AurisTerminalLine(
+      '  augment graft synced',
+      type: AurisTerminalLineType.augment,
+    ),
+    AurisTerminalLine(
+      'x packet checksum mismatch',
+      type: AurisTerminalLineType.error,
+    ),
   ];
 
   @override
@@ -268,7 +280,10 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 560),
           child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: horizontalPad, vertical: 24),
+            padding: EdgeInsets.symmetric(
+              horizontal: horizontalPad,
+              vertical: 24,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
@@ -354,10 +369,7 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
                       icon: const Icon(Icons.power_settings_new),
                     ),
                     const SizedBox(width: 8),
-                    IconButton(
-                      onPressed: () {},
-                      icon: const Icon(Icons.tune),
-                    ),
+                    IconButton(onPressed: () {}, icon: const Icon(Icons.tune)),
                     const Spacer(),
                     FloatingActionButton(
                       onPressed: () {},
@@ -425,10 +437,7 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
                       ),
                     ),
                     SizedBox(width: 12),
-                    IconButton(
-                      onPressed: null,
-                      icon: Icon(Icons.block),
-                    ),
+                    IconButton(onPressed: null, icon: Icon(Icons.block)),
                   ],
                 ),
 
@@ -537,7 +546,10 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
                       label: 'CLOAK',
                     ),
                     const AurisSwitch(
-                        value: false, onChanged: null, label: 'AUX'),
+                      value: false,
+                      onChanged: null,
+                      label: 'AUX',
+                    ),
                   ],
                 ),
                 const SizedBox(height: 16),
@@ -649,19 +661,19 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
                       icon: const Icon(Icons.more_vert),
                       itemBuilder: (BuildContext context) =>
                           const <PopupMenuEntry<String>>[
-                        PopupMenuItem<String>(
-                          value: 'ARM',
-                          child: Text('ARM'),
-                        ),
-                        PopupMenuItem<String>(
-                          value: 'DISARM',
-                          child: Text('DISARM'),
-                        ),
-                        PopupMenuItem<String>(
-                          value: 'RESET',
-                          child: Text('RESET'),
-                        ),
-                      ],
+                            PopupMenuItem<String>(
+                              value: 'ARM',
+                              child: Text('ARM'),
+                            ),
+                            PopupMenuItem<String>(
+                              value: 'DISARM',
+                              child: Text('DISARM'),
+                            ),
+                            PopupMenuItem<String>(
+                              value: 'RESET',
+                              child: Text('RESET'),
+                            ),
+                          ],
                     ),
                     OutlinedButton(
                       onPressed: _showBanner,
@@ -682,8 +694,8 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
                 Text(
                   'SELECTED: '
                   '${_date == null ? '—' : '${_date!.year}-'
-                      '${_date!.month.toString().padLeft(2, '0')}-'
-                      '${_date!.day.toString().padLeft(2, '0')}'} '
+                            '${_date!.month.toString().padLeft(2, '0')}-'
+                            '${_date!.day.toString().padLeft(2, '0')}'} '
                   '${_time == null ? '' : _time!.format(context)}',
                   style: text.labelMedium,
                 ),
@@ -695,37 +707,47 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
                 const _SectionHeader('MENUS'),
                 Text('MENU ANCHOR', style: text.labelMedium),
                 const SizedBox(height: 8),
-                MenuAnchor(
-                  builder: (
-                    BuildContext context,
-                    MenuController controller,
-                    Widget? child,
-                  ) {
-                    return OutlinedButton.icon(
-                      onPressed: () => controller.isOpen
-                          ? controller.close()
-                          : controller.open(),
-                      icon: const Icon(Icons.expand_more),
-                      label: const Text('ACTIONS'),
-                    );
-                  },
-                  menuChildren: <Widget>[
-                    MenuItemButton(
-                      leadingIcon: const Icon(Icons.play_arrow),
-                      onPressed: () {},
-                      child: const Text('ENGAGE'),
-                    ),
-                    MenuItemButton(
-                      leadingIcon: const Icon(Icons.pause),
-                      onPressed: () {},
-                      child: const Text('HOLD'),
-                    ),
-                    MenuItemButton(
-                      leadingIcon: const Icon(Icons.stop),
-                      onPressed: () {},
-                      child: const Text('ABORT'),
-                    ),
-                  ],
+                // Align the trigger to its content width — the surrounding
+                // Column stretches children, but a menu button shouldn't span
+                // full width or its small popup reads as detached / overlapping.
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: MenuAnchor(
+                    // Drop the popup 6px below the trigger so it doesn't sit
+                    // flush against the button — matching AurisSelect's gap.
+                    alignmentOffset: const Offset(0, 6),
+                    builder:
+                        (
+                          BuildContext context,
+                          MenuController controller,
+                          Widget? child,
+                        ) {
+                          return OutlinedButton.icon(
+                            onPressed: () => controller.isOpen
+                                ? controller.close()
+                                : controller.open(),
+                            icon: const Icon(Icons.expand_more),
+                            label: const Text('ACTIONS'),
+                          );
+                        },
+                    menuChildren: <Widget>[
+                      MenuItemButton(
+                        leadingIcon: const Icon(Icons.play_arrow),
+                        onPressed: () {},
+                        child: const Text('ENGAGE'),
+                      ),
+                      MenuItemButton(
+                        leadingIcon: const Icon(Icons.pause),
+                        onPressed: () {},
+                        child: const Text('HOLD'),
+                      ),
+                      MenuItemButton(
+                        leadingIcon: const Icon(Icons.stop),
+                        onPressed: () {},
+                        child: const Text('ABORT'),
+                      ),
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 16),
                 Text('MENU BAR', style: text.labelMedium),
@@ -785,16 +807,22 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
                         child: TabBarView(
                           children: <Widget>[
                             Center(
-                              child: Text('ALL SYSTEMS NOMINAL',
-                                  style: text.bodyMedium),
+                              child: Text(
+                                'ALL SYSTEMS NOMINAL',
+                                style: text.bodyMedium,
+                              ),
                             ),
                             Center(
-                              child: Text('REACTOR AT 82%',
-                                  style: text.bodyMedium),
+                              child: Text(
+                                'REACTOR AT 82%',
+                                style: text.bodyMedium,
+                              ),
                             ),
                             Center(
-                              child: Text('UPLINK ESTABLISHED',
-                                  style: text.bodyMedium),
+                              child: Text(
+                                'UPLINK ESTABLISHED',
+                                style: text.bodyMedium,
+                              ),
                             ),
                           ],
                         ),
@@ -945,7 +973,8 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
                         dense: true,
                         leading: const Icon(Icons.circle, size: 10),
                         title: Text(
-                            'TELEMETRY FRAME ${i.toString().padLeft(3, '0')}'),
+                          'TELEMETRY FRAME ${i.toString().padLeft(3, '0')}',
+                        ),
                       ),
                     ),
                   ),
@@ -1065,9 +1094,10 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
                       final AurisStepState s = switch (state) {
                         StepState.complete => AurisStepState.complete,
                         StepState.error => AurisStepState.error,
-                        _ => stepIndex == _step
-                            ? AurisStepState.active
-                            : AurisStepState.inactive,
+                        _ =>
+                          stepIndex == _step
+                              ? AurisStepState.active
+                              : AurisStepState.inactive,
                       };
                       return AurisStepIndicator(
                         step: stepIndex + 1,
@@ -1078,23 +1108,23 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
                     onStepTapped: (int s) => setState(() => _step = s),
                     controlsBuilder:
                         (BuildContext context, ControlsDetails details) {
-                      return Padding(
-                        padding: const EdgeInsets.only(top: 12),
-                        child: Row(
-                          children: <Widget>[
-                            FilledButton(
-                              onPressed: details.onStepContinue,
-                              child: const Text('NEXT'),
+                          return Padding(
+                            padding: const EdgeInsets.only(top: 12),
+                            child: Row(
+                              children: <Widget>[
+                                FilledButton(
+                                  onPressed: details.onStepContinue,
+                                  child: const Text('NEXT'),
+                                ),
+                                const SizedBox(width: 8),
+                                TextButton(
+                                  onPressed: details.onStepCancel,
+                                  child: const Text('BACK'),
+                                ),
+                              ],
                             ),
-                            const SizedBox(width: 8),
-                            TextButton(
-                              onPressed: details.onStepCancel,
-                              child: const Text('BACK'),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
+                          );
+                        },
                     onStepContinue: () =>
                         setState(() => _step = (_step + 1).clamp(0, 2)),
                     onStepCancel: () =>
@@ -1323,11 +1353,7 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
 
                 // ---- TERMINAL -----------------------------------------------
                 const _SectionHeader('TERMINAL'),
-                AurisTerminal(
-                  title: 'SYSTEM LOG',
-                  code: 'LIVE',
-                  lines: _log,
-                ),
+                AurisTerminal(title: 'SYSTEM LOG', code: 'LIVE', lines: _log),
 
                 // ---- SELECT -------------------------------------------------
                 const _SectionHeader('SELECT'),
@@ -1348,10 +1374,7 @@ class _ShowcaseScreenState extends State<_ShowcaseScreen> {
                 const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    AurisStepIndicator(
-                      step: 1,
-                      state: AurisStepState.complete,
-                    ),
+                    AurisStepIndicator(step: 1, state: AurisStepState.complete),
                     AurisStepIndicator(step: 2, state: AurisStepState.active),
                     AurisStepIndicator(step: 3, state: AurisStepState.inactive),
                     AurisStepIndicator(step: 4, state: AurisStepState.error),
@@ -1553,10 +1576,7 @@ class _CustomizationControl extends StatelessWidget {
         const SizedBox(height: 16),
         label('BEVEL'),
         const SizedBox(height: 8),
-        _ScalePicker(
-          value: bevelScale,
-          onChanged: onBevelChanged,
-        ),
+        _ScalePicker(value: bevelScale, onChanged: onBevelChanged),
         const SizedBox(height: 16),
         Row(
           children: <Widget>[
@@ -1574,11 +1594,7 @@ class _CustomizationControl extends StatelessWidget {
         ),
         // Glow is a continuous scalar (0 = none, 3 = strong), unlike the stepped
         // bevel control, so its effect can be dialled and watched on the tile.
-        Slider(
-          value: glowScale,
-          max: 3,
-          onChanged: onGlowChanged,
-        ),
+        Slider(value: glowScale, max: 3, onChanged: onGlowChanged),
         const SizedBox(height: 8),
         // A live preview tile so the three knobs are legible on their own,
         // without scrolling to find a glowing/chamfered element: its corner cut
@@ -1658,12 +1674,7 @@ class _AccentSwatch extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            AurisContainer(
-              cut: 2,
-              width: 14,
-              height: 14,
-              fill: swatch,
-            ),
+            AurisContainer(cut: 2, width: 14, height: 14, fill: swatch),
             const SizedBox(width: 8),
             Text(
               option.label,
@@ -1727,12 +1738,7 @@ class _SectionHeader extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 12),
-          Expanded(
-            child: Container(
-              height: 1,
-              color: scheme.borderResting,
-            ),
-          ),
+          Expanded(child: Container(height: 1, color: scheme.borderResting)),
         ],
       ),
     );
@@ -1762,11 +1768,11 @@ class _AccessibilityBanner extends StatelessWidget {
           : AurisNotificationVariant.info,
       message: reduceMotion
           ? 'Reduced motion is ON (OS setting): animations render their end '
-              'state with no running controllers. Press Tab to move the gold '
-              'focus ring across the controls below.'
+                'state with no running controllers. Press Tab to move the gold '
+                'focus ring across the controls below.'
           : 'Reduced motion is OFF. Enable your OS reduce-motion setting and '
-              'reload to see animations snap to their end state. Press Tab to '
-              'move the gold focus ring across the controls below.',
+                'reload to see animations snap to their end state. Press Tab to '
+                'move the gold focus ring across the controls below.',
     );
   }
 }
