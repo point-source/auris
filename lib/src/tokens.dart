@@ -167,6 +167,12 @@ abstract final class AurisTokens {
   /// Extra-large bevel — panels / dialogs.
   static const double bevelXl = 20;
 
+  /// Outline weight for an *open overlay* edge (menu / popup). Slightly heavier
+  /// than the default 1px so the accent edge reads as substantial on the
+  /// Material overlay surfaces, which cannot carry the depth glow that fills out
+  /// the custom `AurisSelect` panel's edge through `ThemeData`.
+  static const double borderWidthActive = 1.5;
+
   // ---------------------------------------------------------------------------
   // Elevation and glow — amber glow replaces Material drop shadows. Primitives
   // only; consumers request depth by intent through the resolved scheme.

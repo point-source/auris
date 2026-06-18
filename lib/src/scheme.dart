@@ -284,6 +284,13 @@ class AurisScheme extends ThemeExtension<AurisScheme> {
   /// Hover / focus outline.
   final Color borderBright;
 
+  /// The accent-gold outline an *active* overlay wears — an open menu, popup, or
+  /// the open `AurisSelect` panel — so an open surface reads as the live element
+  /// (§spec:theme-layer "Color roles"). Derived from [primaryActive] at a partial
+  /// alpha so it stays a crisp edge, not a fill; sourced here so every overlay
+  /// shares one value rather than re-deriving it.
+  Color get borderActive => primaryActive.withValues(alpha: 0.7);
+
   // --- Semantic ---
   /// Danger / error.
   final Color danger;

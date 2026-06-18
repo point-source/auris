@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+- Add `AurisScheme.borderActive` — the accent-gold outline an *open* overlay
+  wears (a `PopupMenu`, the `MenuAnchor` / `DropdownMenu` popup, or the open
+  `AurisSelect` panel), derived from `primaryActive`.
+- Consolidate menu / popup outlines: the open `PopupMenu`, `MenuAnchor`, and
+  `DropdownMenu` surfaces now wear the gold `borderActive` edge (at a slightly
+  heavier weight, since they cannot carry the depth glow) instead of a resting
+  `borderBright` outline, so an open overlay reads as the live element and
+  matches the `AurisSelect` panel. The persistent `MenuBar` strip keeps its
+  resting outline (§spec:theme-layer "Color roles").
+
 ## [0.1.2]
 
 - Use absolute `raw.githubusercontent.com` URLs for the README gallery images.

@@ -312,7 +312,7 @@ class _SelectPopup<T> extends StatelessWidget {
             child: AurisContainer(
               cut: scheme.bevel.md,
               fill: scheme.surfacePanel,
-              borderColor: scheme.primaryActive.withValues(alpha: 0.7),
+              borderColor: scheme.borderActive,
               depth: scheme.depthActive,
               padding: EdgeInsets.zero,
               child: ConstrainedBox(

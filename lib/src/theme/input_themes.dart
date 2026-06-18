@@ -122,7 +122,12 @@ abstract final class AurisInputThemes {
         shadowColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
         elevation: const WidgetStatePropertyAll<double>(0),
         side: WidgetStatePropertyAll<BorderSide>(
-          BorderSide(color: scheme.borderBright),
+          // An open menu is the active element — gold edge, matching the
+          // MenuAnchor popup and AurisSelect panel.
+          BorderSide(
+            color: scheme.borderActive,
+            width: AurisTokens.borderWidthActive,
+          ),
         ),
         shape: WidgetStatePropertyAll<OutlinedBorder>(
           AurisChamferBorder(cut: scheme.bevel.md),
@@ -201,17 +206,16 @@ abstract final class AurisInputThemes {
   // ---------------------------------------------------------------------------
 
   /// The chamfered, flat menu-surface style shared by the [MenuAnchor] popup
-  /// ([menu]) and the [MenuBar] strip ([menuBar]): panel surface, bright resting
-  /// outline, no Material elevation / shadow.
-  static MenuStyle _menuSurface(AurisScheme scheme) {
+  /// ([menu]) and the [MenuBar] strip ([menuBar]): panel surface, no Material
+  /// elevation / shadow. [side] distinguishes the two — an open popup wears the
+  /// heavier active accent edge, the persistent bar a 1px resting outline.
+  static MenuStyle _menuSurface(AurisScheme scheme, BorderSide side) {
     return MenuStyle(
       backgroundColor: WidgetStatePropertyAll<Color>(scheme.surfacePanel),
       surfaceTintColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
       shadowColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
       elevation: const WidgetStatePropertyAll<double>(0),
-      side: WidgetStatePropertyAll<BorderSide>(
-        BorderSide(color: scheme.borderBright),
-      ),
+      side: WidgetStatePropertyAll<BorderSide>(side),
       shape: WidgetStatePropertyAll<OutlinedBorder>(
         AurisChamferBorder(cut: scheme.bevel.md),
       ),
@@ -219,15 +223,28 @@ abstract final class AurisInputThemes {
   }
 
   /// The [MenuThemeData] for a [MenuAnchor] popup: a chamfered panel surface,
-  /// flat (glow-not-shadow). The popup rows are styled by [menuButton].
+  /// flat (glow-not-shadow), wearing the active accent edge so an open menu
+  /// reads as the live element — matching the open [DropdownMenu] and
+  /// `AurisSelect` panels. The popup rows are styled by [menuButton].
   static MenuThemeData menu(AurisScheme scheme) {
-    return MenuThemeData(style: _menuSurface(scheme));
+    return MenuThemeData(
+      style: _menuSurface(
+        scheme,
+        BorderSide(
+          color: scheme.borderActive,
+          width: AurisTokens.borderWidthActive,
+        ),
+      ),
+    );
   }
 
-  /// The [MenuBarThemeData] for a top-level [MenuBar]: a flat panel strip with a
-  /// bright resting outline. The top-level menu items are styled by [menuButton].
+  /// The [MenuBarThemeData] for a top-level [MenuBar]: a flat, persistent panel
+  /// strip with a bright *resting* outline (it is chrome, not a transient
+  /// overlay). The top-level menu items are styled by [menuButton].
   static MenuBarThemeData menuBar(AurisScheme scheme) {
-    return MenuBarThemeData(style: _menuSurface(scheme));
+    return MenuBarThemeData(
+      style: _menuSurface(scheme, BorderSide(color: scheme.borderBright)),
+    );
   }
 
   // ---------------------------------------------------------------------------

@@ -34,10 +34,14 @@ abstract final class AurisOverlayThemes {
 
   /// A chamfered border with a visible resting outline, for surfaces that read
   /// better with an explicit edge (dialogs, menus, sheets).
-  static AurisChamferBorder _bevelOutlined(double size, Color color) =>
+  static AurisChamferBorder _bevelOutlined(
+    double size,
+    Color color, {
+    double width = 1.0,
+  }) =>
       AurisChamferBorder(
         cut: size,
-        side: BorderSide(color: color),
+        side: BorderSide(color: color, width: width),
       );
 
   /// A bare chamfered rectangle (no outline), for the small inner cells inside
@@ -235,7 +239,13 @@ abstract final class AurisOverlayThemes {
       shadowColor: Colors.transparent,
       iconColor: scheme.primaryDim,
       elevation: 0,
-      shape: _bevelOutlined(scheme.bevel.md, scheme.borderBright),
+      // An open popup menu is the active element — gold edge, matching the
+      // MenuAnchor / DropdownMenu / AurisSelect open panels.
+      shape: _bevelOutlined(
+        scheme.bevel.md,
+        scheme.borderActive,
+        width: AurisTokens.borderWidthActive,
+      ),
       labelTextStyle: WidgetStateProperty.resolveWith<TextStyle?>((
         Set<WidgetState> states,
       ) {

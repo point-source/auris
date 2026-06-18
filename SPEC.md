@@ -307,7 +307,13 @@ already-populated `ColorScheme` and `TextTheme`.
   Material-default and breaks the aesthetic.
 - **Color roles:** `gold` for active/primary, `amber` for inactive/dim,
   `borderBright` for resting outlines, `bright` for focus/highlight, semantic
-  `danger`/`success` for error/confirmation.
+  `danger`/`success` for error/confirmation. An *open overlay* — a `PopupMenu`,
+  the `MenuAnchor` / `DropdownMenu` popup, or the open `AurisSelect` panel — is
+  the live element, so it wears the active accent edge (`borderActive`, gold)
+  rather than a resting outline; the persistent `MenuBar` strip is chrome and
+  keeps its resting `borderBright` outline. (Glow cannot attach to the Material
+  overlay surfaces through `ThemeData`, so they carry the accent edge without
+  the depth glow that the custom `AurisSelect` panel adds.)
 - **Typography:** uppercase, letter-spaced display/label type; monospace for
   data-bearing surfaces (labels, data tables, tooltips, value indicators).
 
