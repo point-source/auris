@@ -19,7 +19,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
-  golden_matrix: 1.1.0
+  golden_matrix: 1.1.1
 
 flutter:
   fonts:
