@@ -37,10 +37,14 @@ class AurisBadge extends StatelessWidget {
     this.label, {
     super.key,
     this.variant = AurisBadgeVariant.amber,
+    this.iconData,
   });
 
   /// The badge text (rendered uppercase).
   final String label;
+
+  /// 图标
+  final IconData? iconData;
 
   /// The semantic color of the badge.
   final AurisBadgeVariant variant;
@@ -66,22 +70,32 @@ class AurisBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     final AurisScheme scheme = Theme.of(context).extension<AurisScheme>()!;
     final Color color = _color(scheme);
+    final text = Text(
+      label.toUpperCase(),
+      style: TextStyle(
+        fontFamily: AurisTokens.fontMono,
+        fontFamilyFallback: AurisTokens.fontMonoFallback,
+        fontSize: 11,
+        height: 1.0,
+        letterSpacing: AurisTokens.trackingLabel,
+        color: color,
+      ),
+    );
     return AurisContainer(
       cut: scheme.bevel.xs,
       fill: color.withValues(alpha: 0.12),
       borderColor: color.withValues(alpha: 0.55),
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-      child: Text(
-        label.toUpperCase(),
-        style: TextStyle(
-          fontFamily: AurisTokens.fontMono,
-          fontFamilyFallback: AurisTokens.fontMonoFallback,
-          fontSize: 11,
-          height: 1.0,
-          letterSpacing: AurisTokens.trackingLabel,
-          color: color,
-        ),
-      ),
+      child: iconData == null
+          ? text
+          : Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(iconData, size: 11, color: color),
+                const SizedBox(width: 2),
+                text,
+              ],
+            ),
     );
   }
 }

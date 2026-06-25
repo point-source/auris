@@ -79,6 +79,30 @@ void main() {
       final Text label = tester.widget<Text>(find.text('FAULT'));
       expect(label.style!.color, scheme.dangerBright);
     });
+
+    testWidgets('renders icon when iconData is provided', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        host(
+          const AurisBadge(
+            'ACTIVE',
+            variant: AurisBadgeVariant.success,
+            iconData: Icons.check_circle,
+          ),
+        ),
+      );
+      expect(find.byIcon(Icons.check_circle), findsOneWidget);
+      expect(find.text('ACTIVE'), findsOneWidget);
+    });
+
+    testWidgets('does not render icon when iconData is null', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(host(const AurisBadge('PLAIN')));
+      expect(find.byType(Icon), findsNothing);
+      expect(find.text('PLAIN'), findsOneWidget);
+    });
   });
 
   group('AurisPanel', () {
